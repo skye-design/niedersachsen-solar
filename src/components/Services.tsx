@@ -26,7 +26,7 @@ export default function Services() {
         <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {services.map((service, i) => {
             const Icon = icons[service.icon as keyof typeof icons];
-            const isPartnered = service.icon === "thermometer";
+            const isPartnered = service.icon === "thermometer" || service.icon === "house";
             return (
               <Reveal key={service.title} delay={i * 80}>
                 <div className="relative h-full rounded-2xl border border-border bg-card p-8 transition-all duration-300 hover:-translate-y-1 hover:border-primary/40">

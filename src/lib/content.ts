@@ -10,7 +10,7 @@ export const services = [
   {
     title: "Dachsanierung",
     description:
-      "Bevor wir Module aufs Dach bringen, sorgen wir bei Bedarf dafür, dass der Untergrund stimmt — Dachsanierung und -abdichtung aus einer Hand, damit Ihre PV-Anlage auf einer soliden Basis steht.",
+      "Bevor wir Module aufs Dach bringen, sorgen wir bei Bedarf dafür, dass der Untergrund stimmt. Die Dachsanierung selbst führen zertifizierte Dachdecker-Partnerbetriebe aus unserem Netzwerk durch — koordiniert von uns, damit Ihre PV-Anlage am Ende auf einer soliden Basis steht.",
     icon: "house",
   },
   {
