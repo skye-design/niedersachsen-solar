@@ -1,4 +1,5 @@
-import { House, Sun, BatteryFull, Plug, Thermometer } from "@phosphor-icons/react/dist/ssr";
+import Link from "next/link";
+import { House, Sun, BatteryFull, Plug, Thermometer, ArrowRight } from "@phosphor-icons/react/dist/ssr";
 import { services } from "@/lib/content";
 import Reveal from "@/components/Reveal";
 
@@ -46,6 +47,18 @@ export default function Services() {
                   <p className="mt-3 leading-relaxed text-muted-foreground">
                     {service.description}
                   </p>
+                  <Link
+                    href={`/leistungen/${service.slug}`}
+                    className="group/link mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-primary"
+                  >
+                    Mehr erfahren
+                    <ArrowRight
+                      size={16}
+                      weight="bold"
+                      className="transition-transform group-hover/link:translate-x-0.5"
+                      aria-hidden
+                    />
+                  </Link>
                 </div>
               </Reveal>
             );

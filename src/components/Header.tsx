@@ -6,10 +6,10 @@ import { Phone, List, X } from "@phosphor-icons/react";
 import { site } from "@/lib/content";
 
 const navLinks = [
-  { href: "#leistungen", label: "Leistungen" },
-  { href: "#warum-wir", label: "Warum wir" },
-  { href: "#projekte", label: "Projekte" },
-  { href: "#angebot", label: "Kontakt" },
+  { href: "/#leistungen", label: "Leistungen" },
+  { href: "/#warum-wir", label: "Warum wir" },
+  { href: "/#projekte", label: "Projekte" },
+  { href: "/#angebot", label: "Kontakt" },
 ];
 
 export default function Header() {
@@ -41,7 +41,7 @@ export default function Header() {
       }`}
     >
       <div className="mx-auto flex h-[72px] max-w-6xl items-center justify-between gap-4 px-4 sm:px-6">
-        <Link href="#top" className="flex items-center" onClick={() => setIsOpen(false)}>
+        <Link href="/" className="flex items-center" onClick={() => setIsOpen(false)}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/images/niso-logo-horizontal.svg"
@@ -72,7 +72,7 @@ export default function Header() {
             {site.phone}
           </a>
           <Link
-            href="#angebot"
+            href="/#angebot"
             className="hidden cursor-pointer rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-on-primary shadow-sm transition-colors hover:bg-primary-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring sm:inline-flex"
           >
             Angebot anfragen

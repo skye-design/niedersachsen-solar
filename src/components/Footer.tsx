@@ -1,13 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Phone, EnvelopeSimple } from "@phosphor-icons/react/dist/ssr";
-import { site } from "@/lib/content";
+import { site, services } from "@/lib/content";
 
 export default function Footer() {
   return (
     <footer className="border-t border-border">
       <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
-        <div className="flex flex-col gap-8 sm:flex-row sm:justify-between">
+        <div className="flex flex-col flex-wrap gap-8 sm:flex-row sm:justify-between">
           <div>
             <div className="flex items-center gap-2.5">
               <Image
@@ -26,6 +26,18 @@ export default function Footer() {
               Umgebung.
             </p>
           </div>
+
+          <nav className="flex flex-col gap-2 text-sm" aria-label="Leistungen">
+            {services.map((service) => (
+              <Link
+                key={service.slug}
+                href={`/leistungen/${service.slug}`}
+                className="text-foreground/80 transition-colors hover:text-primary"
+              >
+                {service.title}
+              </Link>
+            ))}
+          </nav>
 
           <div className="flex flex-col gap-2 text-sm">
             <a
