@@ -29,12 +29,27 @@ export default function Footer() {
             {services.map((service) => (
               <Link
                 key={service.slug}
-                href={`/leistungen/${service.slug}`}
+                href={service.route}
                 className="text-foreground/80 transition-colors hover:text-primary"
               >
                 {service.title}
               </Link>
             ))}
+            <Link href="/projekte" className="text-foreground/80 transition-colors hover:text-primary">
+              Projekte
+            </Link>
+            <Link href="/ueber-uns" className="text-foreground/80 transition-colors hover:text-primary">
+              Über uns
+            </Link>
+            <Link href="/ablauf" className="text-foreground/80 transition-colors hover:text-primary">
+              Ablauf
+            </Link>
+            <Link href="/ratgeber" className="text-foreground/80 transition-colors hover:text-primary">
+              Ratgeber
+            </Link>
+            <Link href="/kontakt" className="text-foreground/80 transition-colors hover:text-primary">
+              Kontakt
+            </Link>
           </nav>
 
           <div className="flex flex-col gap-2 text-sm">

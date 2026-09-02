@@ -9,8 +9,7 @@ import {
   WarningCircle,
 } from "@phosphor-icons/react";
 import { site } from "@/lib/content";
-
-const FORMSPREE_ENDPOINT = "https://formspree.io/f/mrpzzbgd";
+import { trackEvent } from "@/lib/analytics";
 
 const CONNECTION_OPTIONS = [
   { id: "pv", label: "Photovoltaik" },
@@ -57,6 +56,7 @@ export default function SolarCheck() {
   const [contactMethod, setContactMethod] = useState<"telefon" | "email" | null>(null);
   const [contactValue, setContactValue] = useState("");
   const [message, setMessage] = useState("");
+  const [company, setCompany] = useState(""); // honeypot — left empty by real visitors
   const [touched, setTouched] = useState<Record<string, boolean>>({});
 
   const step = STEP_ORDER[stepIndex];
@@ -90,6 +90,7 @@ export default function SolarCheck() {
       setTouched((t) => ({ ...t, [String(step)]: true }));
     }
     if (!canAdvance()) return;
+    trackEvent({ name: "solar_check_step_completed", step });
     setStepIndex((i) => Math.min(i + 1, STEP_ORDER.length - 1));
   }
 
@@ -112,28 +113,35 @@ export default function SolarCheck() {
     setErrorMessage("");
 
     try {
-      const response = await fetch(FORMSPREE_ENDPOINT, {
+      const response = await fetch("/api/lead", {
         method: "POST",
-        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          _subject: `Neuer Solar-Check von ${name}`,
+          source: "solar-check",
           name,
-          kontaktweg: contactMethod,
-          kontakt: contactValue,
-          plz: postalCode,
-          ort: city,
-          immobilie: labelFor(PROPERTY_OPTIONS, propertyType),
+          contactMethod: contactMethod ?? undefined,
+          contact: contactValue,
+          postalCode,
+          city,
+          propertyType: labelFor(PROPERTY_OPTIONS, propertyType),
           situation: labelFor(SITUATION_OPTIONS, situation),
-          interessen: connections
+          interests: connections
             .map((id) => CONNECTION_OPTIONS.find((o) => o.id === id)?.label)
-            .join(", "),
-          nachricht: message,
+            .filter((label): label is (typeof CONNECTION_OPTIONS)[number]["label"] => label !== undefined),
+          message,
+          company,
         }),
       });
 
-      if (!response.ok) throw new Error("Etwas ist schiefgelaufen.");
+      const result = (await response.json().catch(() => ({}))) as { ok?: boolean; error?: string };
+      if (!response.ok || !result.ok) {
+        throw new Error(result.error ?? "Etwas ist schiefgelaufen.");
+      }
+
+      trackEvent({ name: "solar_check_submitted" });
       setStatus("success");
     } catch (err) {
+      trackEvent({ name: "solar_check_error" });
       setStatus("error");
       setErrorMessage(err instanceof Error ? err.message : "Etwas ist schiefgelaufen.");
     }
@@ -179,6 +187,19 @@ export default function SolarCheck() {
       </p>
 
       <form onSubmit={step === 6 ? handleSubmit : (e) => e.preventDefault()}>
+        <div aria-hidden="true" className="absolute -left-[9999px] h-0 w-0 overflow-hidden">
+          <label htmlFor={`${formBase}-company`}>Firma (bitte freilassen)</label>
+          <input
+            id={`${formBase}-company`}
+            name="company"
+            type="text"
+            tabIndex={-1}
+            autoComplete="off"
+            value={company}
+            onChange={(e) => setCompany(e.target.value)}
+          />
+        </div>
+
         {step === 1 && (
           <fieldset>
             <legend className="text-lg font-semibold text-foreground">

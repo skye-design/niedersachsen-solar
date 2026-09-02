@@ -3,9 +3,9 @@
 import { useId, useState, type FormEvent } from "react";
 import { CheckCircle, WarningCircle, CircleNotch } from "@phosphor-icons/react";
 import { site } from "@/lib/content";
+import { trackEvent } from "@/lib/analytics";
 
 const interestOptions = ["PV-Anlage", "Speicher", "Wallbox", "Wärmepumpe"];
-const FORMSPREE_ENDPOINT = "https://formspree.io/f/mrpzzbgd";
 
 type Status = "idle" | "submitting" | "success" | "error";
 
@@ -21,6 +21,7 @@ export default function QuoteForm() {
   const [status, setStatus] = useState<Status>("idle");
   const [errorMessage, setErrorMessage] = useState("");
   const [touched, setTouched] = useState<Record<string, boolean>>({});
+  const [company, setCompany] = useState(""); // honeypot — left empty by real visitors
 
   const nameError = touched.name && !name.trim() ? "Bitte geben Sie Ihren Namen an." : "";
   const contactError =
@@ -48,24 +49,28 @@ export default function QuoteForm() {
     setErrorMessage("");
 
     try {
-      const response = await fetch(FORMSPREE_ENDPOINT, {
+      const response = await fetch("/api/lead", {
         method: "POST",
-        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          _subject: `Neue Angebotsanfrage von ${name}`,
+          source: "quote-form",
           name,
           contact,
           location,
-          interessen: interests.join(", "),
+          interests,
+          company,
         }),
       });
 
-      if (!response.ok) {
-        throw new Error("Etwas ist schiefgelaufen.");
+      const result = (await response.json().catch(() => ({}))) as { ok?: boolean; error?: string };
+      if (!response.ok || !result.ok) {
+        throw new Error(result.error ?? "Etwas ist schiefgelaufen.");
       }
 
+      trackEvent({ name: "quote_form_submitted" });
       setStatus("success");
     } catch (err) {
+      trackEvent({ name: "quote_form_error" });
       setStatus("error");
       setErrorMessage(
         err instanceof Error ? err.message : "Etwas ist schiefgelaufen.",
@@ -98,6 +103,19 @@ export default function QuoteForm() {
 
   return (
     <form onSubmit={handleSubmit} noValidate className="space-y-5">
+      <div aria-hidden="true" className="absolute -left-[9999px] h-0 w-0 overflow-hidden">
+        <label htmlFor={`${nameId}-company`}>Firma (bitte freilassen)</label>
+        <input
+          id={`${nameId}-company`}
+          name="company"
+          type="text"
+          tabIndex={-1}
+          autoComplete="off"
+          value={company}
+          onChange={(e) => setCompany(e.target.value)}
+        />
+      </div>
+
       <div>
         <label htmlFor={nameId} className="mb-1.5 block text-sm font-semibold text-foreground">
           Name<span className="text-destructive"> *</span>

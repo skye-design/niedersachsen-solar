@@ -1,7 +1,10 @@
+"use client";
+
 import Link from "next/link";
-import { ArrowRight } from "@phosphor-icons/react/dist/ssr";
+import { ArrowRight } from "@phosphor-icons/react";
 import { decisionPaths } from "@/lib/content";
 import Reveal from "@/components/Reveal";
+import { trackEvent } from "@/lib/analytics";
 
 const accentClasses = {
   primary: "border-primary/30 hover:border-primary/60 group-hover:text-primary",
@@ -25,6 +28,7 @@ export default function DecisionEntry() {
             <Reveal key={path.id} delay={i * 60} className={i === 4 ? "lg:col-span-1" : ""}>
               <Link
                 href={path.href}
+                onClick={() => trackEvent({ name: "decision_card_click", serviceId: path.id })}
                 className={`group flex h-full flex-col justify-between rounded-2xl border-2 bg-card p-6 transition-all duration-200 hover:-translate-y-0.5 ${accentClasses[path.accent]}`}
               >
                 <div>

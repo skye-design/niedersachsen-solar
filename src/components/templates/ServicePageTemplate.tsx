@@ -1,50 +1,15 @@
-import type { Metadata } from "next";
-import { notFound } from "next/navigation";
 import Link from "next/link";
-import { CheckCircle } from "@phosphor-icons/react/dist/ssr";
+import { ArrowRight, CheckCircle } from "@phosphor-icons/react/dist/ssr";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import QuoteSection from "@/components/QuoteSection";
 import FAQSection from "@/components/FAQSection";
 import Reveal from "@/components/Reveal";
-import { services, site } from "@/lib/content";
+import Breadcrumbs from "@/components/Breadcrumbs";
+import { services, site, type Service } from "@/lib/content";
 
-export function generateStaticParams() {
-  return services.map((service) => ({ slug: service.slug }));
-}
-
-export async function generateMetadata({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}): Promise<Metadata> {
-  const { slug } = await params;
-  const service = services.find((s) => s.slug === slug);
-  if (!service) return {};
-  const url = `https://niedersachsen-solar.de/leistungen/${service.slug}`;
-  return {
-    title: service.metaTitle,
-    description: service.metaDescription,
-    alternates: { canonical: url },
-    openGraph: {
-      title: service.metaTitle,
-      description: service.metaDescription,
-      url,
-      siteName: site.name,
-      locale: "de_DE",
-      type: "website",
-    },
-  };
-}
-
-export default async function ServicePage({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}) {
-  const { slug } = await params;
-  const service = services.find((s) => s.slug === slug);
-  if (!service) notFound();
+export default function ServicePageTemplate({ service }: { service: Service }) {
+  const related = services.filter((s) => s.slug !== service.slug);
 
   const serviceSchema = {
     "@context": "https://schema.org",
@@ -57,22 +22,7 @@ export default async function ServicePage({
       "@id": "https://niedersachsen-solar.de/#business",
       name: site.name,
     },
-    areaServed: site.cities.map((city) => ({ "@type": "City", name: city })),
-  };
-
-  const breadcrumbSchema = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Startseite", item: "https://niedersachsen-solar.de" },
-      { "@type": "ListItem", position: 2, name: "Leistungen", item: "https://niedersachsen-solar.de/#leistungen" },
-      {
-        "@type": "ListItem",
-        position: 3,
-        name: service.title,
-        item: `https://niedersachsen-solar.de/leistungen/${service.slug}`,
-      },
-    ],
+    areaServed: { "@type": "State", name: site.serviceArea },
   };
 
   return (
@@ -82,16 +32,16 @@ export default async function ServicePage({
         <section className="pt-32 sm:pt-40">
           <div className="mx-auto max-w-3xl px-4 sm:px-6">
             <Reveal>
-              <nav aria-label="Breadcrumb" className="text-sm text-muted-foreground">
-                <Link href="/" className="hover:text-primary">
-                  Startseite
-                </Link>{" "}
-                / <span className="text-foreground">{service.title}</span>
-              </nav>
+              <Breadcrumbs
+                items={[
+                  { label: "Startseite", href: "/" },
+                  { label: service.title },
+                ]}
+              />
               <p className="mt-4 text-sm font-semibold tracking-wide text-primary uppercase">
-                {site.cities.join(" · ")}
+                {site.serviceArea} · Schwerpunkt {site.cities.join(" · ")}
               </p>
-              <h1 className="mt-3 font-serif text-4xl font-medium text-foreground sm:text-5xl">
+              <h1 className="mt-3 font-heading text-4xl font-medium text-foreground sm:text-5xl">
                 {service.title}
               </h1>
               <p className="mt-6 text-lg leading-relaxed text-muted-foreground">
@@ -130,6 +80,38 @@ export default async function ServicePage({
 
         <FAQSection faqs={service.faqs} title={`Häufige Fragen zu ${service.title}`} />
 
+        <section aria-labelledby="related-services-heading" className="border-t border-border">
+          <div className="mx-auto max-w-3xl px-4 py-16 sm:px-6">
+            <h2 id="related-services-heading" className="text-2xl font-semibold text-foreground">
+              Weitere Leistungen
+            </h2>
+            <p className="mt-2 text-muted-foreground">
+              Wir planen {service.title} nie isoliert, sondern als Teil eines
+              Gesamtkonzepts.
+            </p>
+            <div className="mt-6 grid gap-3 sm:grid-cols-2">
+              {related.map((r) => (
+                <Link
+                  key={r.slug}
+                  href={r.route}
+                  className="group flex items-center justify-between gap-3 rounded-xl border border-border bg-card px-5 py-4 transition-colors hover:border-primary/40"
+                >
+                  <span>
+                    <span className="block font-semibold text-foreground">{r.title}</span>
+                    <span className="text-sm text-muted-foreground">{r.userQuestion}</span>
+                  </span>
+                  <ArrowRight
+                    size={18}
+                    weight="bold"
+                    className="shrink-0 text-primary transition-transform group-hover:translate-x-0.5"
+                    aria-hidden
+                  />
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+
         <QuoteSection />
       </main>
       <Footer />
@@ -137,10 +119,6 @@ export default async function ServicePage({
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
     </>
   );

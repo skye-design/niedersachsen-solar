@@ -4,25 +4,18 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Phone, List, X, CaretDown } from "@phosphor-icons/react";
-import { site } from "@/lib/content";
+import { services, site } from "@/lib/content";
 
-// Dedicated top-level routes (/photovoltaik etc.) are Paket B's job — until
-// then these solutions link into the existing /leistungen/[slug] pages.
-const solutionLinks = [
-  { href: "/leistungen/pv-anlagen", label: "Photovoltaik" },
-  { href: "/leistungen/speicher", label: "Stromspeicher" },
-  { href: "/leistungen/wallbox", label: "Wallbox" },
-  { href: "/leistungen/waermepumpe", label: "Wärmepumpe" },
-  { href: "/leistungen/dachsanierung", label: "Dach + PV" },
-];
+const solutionLinks = services.map((service) => ({
+  href: service.route,
+  label: service.title === "PV-Anlagen" ? "Photovoltaik" : service.title,
+}));
 
-// Projekte/Ablauf/Ratgeber/Über uns don't have dedicated routes yet
-// (Paket B) — these point at the matching homepage section for now.
 const navLinks = [
-  { href: "/#projekte", label: "Projekte" },
-  { href: "/#ablauf", label: "Ablauf" },
-  { href: "/#wissen", label: "Ratgeber" },
-  { href: "/#warum-wir", label: "Über uns" },
+  { href: "/projekte", label: "Projekte" },
+  { href: "/ablauf", label: "Ablauf" },
+  { href: "/ratgeber", label: "Ratgeber" },
+  { href: "/ueber-uns", label: "Über uns" },
 ];
 
 export default function SiteHeader() {

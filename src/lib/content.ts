@@ -22,11 +22,17 @@ export const site = {
   founderRole: "Gründer und Geschäftsführer",
   financingPartner: "Cloover",
   hours: "Montag bis Freitag, 8–17 Uhr",
+  address: {
+    street: "Herrenhäuser Straße 64",
+    postalCode: "30419",
+    city: "Hannover",
+  },
 };
 
 export const services = [
   {
     slug: "dachsanierung",
+    route: "/dachsanierung-photovoltaik",
     title: "Dachsanierung",
     userQuestion: "Muss ich erst mein Dach lösen, bevor eine PV-Anlage möglich ist?",
     responsibility: "partner-coordinated" as const,
@@ -70,6 +76,7 @@ export const services = [
   },
   {
     slug: "pv-anlagen",
+    route: "/photovoltaik",
     title: "PV-Anlagen",
     userQuestion: "Lohnt sich eine PV-Anlage für mein Dach?",
     responsibility: "in-house" as const,
@@ -118,6 +125,7 @@ export const services = [
   },
   {
     slug: "speicher",
+    route: "/stromspeicher",
     title: "Speicher",
     userQuestion: "Wie viel von meinem eigenen Solarstrom kann ich wirklich selbst nutzen?",
     responsibility: "in-house" as const,
@@ -166,6 +174,7 @@ export const services = [
   },
   {
     slug: "wallbox",
+    route: "/wallbox",
     title: "Wallbox",
     userQuestion: "Wie lade ich mein E-Auto möglichst viel mit eigenem Solarstrom?",
     responsibility: "in-house" as const,
@@ -214,6 +223,7 @@ export const services = [
   },
   {
     slug: "waermepumpe",
+    route: "/waermepumpe",
     title: "Wärmepumpe",
     userQuestion: "Passt eine Wärmepumpe zu meinem Dach und meiner PV-Anlage?",
     responsibility: "partner-coordinated" as const,
@@ -261,6 +271,8 @@ export const services = [
     ],
   },
 ];
+
+export type Service = (typeof services)[number];
 
 export const trustPoints = [
   {
@@ -332,35 +344,35 @@ export const decisionPaths = [
     id: "pv",
     question: "Lohnt sich eine PV-Anlage für mein Dach?",
     label: "Photovoltaik",
-    href: "/leistungen/pv-anlagen",
+    href: "/photovoltaik",
     accent: "primary" as const,
   },
   {
     id: "speicher",
     question: "Wie viel eigenen Solarstrom kann ich wirklich nutzen?",
     label: "Stromspeicher",
-    href: "/leistungen/speicher",
+    href: "/stromspeicher",
     accent: "green" as const,
   },
   {
     id: "wallbox",
     question: "Wie lade ich mein E-Auto mit eigenem Strom?",
     label: "Wallbox",
-    href: "/leistungen/wallbox",
+    href: "/wallbox",
     accent: "amber" as const,
   },
   {
     id: "waermepumpe",
     question: "Passt eine Wärmepumpe zu meinem Haus?",
     label: "Wärmepumpe",
-    href: "/leistungen/waermepumpe",
+    href: "/waermepumpe",
     accent: "blue" as const,
   },
   {
     id: "dach-pv",
     question: "Muss ich erst mein Dach lösen, bevor PV möglich ist?",
     label: "Dach + PV",
-    href: "/leistungen/dachsanierung",
+    href: "/dachsanierung-photovoltaik",
     accent: "primary" as const,
   },
 ];
@@ -429,24 +441,49 @@ export const processSteps = [
   },
 ];
 
-// Wissensblock (Brief 6.7): specific, practice-based teasers. Article
-// routes (/ratgeber/[slug]) land in Paket B — these render as static
-// cards without a live link until that route exists.
+// Wissensblock (Brief 6.7): specific, practice-based teasers, now with a
+// real /ratgeber/[slug] route behind each. Bodies expand on facts already
+// confirmed elsewhere in this file (service descriptions/FAQs) rather than
+// introducing new unconfirmed claims.
 export const knowledgeArticles = [
   {
+    slug: "dach-vor-pv-sanieren",
     title: "Wann sollte das Dach vor der PV-Anlage saniert werden?",
     excerpt:
       "Nicht jedes Dach braucht vorab eine Sanierung. Woran Sie erkennen, ob Ihre Eindeckung und Unterkonstruktion für eine PV-Anlage bereit sind — und wann sich eine Sanierung zuerst lohnt.",
+    relatedService: "dachsanierung",
+    body: [
+      "Eine Photovoltaikanlage hält mehrere Jahrzehnte — deutlich länger als viele Dacheindeckungen. Wer eine Anlage auf ein Dach setzt, das in wenigen Jahren ohnehin saniert werden muss, verursacht doppelte Arbeit: Die Module müssen für die Dacharbeiten wieder abgebaut und neu montiert werden.",
+      "Bei der Dachaufnahme prüfen wir deshalb drei Dinge, bevor wir eine PV-Anlage auslegen: den Zustand der Eindeckung (Alter, sichtbare Schäden, Undichtigkeiten), die Dämmung und die Tragfähigkeit der Unterkonstruktion. Erst wenn diese drei Punkte für die geplante Nutzungsdauer der Anlage tragen, macht eine Installation ohne vorherige Sanierung Sinn.",
+      "Ist eine Sanierung nötig, koordinieren wir sie über zertifizierte Dachdecker-Partnerbetriebe aus unserem Netzwerk — als ein gemeinsam geplantes Projekt mit der PV-Installation, nicht als getrennte Baustelle mit eigenem Zeitplan. So entscheiden Statik, Ausrichtung und Unterkonstruktion der Dachsanierung von Anfang an mit, wie die Photovoltaikanlage später ausgelegt wird.",
+      "Die ehrliche Antwort auf die Frage \"Muss ich sanieren?\" bekommen Sie erst nach einer Dachaufnahme vor Ort — pauschale Aussagen ohne Blick aufs Dach sind hier wenig wert.",
+    ],
   },
   {
+    slug: "speicher-richtig-dimensionieren",
     title: "Wie wird ein Speicher passend zum Verbrauch dimensioniert?",
     excerpt:
       "Ein zu kleiner Speicher verschenkt Eigenverbrauch, ein zu großer amortisiert sich schlechter. Wie Verbrauchsprofil und PV-Größe die richtige Kapazität bestimmen.",
+    relatedService: "speicher",
+    body: [
+      "Ein Batteriespeicher hat eine einzige Aufgabe: den tagsüber erzeugten Solarstrom für den Verbrauch am Abend und in der Nacht verfügbar zu machen. Wie groß er dafür sein muss, hängt nicht von der PV-Anlage allein ab, sondern vom Zusammenspiel aus Erzeugung und tatsächlichem Verbrauch.",
+      "Ein zu klein dimensionierter Speicher ist schnell voll und schickt überschüssigen Strom trotzdem für wenig Geld ins Netz — der eigentliche Vorteil des Speichers verpufft. Ein zu groß dimensionierter Speicher wird dagegen selten vollständig genutzt und verlängert die Amortisationszeit unnötig, ohne einen entsprechenden Zusatznutzen zu bringen.",
+      "Wir bewerten die passende Kapazität deshalb anhand Ihrer tatsächlichen Verbrauchsdaten, nicht anhand einer Pauschalgröße pro Haushalt oder pro kWp Anlagenleistung. Das Ergebnis ist ein Speicher, der zu Ihrem Alltag passt — inklusive der Frage, ob und wann eine Wallbox oder Wärmepumpe später dazukommen soll, weil das die sinnvolle Kapazität ebenfalls verschiebt.",
+      "Wir setzen dabei ausschließlich auf das EcoFlow-Ökosystem: Speicher, Wallbox und Steuerung stammen aus einem System, das für nahtloses Zusammenspiel konzipiert ist, statt Komponenten verschiedener Hersteller aufeinander abzustimmen.",
+    ],
   },
   {
+    slug: "pv-ueberschussladen-alltag",
     title: "Was bedeutet PV-Überschussladen im Alltag?",
     excerpt:
       "Die Wallbox lädt bevorzugt dann, wenn Ihre PV-Anlage Strom erzeugt. Was das für Ladezeiten, Reichweite und Ihre Stromrechnung konkret bedeutet.",
+    relatedService: "wallbox",
+    body: [
+      "Eine Wallbox ohne Anbindung an die PV-Anlage lädt einfach mit Netzstrom, unabhängig davon, ob gerade die Sonne scheint. Beim PV-Überschussladen ist das anders: Die Wallbox ist intelligent mit der PV-Anlage — und, sofern vorhanden, dem Speicher — verbunden und lädt bevorzugt dann, wenn Sie selbst Strom erzeugen.",
+      "Im Alltag heißt das konkret: An einem sonnigen Tag lädt Ihr Elektrofahrzeug einen relevanten Teil seiner Reichweite mit selbst erzeugtem Strom, während Sie zu Hause sind oder arbeiten — ohne dass Sie den Ladevorgang manuell steuern müssen. An bewölkten Tagen oder wenn schnell geladen werden muss, greift die Steuerung auf Netzstrom zurück, damit Sie nicht auf Sonnenschein warten müssen, wenn es eilt.",
+      "Für Ihre Stromrechnung bedeutet das: Jede Kilowattstunde, die Sie selbst erzeugt statt eingespeist oder aus dem Netz bezogen haben, spart doppelt — Sie zahlen keinen Netzstrompreis für diese Energie und verzichten nicht auf die (meist niedrigere) Einspeisevergütung dafür, weil der Strom ohnehin direkt genutzt wurde.",
+      "Voraussetzung ist eine Wallbox, die mit Ihrer PV-Anlage kommuniziert, statt isoliert am Netz zu hängen — deshalb planen wir Wallbox, PV-Anlage und Speicher immer als ein System.",
+    ],
   },
 ];
 
