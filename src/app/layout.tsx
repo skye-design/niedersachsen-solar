@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Sora, Source_Sans_3, IBM_Plex_Mono } from "next/font/google";
 import ScrollProgress from "@/components/ScrollProgress";
 import StickyMobileCTA from "@/components/StickyMobileCTA";
+import SolarLotseLoader from "@/components/SolarLotseLoader";
+import { site } from "@/lib/content";
 import "./globals.css";
 
 const sora = Sora({
@@ -22,22 +24,31 @@ const plexMono = IBM_Plex_Mono({
   weight: ["500"],
 });
 
-const title = "Niedersachsen Solar | Ganzheitliche Energiekonzepte für Ihr Zuhause";
+// Draft per handoff/04_SEO_AI_SPEC.md §Metadata API — subpage titles stay as
+// finalized in Paket B; only the homepage baseline needed updating here.
+const title = "Photovoltaik & Energiekonzepte in Niedersachsen | Niedersachsen Solar";
 const description =
-  "PV-Anlagen, Speicher, Wallbox und Wärmepumpe aus einer Hand für Hannover, Hildesheim und Braunschweig. Ganzheitliche Energiekonzepte von Menschen, die selbst auf dem Dach gestanden haben.";
+  "Photovoltaik, Speicher, Wallbox und Wärmepumpe für Hannover, Hildesheim und Braunschweig – persönlich geplant, regional umgesetzt und verständlich begleitet.";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://niedersachsen-solar.de"),
   title,
   description,
+  alternates: { canonical: "https://niedersachsen-solar.de/" },
   icons: {
     apple: "/images/favicon-180.png",
+  },
+  // Configurable, not hardcoded — set NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION
+  // once Search Console is connected. This is a public verification meta
+  // tag by design, not a secret.
+  verification: {
+    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
   },
   openGraph: {
     title,
     description,
     url: "https://niedersachsen-solar.de",
-    siteName: "Niedersachsen Solar",
+    siteName: site.name,
     locale: "de_DE",
     type: "website",
     images: [
@@ -57,24 +68,38 @@ export const metadata: Metadata = {
   },
 };
 
-const localBusinessSchema = {
+// One node, two @types (valid schema.org pattern) rather than a @graph of
+// two loosely-linked nodes — Organization-level fields (founder, logo) and
+// LocalBusiness-level fields (address, hours, areaServed) both describe the
+// same real-world entity. HomeAndConstructionBusiness is the closest fitting
+// LocalBusiness subtype for a coordinated PV/roofing/heat-pump business.
+const organizationSchema = {
   "@context": "https://schema.org",
-  "@type": "LocalBusiness",
-  "@id": "https://niedersachsen-solar.de/#business",
-  name: "Niedersachsen Solar",
+  "@type": ["Organization", "HomeAndConstructionBusiness"],
+  "@id": "https://niedersachsen-solar.de/#organization",
+  name: site.name,
   url: "https://niedersachsen-solar.de",
-  telephone: "+4951195733515",
-  email: "kontakt@niedersachsen-solar.de",
+  logo: "https://niedersachsen-solar.de/brand/niso-logo-horizontal-light.svg",
+  founder: { "@type": "Person", name: site.founder },
+  telephone: site.phoneHref.replace("tel:", ""),
+  email: site.email,
   image: "https://niedersachsen-solar.de/images/hero-v2.jpg",
   description,
   address: {
     "@type": "PostalAddress",
-    streetAddress: "Herrenhäuser Str. 64",
-    postalCode: "30419",
-    addressLocality: "Hannover",
+    streetAddress: site.address.street,
+    postalCode: site.address.postalCode,
+    addressLocality: site.address.city,
     addressCountry: "DE",
   },
-  areaServed: ["Hannover", "Hildesheim", "Braunschweig"],
+  // schema.org openingHoursSpecification day names, Mo-Fr per site.hours
+  openingHoursSpecification: {
+    "@type": "OpeningHoursSpecification",
+    dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+    opens: "08:00",
+    closes: "17:00",
+  },
+  areaServed: site.cities.map((city) => ({ "@type": "City", name: city })),
   makesOffer: [
     { "@type": "Offer", itemOffered: { "@type": "Service", name: "Dachsanierung" } },
     { "@type": "Offer", itemOffered: { "@type": "Service", name: "PV-Anlagen" } },
@@ -97,11 +122,12 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col font-body bg-background text-foreground">
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessSchema) }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
         />
         <ScrollProgress />
         {children}
         <StickyMobileCTA />
+        <SolarLotseLoader />
       </body>
     </html>
   );

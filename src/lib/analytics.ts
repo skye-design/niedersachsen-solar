@@ -8,7 +8,16 @@ export type AnalyticsEvent =
   | { name: "solar_check_submitted" }
   | { name: "solar_check_error" }
   | { name: "quote_form_submitted" }
-  | { name: "quote_form_error" };
+  | { name: "quote_form_error" }
+  // Solar-Lotse: topic ids and booleans only, per handoff/05_CHATBOT_SPEC.md
+  // §Monitoring — never message text, name, contact, or summary content.
+  | { name: "solar_lotse_opened" }
+  | { name: "solar_lotse_entry_selected"; entry: "solution" | "process" | "prepare" | "human" }
+  | { name: "solar_lotse_answer_shown"; topicId: string; confidence: "high" | "limited" }
+  | { name: "solar_lotse_feedback"; topicId: string; helpful: boolean }
+  | { name: "solar_lotse_handoff_requested" }
+  | { name: "solar_lotse_submitted" }
+  | { name: "solar_lotse_error" };
 
 export function trackEvent(event: AnalyticsEvent): void {
   if (process.env.NODE_ENV !== "production") {

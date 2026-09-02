@@ -48,13 +48,30 @@ export default async function RatgeberArticlePage({
 
   const relatedService = services.find((s) => s.slug === article.relatedService);
 
+  const url = `https://niedersachsen-solar.de/ratgeber/${article.slug}`;
+  // NOTE: datePublished/dateModified use this content's authoring date
+  // (content-model commit), not a real go-live date since this branch isn't
+  // deployed yet. Confirm/update once the article actually goes live —
+  // flagged as an open item in the Paket D report.
+  const articleDate = "2026-09-02";
   const articleSchema = {
     "@context": "https://schema.org",
     "@type": "Article",
     headline: article.title,
     description: article.excerpt,
+    url,
+    mainEntityOfPage: { "@type": "WebPage", "@id": url },
+    datePublished: articleDate,
+    dateModified: articleDate,
     author: { "@type": "Person", name: site.founder },
-    publisher: { "@type": "Organization", name: site.name },
+    publisher: {
+      "@type": "Organization",
+      name: site.name,
+      logo: {
+        "@type": "ImageObject",
+        url: "https://niedersachsen-solar.de/brand/niso-logo-horizontal-light.svg",
+      },
+    },
   };
 
   return (

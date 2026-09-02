@@ -68,7 +68,9 @@ export async function POST(request: Request) {
         _subject:
           data.source === "solar-check"
             ? `Neuer Solar-Check von ${data.name}`
-            : `Neue Angebotsanfrage von ${data.name}`,
+            : data.source === "solar-lotse"
+              ? `Neue Anfrage über den Solar-Lotsen von ${data.name}`
+              : `Neue Angebotsanfrage von ${data.name}`,
         ...data,
       }),
     });

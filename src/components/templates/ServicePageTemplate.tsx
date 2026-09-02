@@ -18,9 +18,7 @@ export default function ServicePageTemplate({ service }: { service: Service }) {
     name: `${service.title} | ${site.name}`,
     description: service.metaDescription,
     provider: {
-      "@type": "LocalBusiness",
-      "@id": "https://niedersachsen-solar.de/#business",
-      name: site.name,
+      "@id": "https://niedersachsen-solar.de/#organization",
     },
     areaServed: { "@type": "State", name: site.serviceArea },
   };

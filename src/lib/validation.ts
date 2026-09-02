@@ -23,7 +23,7 @@ export const leadSchema = z.object({
   propertyType: z.string().max(60).optional(),
   situation: z.string().max(120).optional(),
   message: z.string().trim().max(2000).optional(),
-  source: z.enum(["quote-form", "solar-check"]),
+  source: z.enum(["quote-form", "solar-check", "solar-lotse"]),
   // Honeypot: validated only for shape here, checked for emptiness in the
   // route handler (kept out of the schema's pass/fail so a bot that fills
   // it gets an indistinguishable fake-success response, not a 400 that

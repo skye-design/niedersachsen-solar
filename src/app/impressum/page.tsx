@@ -1,6 +1,14 @@
+import type { Metadata } from "next";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import Breadcrumbs from "@/components/Breadcrumbs";
 import { site } from "@/lib/content";
+
+export const metadata: Metadata = {
+  title: `Impressum | ${site.name}`,
+  description: "Impressum und Anbieterkennzeichnung von Niedersachsen Solar.",
+  alternates: { canonical: "https://niedersachsen-solar.de/impressum" },
+};
 
 export default function Impressum() {
   return (
@@ -8,7 +16,8 @@ export default function Impressum() {
       <Header />
       <main className="flex-1">
         <div className="mx-auto max-w-3xl px-4 pt-32 pb-16 sm:px-6">
-          <h1 className="font-heading text-3xl font-bold text-foreground">
+          <Breadcrumbs items={[{ label: "Startseite", href: "/" }, { label: "Impressum" }]} />
+          <h1 className="mt-3 font-heading text-3xl font-bold text-foreground">
             Impressum
           </h1>
 
