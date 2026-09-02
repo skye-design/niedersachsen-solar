@@ -3,6 +3,7 @@ import { MapPin, ArrowRight } from "@phosphor-icons/react/dist/ssr";
 import { site } from "@/lib/content";
 import HeroMedia from "@/components/HeroMedia";
 import EnergyPath, { type EnergyPathNode } from "@/components/EnergyPath";
+import SignalTag from "@/components/SignalTag";
 
 const heroNodes: EnergyPathNode[] = [
   { id: "dach", label: "Dach", icon: "dach" },
@@ -52,13 +53,23 @@ export default function Hero() {
               animation here in the first place. Below-the-fold sections
               keep Reveal (see Reveal.tsx for the separate no-JS fix
               applied there). */}
+          {/* 2026-09-02 (Commit 2, Preview-Treue): thin measurement-line
+              accent — a precision/technical flourish above the eyebrow,
+              matching the "feine Messlinien" the preview calls for. Purely
+              decorative, aria-hidden. */}
+          <div className="mb-4 flex items-center gap-1.5" aria-hidden>
+            <span className="h-2 w-px bg-primary/50" />
+            <span className="h-px w-10 bg-primary/40" />
+            <span className="h-2 w-px bg-primary/50" />
+          </div>
+
           <p className="mb-5 inline-flex items-center gap-2 text-xs font-semibold tracking-[0.2em] text-primary uppercase">
             <MapPin size={14} weight="fill" aria-hidden />
             Hannover · Hildesheim · Braunschweig
           </p>
 
           <h1 className="max-w-2xl text-4xl leading-[1.1] font-semibold text-on-ink sm:text-5xl lg:text-6xl">
-            Ihr Zuhause kann mehr Energie selbst übernehmen.
+            Ihr Zuhause. Ein Energiesystem.
           </h1>
 
           {/* 2026-09-02: added a targeted gradient panel behind just this
@@ -99,8 +110,28 @@ export default function Hero() {
           </div>
 
           <div className="mt-10 max-w-2xl rounded-2xl border border-ink-border bg-ink-alt/40 p-5 backdrop-blur-sm sm:mt-12">
+            {/* 2026-09-02 (Commit 2): compact energy-path label, matching
+                the SolarCheck's own "SCHRITT X VON Y" mono-data styling
+                for consistency (font-data, tracked-out, uppercase) rather
+                than inventing a new label convention. */}
+            <p className="font-data mb-4 text-xs tracking-[0.15em] text-on-ink-muted uppercase">
+              Ihr Energiepfad <span className="text-primary">· 01/05</span>
+            </p>
             <EnergyPath nodes={heroNodes} compact dark />
           </div>
+
+          {/* 2026-09-02 (Commit 2): transition preview into the next
+              section (TrustSection, id="warum-wir") — reuses the existing
+              SignalTag component (already the site's "red signal marker"
+              pattern, see TrustSection.tsx's own index={1} usage) rather
+              than inventing a second marker style for the same concept. */}
+          <a
+            href="#warum-wir"
+            className="mt-8 flex flex-wrap items-center gap-2 text-sm text-on-ink-muted transition-colors hover:text-on-ink"
+          >
+            <SignalTag index="01">Vertrauen</SignalTag>
+            <span>— Vom Dach bis zur Inbetriebnahme.</span>
+          </a>
         </div>
       </div>
     </section>
