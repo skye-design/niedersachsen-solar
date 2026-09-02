@@ -1,15 +1,35 @@
+// Central content-model types (see handoff/02_CONTENT_MODEL.md).
+// Business claims are never hardcoded directly into JSX — they flow through
+// here with an explicit verification state so an unconfirmed number/promise
+// can never quietly ship.
+export type VerificationState = "confirmed" | "needs-owner-confirmation" | "internal-only";
+
+export type Claim = {
+  id: string;
+  statement: string;
+  source?: string;
+  state: VerificationState;
+};
+
 export const site = {
   name: "Niedersachsen Solar",
   phone: "0511 95733515",
   phoneHref: "tel:+4951195733515",
   email: "kontakt@niedersachsen-solar.de",
   cities: ["Hannover", "Hildesheim", "Braunschweig"],
+  serviceArea: "Niedersachsen",
+  founder: "Skye van Dyck",
+  founderRole: "Gründer und Geschäftsführer",
+  financingPartner: "Cloover",
+  hours: "Montag bis Freitag, 8–17 Uhr",
 };
 
 export const services = [
   {
     slug: "dachsanierung",
     title: "Dachsanierung",
+    userQuestion: "Muss ich erst mein Dach lösen, bevor eine PV-Anlage möglich ist?",
+    responsibility: "partner-coordinated" as const,
     description:
       "Bevor wir Module aufs Dach bringen, sorgen wir bei Bedarf dafür, dass der Untergrund stimmt. Die Dachsanierung selbst führen zertifizierte Dachdecker-Partnerbetriebe aus unserem Netzwerk durch — koordiniert von uns, damit Ihre PV-Anlage am Ende auf einer soliden Basis steht.",
     icon: "house",
@@ -51,6 +71,8 @@ export const services = [
   {
     slug: "pv-anlagen",
     title: "PV-Anlagen",
+    userQuestion: "Lohnt sich eine PV-Anlage für mein Dach?",
+    responsibility: "in-house" as const,
     description:
       "Photovoltaik-Planung und -Installation aus einer Hand — von der Dachaufnahme bis zur Inbetriebnahme. Wir haben selbst jahrelang auf dem Dach gestanden, bevor wir Energiekonzepte geplant haben.",
     icon: "sun",
@@ -97,6 +119,8 @@ export const services = [
   {
     slug: "speicher",
     title: "Speicher",
+    userQuestion: "Wie viel von meinem eigenen Solarstrom kann ich wirklich selbst nutzen?",
+    responsibility: "in-house" as const,
     description:
       "Batteriespeicher-Systeme ausschließlich von EcoFlow — ein durchdachtes Ökosystem statt loser Einzelkomponenten, für maximale Unabhängigkeit vom Netz.",
     icon: "battery",
@@ -143,6 +167,8 @@ export const services = [
   {
     slug: "wallbox",
     title: "Wallbox",
+    userQuestion: "Wie lade ich mein E-Auto möglichst viel mit eigenem Solarstrom?",
+    responsibility: "in-house" as const,
     description:
       "Ladeinfrastruktur für Ihr Elektrofahrzeug, intelligent mit Ihrer PV-Anlage verbunden — laden Sie mit selbst erzeugtem Strom.",
     icon: "plug",
@@ -189,6 +215,8 @@ export const services = [
   {
     slug: "waermepumpe",
     title: "Wärmepumpe",
+    userQuestion: "Passt eine Wärmepumpe zu meinem Dach und meiner PV-Anlage?",
+    responsibility: "partner-coordinated" as const,
     description:
       "Als Teil Ihres Energiekonzepts koordinieren wir die Wärmepumpen-Installation über unser Netzwerk zertifizierter Heizungsbau-Fachpartner — abgestimmt auf Ihre PV-Anlage und Ihren Speicher.",
     icon: "thermometer",
@@ -262,7 +290,7 @@ export const generalFaqs = [
   {
     question: "In welchen Regionen ist Niedersachsen Solar tätig?",
     answer:
-      "Wir planen und installieren Energiekonzepte in Hannover, Hildesheim, Braunschweig und der jeweiligen Umgebung.",
+      "Wir planen und installieren Energiekonzepte im gesamten Bundesland Niedersachsen, mit Schwerpunkt in und um Hannover, Hildesheim und Braunschweig.",
   },
   {
     question: "Was kosten Photovoltaik, Speicher, Wallbox und Wärmepumpe?",
@@ -287,6 +315,161 @@ export const generalFaqs = [
   {
     question: "Gibt es eine Finanzierungsmöglichkeit?",
     answer:
-      "Ja, über unsere Finanzierungspartner klären wir Ihre Optionen direkt und unkompliziert, ohne Umwege über mehrere Ansprechpartner.",
+      "Ja, über unseren Finanzierungspartner Cloover klären wir Ihre Optionen direkt und unkompliziert, ohne Umwege über mehrere Ansprechpartner.",
+  },
+  {
+    question: "Wann sind Sie persönlich erreichbar?",
+    answer:
+      "Montags bis freitags von 8 bis 17 Uhr. Außerhalb dieser Zeiten erreichen Sie uns über das Kontaktformular oder den Solar-Check — wir melden uns innerhalb eines Werktags zurück.",
+  },
+];
+
+// Entscheidungseinstieg (Brief 6.2): five paths — PV, Speicher, Wallbox,
+// Wärmepumpe, and Dach+PV combined into one card, each phrased as the
+// visitor's real question rather than a bare product name.
+export const decisionPaths = [
+  {
+    id: "pv",
+    question: "Lohnt sich eine PV-Anlage für mein Dach?",
+    label: "Photovoltaik",
+    href: "/leistungen/pv-anlagen",
+    accent: "primary" as const,
+  },
+  {
+    id: "speicher",
+    question: "Wie viel eigenen Solarstrom kann ich wirklich nutzen?",
+    label: "Stromspeicher",
+    href: "/leistungen/speicher",
+    accent: "green" as const,
+  },
+  {
+    id: "wallbox",
+    question: "Wie lade ich mein E-Auto mit eigenem Strom?",
+    label: "Wallbox",
+    href: "/leistungen/wallbox",
+    accent: "amber" as const,
+  },
+  {
+    id: "waermepumpe",
+    question: "Passt eine Wärmepumpe zu meinem Haus?",
+    label: "Wärmepumpe",
+    href: "/leistungen/waermepumpe",
+    accent: "blue" as const,
+  },
+  {
+    id: "dach-pv",
+    question: "Muss ich erst mein Dach lösen, bevor PV möglich ist?",
+    label: "Dach + PV",
+    href: "/leistungen/dachsanierung",
+    accent: "primary" as const,
+  },
+];
+
+// Vertrauensabschnitt (Brief 6.3): each proof field carries its own
+// verification state instead of being asserted as flat fact in JSX.
+export const proofClaims: Claim[] = [
+  {
+    id: "praxiserfahrung",
+    statement:
+      "Gründer und Geschäftsführer Skye van Dyck hat selbst PV-Anlagen installiert, bevor er Energiekonzepte geplant hat — diese praktische Erfahrung fließt in jede Planung ein.",
+    state: "confirmed",
+  },
+  {
+    id: "ecoflow",
+    statement:
+      "Speicherlösungen werden ausschließlich mit dem EcoFlow-Ökosystem geplant, statt beliebige Einzelkomponenten zu kombinieren.",
+    state: "confirmed",
+  },
+  {
+    id: "finanzierung",
+    statement:
+      "Über unseren Finanzierungspartner Cloover klären wir Ihre Optionen direkt, ohne Umwege über mehrere Ansprechpartner.",
+    state: "confirmed",
+  },
+];
+
+// Prozess (Brief 6.5): five steps, each naming its result, the documents it
+// needs, and who is responsible — reduces uncertainty instead of just
+// showing a bare timeline.
+export const processSteps = [
+  {
+    step: 1,
+    title: "Kennenlernen",
+    result: "Sie wissen, ob ein Gesamtsystem für Ihr Haus sinnvoll ist.",
+    documents: "Keine — ein kurzes Gespräch genügt.",
+    responsible: "Niedersachsen Solar",
+  },
+  {
+    step: 2,
+    title: "Haus verstehen",
+    result: "Dachzustand, Ausrichtung und Verbrauch sind erfasst.",
+    documents: "Letzte Stromrechnung, Dachfotos falls vorhanden.",
+    responsible: "Niedersachsen Solar",
+  },
+  {
+    step: 3,
+    title: "System planen",
+    result: "Ein konkretes Angebot für PV, Speicher, Wallbox und/oder Wärmepumpe.",
+    documents: "Keine weiteren Unterlagen nötig.",
+    responsible: "Niedersachsen Solar",
+  },
+  {
+    step: 4,
+    title: "Sauber umsetzen",
+    result: "PV-Anlage und Speicher sind installiert; Dach/Wärmepumpe koordiniert.",
+    documents: "Zählerschrank-Zugang, ggf. Netzbetreiber-Anmeldung.",
+    responsible: "Niedersachsen Solar und zertifizierte Fachpartner",
+  },
+  {
+    step: 5,
+    title: "Gemeinsam in Betrieb nehmen",
+    result: "Ihr System läuft, Sie wissen, wie Sie es bedienen.",
+    documents: "Keine — Einweisung erfolgt vor Ort.",
+    responsible: "Niedersachsen Solar",
+  },
+];
+
+// Wissensblock (Brief 6.7): specific, practice-based teasers. Article
+// routes (/ratgeber/[slug]) land in Paket B — these render as static
+// cards without a live link until that route exists.
+export const knowledgeArticles = [
+  {
+    title: "Wann sollte das Dach vor der PV-Anlage saniert werden?",
+    excerpt:
+      "Nicht jedes Dach braucht vorab eine Sanierung. Woran Sie erkennen, ob Ihre Eindeckung und Unterkonstruktion für eine PV-Anlage bereit sind — und wann sich eine Sanierung zuerst lohnt.",
+  },
+  {
+    title: "Wie wird ein Speicher passend zum Verbrauch dimensioniert?",
+    excerpt:
+      "Ein zu kleiner Speicher verschenkt Eigenverbrauch, ein zu großer amortisiert sich schlechter. Wie Verbrauchsprofil und PV-Größe die richtige Kapazität bestimmen.",
+  },
+  {
+    title: "Was bedeutet PV-Überschussladen im Alltag?",
+    excerpt:
+      "Die Wallbox lädt bevorzugt dann, wenn Ihre PV-Anlage Strom erzeugt. Was das für Ladezeiten, Reichweite und Ihre Stromrechnung konkret bedeutet.",
+  },
+];
+
+// Projekte aus der Region (Brief 6.6): the brief wants full case studies
+// (region, starting point, system scope, challenge, solution). That data
+// doesn't exist yet — only real photos do — so this renders as a lighter
+// photo teaser rather than inventing case-study narrative. See report for
+// the open question to the product owner.
+export const projectTeasers = [
+  {
+    src: "/images/gallery/gallery-01-v2.jpg",
+    alt: "Luftaufnahme einer großflächigen Photovoltaikanlage auf einem Gewerbedach",
+  },
+  {
+    src: "/images/gallery/gallery-02-v2.jpg",
+    alt: "PV-Module im Abendlicht auf einem Wohnhausdach",
+  },
+  {
+    src: "/images/gallery/gallery-03-v2.jpg",
+    alt: "Solarmodule auf einem Dachgaubendach in Niedersachsen",
+  },
+  {
+    src: "/images/gallery/gallery-04-v2.jpg",
+    alt: "PV-Anlage auf einem Reihenhaus mit Klinkerfassade",
   },
 ];

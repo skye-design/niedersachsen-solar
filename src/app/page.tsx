@@ -1,10 +1,13 @@
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
+import DecisionEntry from "@/components/DecisionEntry";
 import TrustSection from "@/components/TrustSection";
-import Services from "@/components/Services";
-import Gallery from "@/components/Gallery";
+import SystemExplainer from "@/components/SystemExplainer";
+import Process from "@/components/Process";
+import ProjectTeasers from "@/components/ProjectTeasers";
+import KnowledgeBlock from "@/components/KnowledgeBlock";
 import FAQSection from "@/components/FAQSection";
-import QuoteSection from "@/components/QuoteSection";
+import ConversionFinale from "@/components/ConversionFinale";
 import Footer from "@/components/Footer";
 import { generalFaqs } from "@/lib/content";
 
@@ -12,13 +15,18 @@ export default function Home() {
   return (
     <>
       <Header />
-      <main className="flex-1">
+      <main className="flex-1 pb-16 sm:pb-0">
         <Hero />
+        <DecisionEntry />
         <TrustSection />
-        <Services />
-        <Gallery />
+        <SystemExplainer />
+        <Process />
+        <ProjectTeasers />
+        <div id="wissen">
+          <KnowledgeBlock />
+        </div>
         <FAQSection faqs={generalFaqs} />
-        <QuoteSection />
+        <ConversionFinale />
       </main>
       <Footer />
     </>

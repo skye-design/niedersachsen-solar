@@ -1,47 +1,49 @@
-import { Wrench, ShieldCheck, Handshake } from "@phosphor-icons/react/dist/ssr";
-import { trustPoints } from "@/lib/content";
+import Image from "next/image";
+import { CheckCircle } from "@phosphor-icons/react/dist/ssr";
+import { proofClaims } from "@/lib/content";
 import Reveal from "@/components/Reveal";
-
-const icons = {
-  toolbox: Wrench,
-  "shield-check": ShieldCheck,
-  handshake: Handshake,
-};
+import SignalTag from "@/components/SignalTag";
 
 export default function TrustSection() {
   return (
     <section id="warum-wir">
-      <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-32">
-        <Reveal className="mx-auto max-w-2xl text-center">
-          <h2 className="font-serif text-3xl font-medium text-foreground sm:text-4xl">
-            Warum Niedersachsen Solar
+      <div className="mx-auto grid max-w-6xl gap-10 px-4 py-20 sm:px-6 sm:py-28 lg:grid-cols-2 lg:gap-16">
+        <Reveal className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl border border-border lg:aspect-auto">
+          <Image
+            src="/images/feature-v2.jpg"
+            alt="Monteur bei der Installation von Solarmodulen auf einem Ziegeldach"
+            fill
+            sizes="(min-width: 1024px) 45vw, 100vw"
+            className="object-cover"
+          />
+        </Reveal>
+
+        <Reveal delay={80}>
+          <SignalTag index={1}>Vertrauen</SignalTag>
+          <h2 className="mt-4 text-3xl font-semibold text-foreground sm:text-4xl">
+            Vom Dach in die Planung
           </h2>
           <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
             Keine Vertriebsnummer, sondern echte Handwerkserfahrung, ein
             geschlossenes Ökosystem und ein direkter Weg zur Finanzierung.
           </p>
-        </Reveal>
 
-        <div className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-          {trustPoints.map((point, i) => {
-            const Icon = icons[point.icon as keyof typeof icons];
-            return (
-              <Reveal key={point.title} delay={i * 80}>
-                <div className="h-full rounded-2xl border border-border bg-card p-8 transition-all duration-300 hover:-translate-y-1 hover:border-primary/40">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-accent-soft text-accent">
-                    <Icon size={24} weight="bold" aria-hidden />
-                  </div>
-                  <h3 className="mt-5 font-heading text-xl font-semibold text-foreground">
-                    {point.title}
-                  </h3>
-                  <p className="mt-3 leading-relaxed text-muted-foreground">
-                    {point.description}
-                  </p>
-                </div>
-              </Reveal>
-            );
-          })}
-        </div>
+          <ul className="mt-8 space-y-5">
+            {proofClaims
+              .filter((claim) => claim.state === "confirmed")
+              .map((claim) => (
+              <li key={claim.id} className="flex gap-3">
+                <CheckCircle
+                  size={22}
+                  weight="fill"
+                  className="mt-0.5 shrink-0 text-primary"
+                  aria-hidden
+                />
+                <p className="leading-relaxed text-foreground/90">{claim.statement}</p>
+              </li>
+            ))}
+          </ul>
+        </Reveal>
       </div>
     </section>
   );

@@ -9,21 +9,19 @@ export default function Footer() {
       <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
         <div className="flex flex-col flex-wrap gap-8 sm:flex-row sm:justify-between">
           <div>
-            <div className="flex items-center gap-2.5">
-              <Image
-                src="/images/logo-header.png"
-                alt=""
-                width={32}
-                height={33}
-                className="h-7 w-auto"
-              />
-              <p className="font-heading text-lg font-bold text-foreground">
-                Niedersachsen<span className="text-primary">Solar</span>
-              </p>
-            </div>
-            <p className="mt-2 max-w-xs text-sm leading-relaxed text-muted-foreground">
-              Ganzheitliche Energiekonzepte für {site.cities.join(", ")} und
-              Umgebung.
+            <Image
+              src="/brand/niso-logo-horizontal-light.svg"
+              alt={site.name}
+              width={200}
+              height={48}
+              className="h-9 w-auto"
+            />
+            <p className="mt-3 max-w-xs text-sm leading-relaxed text-muted-foreground">
+              Ganzheitliche Energiekonzepte für {site.serviceArea}, mit
+              Schwerpunkt in {site.cities.join(", ")}.
+            </p>
+            <p className="mt-2 text-xs text-muted-foreground">
+              {site.founderRole}: {site.founder}
             </p>
           </div>
 
@@ -54,6 +52,7 @@ export default function Footer() {
               <EnvelopeSimple size={16} weight="fill" aria-hidden />
               {site.email}
             </a>
+            <p className="mt-1 text-xs text-muted-foreground">{site.hours}</p>
           </div>
 
           <nav className="flex flex-col gap-2 text-sm" aria-label="Rechtliches">

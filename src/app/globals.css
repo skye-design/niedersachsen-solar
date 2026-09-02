@@ -1,26 +1,40 @@
 @import "tailwindcss";
 
 :root {
-  --background: #111318;
-  --background-alt: #0f1116;
-  --foreground: #f8f9fa;
-  --muted-foreground: #9ba0aa;
+  /* Warm, predominantly light surface system */
+  --background: #f5f2ea;
+  --background-alt: #ece7d9;
+  --foreground: #171a1d;
+  --muted-foreground: #5c6066;
 
   --primary: #cc010f;
   --primary-dark: #a3020e;
   --on-primary: #ffffff;
 
   --accent: #cc010f;
-  --accent-soft: rgba(204, 1, 15, 0.1);
+  --accent-soft: rgba(204, 1, 15, 0.08);
   --on-accent: #ffffff;
 
-  --border: rgba(248, 249, 250, 0.1);
-  --card: #2e3138;
+  --border: rgba(23, 26, 29, 0.12);
+  --card: #ffffff;
 
-  --destructive: #ff6b6b;
-  --on-destructive: #16130a;
+  --destructive: #b3261e;
+  --on-destructive: #ffffff;
 
   --ring: #cc010f;
+
+  /* Targeted dark technical sections (System-Explainer, Prozess) */
+  --ink: #171a1d;
+  --ink-alt: #21252a;
+  --on-ink: #f5f2ea;
+  --on-ink-muted: #9aa0a6;
+  --ink-border: rgba(245, 242, 234, 0.12);
+
+  /* Functional brand colors */
+  --blue: #183b47;
+  --amber: #f2b544;
+  --green: #4f7259;
+  --mist: #dde2e1;
 }
 
 @theme inline {
@@ -45,9 +59,22 @@
 
   --color-ring: var(--ring);
 
-  --font-heading: var(--font-poppins);
-  --font-body: var(--font-poppins);
-  --font-serif: var(--font-poppins);
+  --color-ink: var(--ink);
+  --color-ink-alt: var(--ink-alt);
+  --color-on-ink: var(--on-ink);
+  --color-on-ink-muted: var(--on-ink-muted);
+  --color-ink-border: var(--ink-border);
+
+  --color-blue: var(--blue);
+  --color-amber: var(--amber);
+  --color-green: var(--green);
+  --color-mist: var(--mist);
+
+  --font-heading: var(--font-sora);
+  --font-body: var(--font-source-sans);
+  --font-mono: var(--font-plex-mono);
+  /* alias kept so not-yet-rebuilt pages (Paket B) using font-serif still get the new heading font, not a system fallback */
+  --font-serif: var(--font-sora);
 }
 
 body {
@@ -61,13 +88,18 @@ h2,
 h3,
 h4 {
   font-family: var(--font-heading);
-  letter-spacing: -0.02em;
+  letter-spacing: -0.01em;
+}
+
+.font-data {
+  font-family: var(--font-mono);
+  letter-spacing: 0.02em;
 }
 
 .reveal {
   opacity: 0;
   transform: translateY(24px);
-  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1), transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .reveal.is-visible {
   opacity: 1;

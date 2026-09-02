@@ -1,12 +1,25 @@
 import type { Metadata } from "next";
-import { Poppins } from "next/font/google";
+import { Sora, Source_Sans_3, IBM_Plex_Mono } from "next/font/google";
 import ScrollProgress from "@/components/ScrollProgress";
+import StickyMobileCTA from "@/components/StickyMobileCTA";
 import "./globals.css";
 
-const poppins = Poppins({
-  variable: "--font-poppins",
+const sora = Sora({
+  variable: "--font-sora",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600"],
+  weight: ["600", "700"],
+});
+
+const sourceSans = Source_Sans_3({
+  variable: "--font-source-sans",
+  subsets: ["latin"],
+  weight: ["400", "600"],
+});
+
+const plexMono = IBM_Plex_Mono({
+  variable: "--font-plex-mono",
+  subsets: ["latin"],
+  weight: ["500"],
 });
 
 const title = "Niedersachsen Solar | Ganzheitliche Energiekonzepte für Ihr Zuhause";
@@ -77,7 +90,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="de" className={`${poppins.variable} h-full antialiased`}>
+    <html
+      lang="de"
+      className={`${sora.variable} ${sourceSans.variable} ${plexMono.variable} h-full antialiased`}
+    >
       <body className="min-h-full flex flex-col font-body bg-background text-foreground">
         <script
           type="application/ld+json"
@@ -85,6 +101,7 @@ export default function RootLayout({
         />
         <ScrollProgress />
         {children}
+        <StickyMobileCTA />
       </body>
     </html>
   );

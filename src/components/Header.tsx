@@ -2,19 +2,33 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Phone, List, X } from "@phosphor-icons/react";
+import Image from "next/image";
+import { Phone, List, X, CaretDown } from "@phosphor-icons/react";
 import { site } from "@/lib/content";
 
-const navLinks = [
-  { href: "/#leistungen", label: "Leistungen" },
-  { href: "/#warum-wir", label: "Warum wir" },
-  { href: "/#projekte", label: "Projekte" },
-  { href: "/#angebot", label: "Kontakt" },
+// Dedicated top-level routes (/photovoltaik etc.) are Paket B's job — until
+// then these solutions link into the existing /leistungen/[slug] pages.
+const solutionLinks = [
+  { href: "/leistungen/pv-anlagen", label: "Photovoltaik" },
+  { href: "/leistungen/speicher", label: "Stromspeicher" },
+  { href: "/leistungen/wallbox", label: "Wallbox" },
+  { href: "/leistungen/waermepumpe", label: "Wärmepumpe" },
+  { href: "/leistungen/dachsanierung", label: "Dach + PV" },
 ];
 
-export default function Header() {
+// Projekte/Ablauf/Ratgeber/Über uns don't have dedicated routes yet
+// (Paket B) — these point at the matching homepage section for now.
+const navLinks = [
+  { href: "/#projekte", label: "Projekte" },
+  { href: "/#ablauf", label: "Ablauf" },
+  { href: "/#wissen", label: "Ratgeber" },
+  { href: "/#warum-wir", label: "Über uns" },
+];
+
+export default function SiteHeader() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const [isSolutionsOpen, setIsSolutionsOpen] = useState(false);
 
   useEffect(() => {
     function onScroll() {
@@ -32,33 +46,73 @@ export default function Header() {
     };
   }, [isOpen]);
 
+  const opaque = isScrolled || isOpen;
+
   return (
     <header
       className={`fixed inset-x-0 top-0 z-50 border-b transition-colors duration-300 ${
-        isScrolled
-          ? "border-border bg-background/90 backdrop-blur-md"
-          : "border-transparent bg-gradient-to-b from-black/35 to-transparent"
+        opaque
+          ? "border-border bg-background/95 backdrop-blur-md"
+          : "border-transparent bg-gradient-to-b from-black/45 to-transparent"
       }`}
     >
       <div className="mx-auto flex h-[72px] max-w-6xl items-center justify-between gap-4 px-4 sm:px-6">
         <Link href="/" className="flex items-center" onClick={() => setIsOpen(false)}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/images/niso-logo-horizontal.svg"
+          <Image
+            src={opaque ? "/brand/niso-logo-nav-light.svg" : "/brand/niso-logo-nav-dark.svg"}
             alt={site.name}
-            className="h-10 w-auto sm:h-11"
+            width={220}
+            height={44}
+            priority
+            className="h-9 w-auto sm:h-10"
           />
         </Link>
 
-        <nav className="hidden items-center gap-8 md:flex" aria-label="Hauptnavigation">
+        <nav className="hidden items-center gap-7 lg:flex" aria-label="Hauptnavigation">
+          <div
+            className="group relative"
+            onMouseEnter={() => setIsSolutionsOpen(true)}
+            onMouseLeave={() => setIsSolutionsOpen(false)}
+          >
+            <button
+              type="button"
+              aria-expanded={isSolutionsOpen}
+              aria-haspopup="true"
+              onClick={() => setIsSolutionsOpen((v) => !v)}
+              className={`flex items-center gap-1 text-sm font-medium transition-colors ${
+                opaque ? "text-foreground/80 hover:text-foreground" : "text-white/85 hover:text-white"
+              }`}
+            >
+              Lösungen
+              <CaretDown size={14} weight="bold" aria-hidden />
+            </button>
+            {isSolutionsOpen && (
+              <div className="absolute top-full left-0 pt-3">
+                <div className="w-56 rounded-2xl border border-border bg-card p-2 shadow-lg">
+                  {solutionLinks.map((link) => (
+                    <Link
+                      key={link.href}
+                      href={link.href}
+                      onClick={() => setIsSolutionsOpen(false)}
+                      className="block rounded-xl px-3 py-2.5 text-sm font-medium text-foreground/80 transition-colors hover:bg-background-alt hover:text-foreground"
+                    >
+                      {link.label}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+
           {navLinks.map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              className="group relative text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+              className={`text-sm font-medium transition-colors ${
+                opaque ? "text-foreground/80 hover:text-foreground" : "text-white/85 hover:text-white"
+              }`}
             >
               {link.label}
-              <span className="absolute -bottom-1.5 left-0 h-px w-0 bg-primary transition-all duration-200 group-hover:w-full" />
             </Link>
           ))}
         </nav>
@@ -66,16 +120,20 @@ export default function Header() {
         <div className="flex items-center gap-3">
           <a
             href={site.phoneHref}
-            className="hidden items-center gap-2 rounded-full border border-border px-4 py-2 text-sm font-semibold text-foreground transition-colors hover:border-primary hover:text-primary md:flex"
+            className={`hidden items-center gap-2 rounded-full border px-4 py-2 text-sm font-semibold transition-colors lg:flex ${
+              opaque
+                ? "border-border text-foreground hover:border-primary hover:text-primary"
+                : "border-white/30 text-white hover:border-white hover:bg-white/10"
+            }`}
           >
             <Phone size={16} weight="fill" aria-hidden />
             {site.phone}
           </a>
           <Link
-            href="/#angebot"
+            href="/#solar-check"
             className="hidden cursor-pointer rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-on-primary shadow-sm transition-colors hover:bg-primary-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring sm:inline-flex"
           >
-            Angebot anfragen
+            Solar-Check starten
           </Link>
           <button
             type="button"
@@ -83,7 +141,9 @@ export default function Header() {
             aria-label={isOpen ? "Menü schließen" : "Menü öffnen"}
             aria-expanded={isOpen}
             aria-controls="mobile-nav"
-            className="flex h-10 w-10 items-center justify-center text-foreground md:hidden"
+            className={`flex h-10 w-10 items-center justify-center lg:hidden ${
+              opaque ? "text-foreground" : "text-white"
+            }`}
           >
             {isOpen ? <X size={24} /> : <List size={24} />}
           </button>
@@ -93,31 +153,42 @@ export default function Header() {
       <nav
         id="mobile-nav"
         aria-label="Mobile Navigation"
-        className={`fixed right-0 left-0 overflow-y-auto bg-background transition-transform duration-300 ease-out md:hidden ${
+        inert={!isOpen}
+        className={`fixed right-0 left-0 overflow-y-auto bg-background transition-transform duration-300 ease-out lg:hidden ${
           isOpen ? "translate-x-0" : "translate-x-full"
         }`}
         style={{ top: "72px", height: "calc(100vh - 72px)" }}
       >
-        <ul className="flex flex-col gap-0 px-6 py-6">
-          {navLinks.map((link) => (
+        <div className="flex flex-col gap-3 px-6 py-6">
+          <Link
+            href="/#solar-check"
+            onClick={() => setIsOpen(false)}
+            className="flex min-h-[44px] items-center justify-center rounded-full bg-primary px-6 py-3.5 text-base font-semibold text-on-primary"
+          >
+            Solar-Check starten
+          </Link>
+          <a
+            href={site.phoneHref}
+            className="flex min-h-[44px] items-center justify-center gap-2 rounded-full border border-border px-6 py-3.5 text-base font-semibold text-foreground"
+          >
+            <Phone size={18} weight="fill" aria-hidden />
+            Direkt anrufen
+          </a>
+        </div>
+
+        <ul className="flex flex-col gap-0 px-6">
+          {[...solutionLinks, ...navLinks].map((link) => (
             <li key={link.href} className="border-b border-border">
               <Link
                 href={link.href}
                 onClick={() => setIsOpen(false)}
-                className="block py-4 text-lg font-medium text-foreground"
+                className="block min-h-[44px] py-3.5 text-lg font-medium text-foreground"
               >
                 {link.label}
               </Link>
             </li>
           ))}
         </ul>
-        <a
-          href={site.phoneHref}
-          className="mx-6 mt-4 flex items-center justify-center gap-2 rounded-full border border-border px-5 py-3 text-base font-semibold text-foreground"
-        >
-          <Phone size={18} weight="fill" aria-hidden />
-          {site.phone}
-        </a>
       </nav>
     </header>
   );
