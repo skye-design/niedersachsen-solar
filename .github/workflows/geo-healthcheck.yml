@@ -1,0 +1,53 @@
+name: GEO/SEO Health Check
+
+on:
+  schedule:
+    # Mondays 06:17 UTC — off-the-hour to avoid the top-of-hour scheduler pile-up
+    - cron: "17 6 * * 1"
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    env:
+      BASE: https://niedersachsen-solar.de
+    steps:
+      - name: robots.txt allows crawling
+        run: |
+          set -e
+          body=$(curl -sf "$BASE/robots.txt")
+          echo "$body" | grep -q "Allow: /" || { echo "::error::robots.txt no longer allows crawling"; exit 1; }
+          echo "$body" | grep -q "Sitemap:" || { echo "::error::robots.txt missing Sitemap directive"; exit 1; }
+
+      - name: sitemap.xml is reachable and lists all pages
+        run: |
+          set -e
+          body=$(curl -sf "$BASE/sitemap.xml")
+          for path in "" "/leistungen/pv-anlagen" "/leistungen/speicher" "/leistungen/wallbox" "/leistungen/waermepumpe" "/leistungen/dachsanierung"; do
+            echo "$body" | grep -q "$BASE$path<" || { echo "::error::sitemap.xml missing $BASE$path"; exit 1; }
+          done
+
+      - name: homepage has LocalBusiness + FAQPage schema and OG tags
+        run: |
+          set -e
+          body=$(curl -sf "$BASE/")
+          echo "$body" | grep -q '"@type":"LocalBusiness"' || { echo "::error::LocalBusiness schema missing from homepage"; exit 1; }
+          echo "$body" | grep -q '"@type":"FAQPage"' || { echo "::error::FAQPage schema missing from homepage"; exit 1; }
+          echo "$body" | grep -q 'property="og:title"' || { echo "::error::Open Graph tags missing from homepage"; exit 1; }
+
+      - name: every service page returns 200 with Service schema
+        run: |
+          set -e
+          for slug in pv-anlagen speicher wallbox waermepumpe dachsanierung; do
+            code=$(curl -s -o /tmp/page.html -w "%{http_code}" "$BASE/leistungen/$slug")
+            [ "$code" = "200" ] || { echo "::error::$BASE/leistungen/$slug returned $code"; exit 1; }
+            grep -q '"@type":"Service"' /tmp/page.html || { echo "::error::Service schema missing on $slug page"; exit 1; }
+          done
+
+      - name: key AI/search crawlers are not blocked
+        run: |
+          set -e
+          for ua in GPTBot ClaudeBot PerplexityBot OAI-SearchBot Googlebot; do
+            code=$(curl -s -o /dev/null -w "%{http_code}" -A "$ua" "$BASE/")
+            [ "$code" = "200" ] || { echo "::error::$ua got HTTP $code on homepage"; exit 1; }
+          done
