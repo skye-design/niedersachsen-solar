@@ -87,6 +87,11 @@ export const services = [
         answer:
           "Ja — das ist unser Kernprinzip. Wir planen PV-Anlage, Speicher, Wallbox und Wärmepumpe als ein zusammenhängendes System, damit die Komponenten optimal zusammenspielen statt isoliert zu funktionieren.",
       },
+      {
+        question: "Was kostet eine PV-Anlage?",
+        answer:
+          "Je nach Dachgröße und gewünschter Leistung liegen Photovoltaik-Anlagen meist zwischen 6.000 € und 35.000 € vor Förderung. Den genauen Preis für Ihr Dach ermitteln wir im kostenlosen Erstgespräch.",
+      },
     ],
   },
   {
@@ -127,6 +132,11 @@ export const services = [
         question: "Lohnt sich ein Speicher für jedes Haus?",
         answer:
           "Das hängt von Ihrem Verbrauchsprofil und Ihrer PV-Anlage ab. Wir bewerten das im persönlichen Gespräch anhand Ihrer tatsächlichen Verbrauchsdaten, statt pauschal einen Speicher zu empfehlen.",
+      },
+      {
+        question: "Was kostet ein Batteriespeicher?",
+        answer:
+          "Batteriespeicher von EcoFlow kosten je nach Kapazität ab ca. 2.000 € bis 12.000 €. Im Erstgespräch klären wir, welche Speichergröße zu Ihrem Verbrauch und Ihrer PV-Anlage passt.",
       },
     ],
   },
@@ -169,6 +179,11 @@ export const services = [
         answer:
           "Über die Steuerung des EcoFlow-Ökosystems, das Erzeugung, Speicher und Ladevorgang aufeinander abstimmt, statt die Wallbox isoliert am Netz zu betreiben.",
       },
+      {
+        question: "Was kostet eine Wallbox inklusive Installation?",
+        answer:
+          "Eine Wallbox inklusive fachgerechter Installation kostet in der Regel zwischen 1.200 € und 2.500 €, abhängig vom Modell und dem Aufwand für die Elektroinstallation in Ihrem Haus.",
+      },
     ],
   },
   {
@@ -210,6 +225,11 @@ export const services = [
         answer:
           "Das hängt von Gebäudezustand, Dämmung und Heizlast ab. Wir klären das gemeinsam mit unseren Heizungsbau-Partnern im persönlichen Gespräch, statt es pauschal zu versprechen.",
       },
+      {
+        question: "Was kostet eine Wärmepumpe?",
+        answer:
+          "Die Gesamtkosten für eine Wärmepumpe — Anschaffung, Installation und Umfeldarbeiten — liegen laut Finanztip.de je nach System zwischen 11.000 € und 47.000 € vor Förderung. Der Staat bezuschusst Wärmepumpen mit bis zu 80 % der Kosten. Wir koordinieren die Installation über zertifizierte Heizungsbau-Fachpartner und beraten Sie zu den passenden Fördermöglichkeiten.",
+      },
     ],
   },
 ];
@@ -235,14 +255,19 @@ export const trustPoints = [
   },
 ];
 
-// NOTE: Pricing/timeline FAQs intentionally omitted — need real figures from
-// Skye (typical price ranges, installation timelines) before publishing
-// anything numeric. Do not invent numbers here.
+// NOTE: Dachsanierung pricing intentionally has no range anywhere on the
+// site — costs are too project-specific (roof condition/size) to give an
+// honest range. Keep it "im Gespräch klären wir das" only.
 export const generalFaqs = [
   {
     question: "In welchen Regionen ist Niedersachsen Solar tätig?",
     answer:
       "Wir planen und installieren Energiekonzepte in Hannover, Hildesheim, Braunschweig und der jeweiligen Umgebung.",
+  },
+  {
+    question: "Was kosten Photovoltaik, Speicher, Wallbox und Wärmepumpe?",
+    answer:
+      "Die Kosten hängen stark von Hausgröße und gewähltem System ab. Als grobe Orientierung, jeweils vor Förderung: PV-Anlagen liegen meist zwischen 6.000 € und 35.000 €, Batteriespeicher zwischen 2.000 € und 12.000 €, eine Wallbox inklusive Installation zwischen 1.200 € und 2.500 €, und eine Wärmepumpe laut Finanztip.de zwischen 11.000 € und 47.000 €. Den genauen Preis für Ihr Energiekonzept ermitteln wir im kostenlosen Erstgespräch.",
   },
   {
     question: "Was unterscheidet Niedersachsen Solar von anderen Solarteuren?",
