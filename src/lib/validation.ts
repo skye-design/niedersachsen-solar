@@ -25,7 +25,10 @@ export const leadSchema = z
     postalCode: z
       .string()
       .trim()
-      .regex(/^\d{4,5}$/, "Bitte geben Sie eine gültige PLZ an.")
+      // German Postleitzahlen are always exactly 5 digits (00000-99999) —
+      // NISO operates only in Germany, so a 4-digit match (Austria's
+      // format) was accepting input that isn't actually valid here.
+      .regex(/^\d{5}$/, "Bitte geben Sie eine gültige 5-stellige PLZ an.")
       .optional(),
     city: z.string().trim().max(120).optional(),
     interests: z.array(z.string().max(60)).max(10).optional(),

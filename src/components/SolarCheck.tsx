@@ -81,7 +81,8 @@ export default function SolarCheck() {
     if (!touched[key]) return "";
     switch (key) {
       case "plz":
-        return /^\d{4,5}$/.test(postalCode.trim()) ? "" : "Bitte geben Sie eine gültige PLZ an.";
+        // Matches validation.ts server-side: German PLZ is always 5 digits.
+        return /^\d{5}$/.test(postalCode.trim()) ? "" : "Bitte geben Sie eine gültige 5-stellige PLZ an.";
       case "ort":
         return city.trim().length > 1 ? "" : "Bitte geben Sie einen Ort an.";
       case "name":
@@ -339,6 +340,7 @@ export default function SolarCheck() {
                   type="text"
                   inputMode="numeric"
                   autoComplete="postal-code"
+                  maxLength={5}
                   value={postalCode}
                   onChange={(e) => setPostalCode(e.target.value)}
                   onBlur={() => setTouched((t) => ({ ...t, plz: true }))}
