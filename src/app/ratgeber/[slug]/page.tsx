@@ -7,7 +7,7 @@ import Footer from "@/components/Footer";
 import QuoteSection from "@/components/QuoteSection";
 import Reveal from "@/components/Reveal";
 import Breadcrumbs from "@/components/Breadcrumbs";
-import { knowledgeArticles, services, site } from "@/lib/content";
+import { knowledgeArticles, services, site, brand } from "@/lib/content";
 
 export function generateStaticParams() {
   return knowledgeArticles.map((article) => ({ slug: article.slug }));
@@ -63,13 +63,15 @@ export default async function RatgeberArticlePage({
     mainEntityOfPage: { "@type": "WebPage", "@id": url },
     datePublished: articleDate,
     dateModified: articleDate,
-    author: { "@type": "Person", name: site.founder },
+    // GATED (contentGates.founderAndAddressInMarketing, content.ts):
+    // attributed to the organization rather than the founder by name.
+    author: { "@type": "Organization", name: site.name },
     publisher: {
       "@type": "Organization",
       name: site.name,
       logo: {
         "@type": "ImageObject",
-        url: "https://niedersachsen-solar.de/brand/niso-logo-horizontal-light.svg",
+        url: `https://niedersachsen-solar.de${brand.logo}`,
       },
     },
   };

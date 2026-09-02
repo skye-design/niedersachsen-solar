@@ -26,8 +26,12 @@ const CONTENT_DATE = "2026-09-02";
 export const UNCONFIRMED_ANSWER =
   "Das hängt von Ihrem Gebäude und der konkreten Planung ab. Ich kann Ihre Frage für das persönliche Gespräch aufnehmen.";
 
+// 2026-09-02: appended a sentence making the topic-selection model explicit
+// — this isn't a free-text AI chat, and shouldn't read like one. The first
+// two sentences are the spec's (05_CHATBOT_SPEC.md) mandated identity text,
+// kept verbatim.
 export const BOT_IDENTITY =
-  "Ich bin der digitale Solar-Lotse von Niedersachsen Solar. Ich kann Ihnen Leistungen und Ablauf erklären und Ihre Anfrage vorbereiten. Verbindliche Planung und Angebote erhalten Sie persönlich von unserem Team.";
+  "Ich bin der geführte Solar-Lotse von Niedersachsen Solar. Ich kann Ihnen Leistungen und Ablauf erklären und Ihre Anfrage vorbereiten. Wählen Sie unten ein Thema aus — ich beantworte keine frei getippten Fragen. Verbindliche Planung und Angebote erhalten Sie persönlich von unserem Team.";
 
 export function getServiceAnswer(slug: Service["slug"]): SolarLotseResponse {
   const service = services.find((s) => s.slug === slug);

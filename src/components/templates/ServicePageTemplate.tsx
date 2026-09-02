@@ -20,7 +20,9 @@ export default function ServicePageTemplate({ service }: { service: Service }) {
     provider: {
       "@id": "https://niedersachsen-solar.de/#organization",
     },
-    areaServed: { "@type": "State", name: site.serviceArea },
+    // GATED (contentGates.statewideServiceArea, content.ts): city-level
+    // only, not State — the broader claim has no owner confirmation yet.
+    areaServed: site.cities.map((city) => ({ "@type": "City", name: city })),
   };
 
   return (
@@ -37,7 +39,7 @@ export default function ServicePageTemplate({ service }: { service: Service }) {
                 ]}
               />
               <p className="mt-4 text-sm font-semibold tracking-wide text-primary uppercase">
-                {site.serviceArea} · Schwerpunkt {site.cities.join(" · ")}
+                {site.cities.join(" · ")}
               </p>
               <h1 className="mt-3 font-heading text-4xl font-medium text-foreground sm:text-5xl">
                 {service.title}

@@ -35,6 +35,15 @@
   --amber: #f2b544;
   --green: #4f7259;
   --mist: #dde2e1;
+
+  /* 2026-09-02: single source of truth for the mobile sticky CTA bar's
+     height, shared by StickyMobileCTA (sets its own height to this,
+     doesn't just min-height it), the layout-level spacer that reserves
+     room for it below the last page content, and the Solar-Lotse launcher
+     (positioned this + 16px above it) — see each file's own comment.
+     Previously these were three independent hardcoded guesses that could
+     silently drift apart. */
+  --bottom-bar-height: 60px;
 }
 
 @theme inline {
@@ -96,7 +105,17 @@ h4 {
   letter-spacing: 0.02em;
 }
 
-.reveal {
+/* 2026-09-02: the hidden-until-revealed state now only applies once `.js`
+   is present on <html> (set by a tiny blocking inline script in
+   layout.tsx, before first paint). Without JS — or if that script never
+   runs — `.reveal` elements have no opacity/transform override at all and
+   render fully visible immediately, since Reveal.tsx's own useEffect
+   (the only thing that ever adds `.is-visible`) never runs either. This is
+   the general no-JS fix for every below-the-fold Reveal usage; the hero
+   itself no longer uses Reveal at all (see Hero.tsx) since above-the-fold
+   content has no "scroll into view" moment to justify hiding it, even
+   briefly. */
+.js .reveal {
   opacity: 0;
   transform: translateY(24px);
   transition: opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1), transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);

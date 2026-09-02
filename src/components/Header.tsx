@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Phone, List, X, CaretDown } from "@phosphor-icons/react";
-import { services, site } from "@/lib/content";
+import { services, site, brand } from "@/lib/content";
 
 const solutionLinks = services.map((service) => ({
   href: service.route,
@@ -39,6 +39,21 @@ export default function SiteHeader() {
     };
   }, [isOpen]);
 
+  // 2026-09-02: found during verification — the mobile drawer had no
+  // Escape handler at all (desktop's Lösungen dropdown didn't either, so
+  // both get it here).
+  useEffect(() => {
+    if (!isOpen && !isSolutionsOpen) return;
+    function onKeyDown(e: KeyboardEvent) {
+      if (e.key === "Escape") {
+        setIsOpen(false);
+        setIsSolutionsOpen(false);
+      }
+    }
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [isOpen, isSolutionsOpen]);
+
   const opaque = isScrolled || isOpen;
 
   return (
@@ -52,7 +67,7 @@ export default function SiteHeader() {
       <div className="mx-auto flex h-[72px] max-w-6xl items-center justify-between gap-4 px-4 sm:px-6">
         <Link href="/" className="flex items-center" onClick={() => setIsOpen(false)}>
           <Image
-            src={opaque ? "/brand/niso-logo-nav-light.svg" : "/brand/niso-logo-nav-dark.svg"}
+            src={brand.logo}
             alt={site.name}
             width={220}
             height={44}

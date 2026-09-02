@@ -13,8 +13,7 @@ export default function ConversionFinale() {
           </h2>
           <p className="mt-4 max-w-md text-lg leading-relaxed text-on-ink-muted">
             Der Solar-Check dauert wenige Minuten. Danach melden wir uns
-            innerhalb eines Werktags persönlich bei Ihnen — ohne
-            automatisierte Preiszusage.
+            persönlich bei Ihnen — ohne automatisierte Preiszusage.
           </p>
 
           <div className="mt-8 space-y-3">

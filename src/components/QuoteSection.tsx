@@ -13,8 +13,8 @@ export default function QuoteSection() {
             Lassen Sie uns Ihr Energiekonzept besprechen
           </h2>
           <p className="mt-4 max-w-md text-lg leading-relaxed text-muted-foreground">
-            Unverbindlich, persönlich, ohne Verkaufsdruck. Wir melden uns
-            innerhalb von einem Werktag bei Ihnen.
+            Unverbindlich, persönlich, ohne Verkaufsdruck. Wir melden uns bei
+            Ihnen.
           </p>
 
           <div className="relative mt-8 hidden aspect-[4/3] w-full max-w-md overflow-hidden rounded-2xl border border-border sm:block">

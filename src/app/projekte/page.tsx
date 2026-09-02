@@ -7,9 +7,11 @@ import Reveal from "@/components/Reveal";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { projectTeasers, site } from "@/lib/content";
 
+// 2026-09-02: no longer references the statewide service area — gated
+// (contentGates.statewideServiceArea in content.ts) pending owner confirmation.
 export const metadata: Metadata = {
   title: `Projekte | ${site.name}`,
-  description: `Photovoltaik-Installationen aus ${site.serviceArea}, mit Schwerpunkt in ${site.cities.join(", ")}.`,
+  description: `Photovoltaik-Installationen aus ${site.cities.join(", ")}.`,
   alternates: { canonical: "https://niedersachsen-solar.de/projekte" },
 };
 
@@ -23,7 +25,7 @@ export default function ProjektePage() {
             <Reveal>
               <Breadcrumbs items={[{ label: "Startseite", href: "/" }, { label: "Projekte" }]} />
               <h1 className="mt-3 font-heading text-4xl font-medium text-foreground sm:text-5xl">
-                Installationen aus {site.serviceArea}
+                Installationen aus {site.cities.join(", ")}
               </h1>
               <p className="mt-6 text-lg leading-relaxed text-muted-foreground">
                 Ein Ausschnitt realer Anlagen, mit Schwerpunkt in und um{" "}

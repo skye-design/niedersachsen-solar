@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Phone, EnvelopeSimple } from "@phosphor-icons/react/dist/ssr";
-import { site, services } from "@/lib/content";
+import { site, services, brand } from "@/lib/content";
 
 export default function Footer() {
   return (
@@ -10,18 +10,14 @@ export default function Footer() {
         <div className="flex flex-col flex-wrap gap-8 sm:flex-row sm:justify-between">
           <div>
             <Image
-              src="/brand/niso-logo-horizontal-light.svg"
+              src={brand.logo}
               alt={site.name}
               width={200}
               height={48}
               className="h-9 w-auto"
             />
             <p className="mt-3 max-w-xs text-sm leading-relaxed text-muted-foreground">
-              Ganzheitliche Energiekonzepte für {site.serviceArea}, mit
-              Schwerpunkt in {site.cities.join(", ")}.
-            </p>
-            <p className="mt-2 text-xs text-muted-foreground">
-              {site.founderRole}: {site.founder}
+              Ganzheitliche Energiekonzepte für {site.cities.join(", ")}.
             </p>
           </div>
 
@@ -67,7 +63,6 @@ export default function Footer() {
               <EnvelopeSimple size={16} weight="fill" aria-hidden />
               {site.email}
             </a>
-            <p className="mt-1 text-xs text-muted-foreground">{site.hours}</p>
           </div>
 
           <nav className="flex flex-col gap-2 text-sm" aria-label="Rechtliches">

@@ -21,7 +21,6 @@ export type AnalyticsEvent =
 
 export function trackEvent(event: AnalyticsEvent): void {
   if (process.env.NODE_ENV !== "production") {
-    // eslint-disable-next-line no-console
     console.debug("[analytics]", event);
   }
   // No PII is ever passed in an AnalyticsEvent's fields by design — only

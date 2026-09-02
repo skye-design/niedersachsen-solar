@@ -107,20 +107,26 @@ export default function SolarLotse() {
 
   return (
     <>
+      {/* 2026-09-02: bottom offset was a hardcoded bottom-20 (80px) guess
+          against StickyMobileCTA's old, also-hardcoded height — now derived
+          from the same --bottom-bar-height variable that component sets
+          its actual height to, +16px clearance, so the two can't drift
+          out of sync again. sm:bottom-6 is unaffected (StickyMobileCTA is
+          sm:hidden, no bar to clear at that width). */}
       <button
         type="button"
         onClick={openDialog}
         aria-haspopup="dialog"
         aria-expanded={isOpen}
-        className="fixed right-4 bottom-20 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-primary text-on-primary shadow-lg transition-transform hover:scale-105 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring sm:right-6 sm:bottom-6"
+        className="fixed right-4 bottom-[calc(var(--bottom-bar-height)+16px)] z-40 flex h-14 w-14 items-center justify-center rounded-full bg-primary text-on-primary shadow-lg transition-transform hover:scale-105 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring sm:right-6 sm:bottom-6"
       >
         <ChatCircleDots size={26} weight="fill" aria-hidden />
-        <span className="sr-only">Solar-Lotse öffnen</span>
+        <span className="sr-only">Geführten Solar-Lotsen öffnen</span>
       </button>
 
       <dialog
         ref={dialogRef}
-        aria-label="Solar-Lotse"
+        aria-label="Geführter Solar-Lotse"
         className="m-0 h-[min(680px,100dvh)] w-full max-w-md rounded-t-3xl border border-border bg-background p-0 backdrop:bg-black/40 sm:right-6 sm:bottom-6 sm:m-6 sm:h-[600px] sm:rounded-3xl sm:shadow-2xl [&:not([open])]:hidden"
         style={{ position: "fixed", insetInline: 0, bottom: 0, top: "auto" }}
         onCancel={() => setIsOpen(false)}
@@ -129,12 +135,12 @@ export default function SolarLotse() {
           <header className="flex items-center justify-between gap-3 border-b border-border px-5 py-4">
             <div className="flex items-center gap-2.5">
               <ChatCircleDots size={22} weight="fill" className="text-primary" aria-hidden />
-              <p className="font-heading text-base font-semibold text-foreground">Solar-Lotse</p>
+              <p className="font-heading text-base font-semibold text-foreground">Geführter Solar-Lotse</p>
             </div>
             <button
               type="button"
               onClick={closeDialog}
-              aria-label="Solar-Lotse schließen"
+              aria-label="Geführten Solar-Lotsen schließen"
               className="flex h-9 w-9 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-background-alt hover:text-foreground"
             >
               <X size={20} aria-hidden />
@@ -460,7 +466,7 @@ function HandoffScreen({ onBack, onDone }: { onBack: () => void; onDone: () => v
         <CheckCircle size={36} weight="fill" className="text-primary" aria-hidden />
         <p className="font-heading text-base font-semibold text-foreground">Danke, {name.split(" ")[0]}!</p>
         <p className="max-w-xs text-sm text-muted-foreground">
-          Wir melden uns innerhalb eines Werktags bei Ihnen. Dringend? Rufen Sie uns direkt an:{" "}
+          Wir melden uns bei Ihnen. Dringend? Rufen Sie uns direkt an:{" "}
           <a href={site.phoneHref} className="font-semibold text-primary underline underline-offset-2">
             {site.phone}
           </a>

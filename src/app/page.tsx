@@ -15,7 +15,10 @@ export default function Home() {
   return (
     <>
       <Header />
-      <main className="flex-1 pb-16 sm:pb-0">
+      {/* 2026-09-02: bottom padding for the sticky mobile CTA moved to a
+          shared spacer in layout.tsx (was hardcoded pb-16 here only —
+          every other page had none). */}
+      <main className="flex-1">
         <Hero />
         <DecisionEntry />
         <TrustSection />

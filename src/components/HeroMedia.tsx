@@ -47,9 +47,15 @@ export default function HeroMedia() {
         preload="none"
         poster="/images/gallery/gallery-01-v2.jpg"
       />
+      {/* 2026-09-02: was gallery-01-v2.jpg, a top-down aerial shot that's
+          almost entirely a flat panel grid — center-cropped to a narrow
+          portrait viewport it reads as an abstract texture, not a
+          recognizable building. hero-v2.jpg has roof tiles, a dormer
+          window, trees, and a neighboring house in frame, so it survives
+          that crop as an actual, readable project photo. */}
       <Image
-        src="/images/gallery/gallery-01-v2.jpg"
-        alt="Luftaufnahme einer großflächigen Photovoltaikanlage auf einem Gewerbedach"
+        src="/images/hero-v2.jpg"
+        alt="Photovoltaik-Module auf einem Wohnhausdach mit Dachfenster, umgeben von Bäumen"
         fill
         priority
         sizes="100vw"

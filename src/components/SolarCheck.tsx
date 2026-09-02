@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, useState, type FormEvent } from "react";
+import { useEffect, useId, useRef, useState, type FormEvent } from "react";
 import {
   ArrowLeft,
   ArrowRight,
@@ -10,6 +10,7 @@ import {
 } from "@phosphor-icons/react";
 import { site } from "@/lib/content";
 import { trackEvent } from "@/lib/analytics";
+import { EMAIL_RE, PHONE_RE } from "@/lib/validation";
 
 const CONNECTION_OPTIONS = [
   { id: "pv", label: "Photovoltaik" },
@@ -34,6 +35,10 @@ const SITUATION_OPTIONS = [
 
 type Step = 1 | 2 | 3 | 4 | "summary" | 5 | 6;
 const STEP_ORDER: Step[] = [1, 2, 3, 4, "summary", 5, 6];
+// The summary screen isn't a numbered form step — it's a review checkpoint
+// of steps 1-4 before contact details. It used to display "Schritt 4 von
+// 6", identical to the real step 4, which read as if nothing had advanced.
+const NUMBERED_STEP_COUNT = 6;
 
 type Status = "idle" | "submitting" | "success" | "error";
 
@@ -60,9 +65,41 @@ export default function SolarCheck() {
   const [touched, setTouched] = useState<Record<string, boolean>>({});
 
   const step = STEP_ORDER[stepIndex];
-  const numberedStepCount = 6;
-  const currentNumber =
-    step === "summary" ? 4 : typeof step === "number" && step <= 4 ? step : step === 5 ? 5 : 6;
+  // Fills through 4/6 while reviewing the summary — it's showing progress
+  // made, not claiming the summary itself is step 4.
+  const progressFill = step === "summary" ? 4 : typeof step === "number" && step <= 4 ? step : step === 5 ? 5 : 6;
+
+  // Focus the new step's heading/legend on every step change, so keyboard
+  // and screen-reader users land somewhere meaningful instead of the focus
+  // silently staying on the now-hidden "Weiter" button.
+  const headingRef = useRef<HTMLElement | null>(null);
+  useEffect(() => {
+    headingRef.current?.focus();
+  }, [stepIndex]);
+
+  function fieldError(key: string): string {
+    if (!touched[key]) return "";
+    switch (key) {
+      case "plz":
+        return /^\d{4,5}$/.test(postalCode.trim()) ? "" : "Bitte geben Sie eine gültige PLZ an.";
+      case "ort":
+        return city.trim().length > 1 ? "" : "Bitte geben Sie einen Ort an.";
+      case "name":
+        return name.trim().length > 1 ? "" : "Bitte geben Sie Ihren Namen an.";
+      case "contactMethod":
+        return contactMethod ? "" : "Bitte wählen Sie einen Kontaktweg.";
+      case "contact": {
+        if (!contactMethod) return "";
+        const value = contactValue.trim();
+        if (contactMethod === "email") {
+          return EMAIL_RE.test(value) ? "" : "Bitte geben Sie eine gültige E-Mail-Adresse an.";
+        }
+        return PHONE_RE.test(value) ? "" : "Bitte geben Sie eine gültige Telefonnummer an.";
+      }
+      default:
+        return "";
+    }
+  }
 
   function canAdvance(): boolean {
     switch (step) {
@@ -73,11 +110,16 @@ export default function SolarCheck() {
       case 3:
         return !!situation;
       case 4:
-        return /^\d{4,5}$/.test(postalCode.trim()) && city.trim().length > 1;
+        return !fieldError("plz") && !fieldError("ort") && postalCode.trim() !== "" && city.trim() !== "";
       case "summary":
         return true;
       case 5:
-        return name.trim().length > 1 && !!contactMethod && contactValue.trim().length > 2;
+        return (
+          name.trim().length > 1 &&
+          !!contactMethod &&
+          !fieldError("contact") &&
+          contactValue.trim().length > 0
+        );
       case 6:
         return true;
       default:
@@ -86,9 +128,8 @@ export default function SolarCheck() {
   }
 
   function goNext() {
-    if (step === 4 || step === 5) {
-      setTouched((t) => ({ ...t, [String(step)]: true }));
-    }
+    if (step === 4) setTouched((t) => ({ ...t, plz: true, ort: true }));
+    if (step === 5) setTouched((t) => ({ ...t, name: true, contactMethod: true, contact: true }));
     if (!canAdvance()) return;
     trackEvent({ name: "solar_check_step_completed", step });
     setStepIndex((i) => Math.min(i + 1, STEP_ORDER.length - 1));
@@ -105,7 +146,7 @@ export default function SolarCheck() {
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
     if (!canAdvance()) {
-      setTouched((t) => ({ ...t, "5": true }));
+      setTouched((t) => ({ ...t, name: true, contactMethod: true, contact: true }));
       return;
     }
 
@@ -157,9 +198,8 @@ export default function SolarCheck() {
         <CheckCircle size={44} weight="fill" className="text-primary" aria-hidden />
         <h3 className="text-xl font-semibold text-foreground">Vielen Dank, {name.split(" ")[0]}!</h3>
         <p className="max-w-sm text-muted-foreground">
-          Wir haben Ihren Solar-Check erhalten und melden uns innerhalb eines
-          Werktags bei Ihnen. Bei dringenden Fragen erreichen Sie uns direkt
-          unter{" "}
+          Wir haben Ihren Solar-Check erhalten und melden uns bei Ihnen. Bei
+          dringenden Fragen erreichen Sie uns direkt unter{" "}
           <a href={site.phoneHref} className="font-semibold text-primary underline underline-offset-2">
             {site.phone}
           </a>
@@ -172,18 +212,18 @@ export default function SolarCheck() {
   return (
     <div className="rounded-3xl border border-border bg-card p-6 shadow-sm sm:p-8">
       {/* Progress */}
-      <div className="mb-8 flex items-center gap-2" role="progressbar" aria-valuenow={currentNumber} aria-valuemin={1} aria-valuemax={numberedStepCount}>
-        {Array.from({ length: numberedStepCount }).map((_, i) => (
+      <div className="mb-8 flex items-center gap-2" role="progressbar" aria-valuenow={progressFill} aria-valuemin={1} aria-valuemax={NUMBERED_STEP_COUNT}>
+        {Array.from({ length: NUMBERED_STEP_COUNT }).map((_, i) => (
           <span
             key={i}
             className={`h-1.5 flex-1 rounded-full transition-colors ${
-              i < currentNumber ? "bg-primary" : "bg-border"
+              i < progressFill ? "bg-primary" : "bg-border"
             }`}
           />
         ))}
       </div>
       <p className="font-data mb-6 text-xs text-muted-foreground uppercase">
-        Schritt {currentNumber} von {numberedStepCount}
+        {step === "summary" ? "Zusammenfassung" : `Schritt ${progressFill} von ${NUMBERED_STEP_COUNT}`}
       </p>
 
       <form onSubmit={step === 6 ? handleSubmit : (e) => e.preventDefault()}>
@@ -202,7 +242,7 @@ export default function SolarCheck() {
 
         {step === 1 && (
           <fieldset>
-            <legend className="text-lg font-semibold text-foreground">
+            <legend ref={(el) => { headingRef.current = el; }} tabIndex={-1} className="text-lg font-semibold text-foreground outline-none">
               Was möchten Sie verbinden?
             </legend>
             <div className="mt-4 flex flex-wrap gap-2">
@@ -230,7 +270,7 @@ export default function SolarCheck() {
 
         {step === 2 && (
           <fieldset>
-            <legend className="text-lg font-semibold text-foreground">
+            <legend ref={(el) => { headingRef.current = el; }} tabIndex={-1} className="text-lg font-semibold text-foreground outline-none">
               Um welche Immobilie geht es?
             </legend>
             <div className="mt-4 flex flex-col gap-2">
@@ -258,7 +298,7 @@ export default function SolarCheck() {
 
         {step === 3 && (
           <fieldset>
-            <legend className="text-lg font-semibold text-foreground">
+            <legend ref={(el) => { headingRef.current = el; }} tabIndex={-1} className="text-lg font-semibold text-foreground outline-none">
               Wie ist die aktuelle Situation?
             </legend>
             <div className="mt-4 flex flex-col gap-2">
@@ -286,7 +326,7 @@ export default function SolarCheck() {
 
         {step === 4 && (
           <fieldset>
-            <legend className="text-lg font-semibold text-foreground">
+            <legend ref={(el) => { headingRef.current = el; }} tabIndex={-1} className="text-lg font-semibold text-foreground outline-none">
               Wo befindet sich das Gebäude?
             </legend>
             <div className="mt-4 grid grid-cols-2 gap-3">
@@ -301,8 +341,17 @@ export default function SolarCheck() {
                   autoComplete="postal-code"
                   value={postalCode}
                   onChange={(e) => setPostalCode(e.target.value)}
+                  onBlur={() => setTouched((t) => ({ ...t, plz: true }))}
+                  aria-invalid={!!fieldError("plz")}
+                  aria-describedby={fieldError("plz") ? `${formBase}-plz-error` : undefined}
                   className="w-full rounded-xl border border-border bg-background px-4 py-3 text-base text-foreground outline-none focus:border-primary focus:ring-2 focus:ring-ring/30"
                 />
+                {fieldError("plz") && (
+                  <p id={`${formBase}-plz-error`} className="mt-1.5 flex items-center gap-1.5 text-sm text-destructive">
+                    <WarningCircle size={14} weight="fill" aria-hidden />
+                    {fieldError("plz")}
+                  </p>
+                )}
               </div>
               <div>
                 <label htmlFor={`${formBase}-ort`} className="mb-1.5 block text-sm font-semibold text-foreground">
@@ -314,22 +363,25 @@ export default function SolarCheck() {
                   autoComplete="address-level2"
                   value={city}
                   onChange={(e) => setCity(e.target.value)}
+                  onBlur={() => setTouched((t) => ({ ...t, ort: true }))}
+                  aria-invalid={!!fieldError("ort")}
+                  aria-describedby={fieldError("ort") ? `${formBase}-ort-error` : undefined}
                   className="w-full rounded-xl border border-border bg-background px-4 py-3 text-base text-foreground outline-none focus:border-primary focus:ring-2 focus:ring-ring/30"
                 />
+                {fieldError("ort") && (
+                  <p id={`${formBase}-ort-error`} className="mt-1.5 flex items-center gap-1.5 text-sm text-destructive">
+                    <WarningCircle size={14} weight="fill" aria-hidden />
+                    {fieldError("ort")}
+                  </p>
+                )}
               </div>
             </div>
-            {touched["4"] && !canAdvance() && (
-              <p className="mt-2 flex items-center gap-1.5 text-sm text-destructive">
-                <WarningCircle size={16} weight="fill" aria-hidden />
-                Bitte geben Sie eine gültige PLZ und einen Ort an.
-              </p>
-            )}
           </fieldset>
         )}
 
         {step === "summary" && (
           <div>
-            <h3 className="text-lg font-semibold text-foreground">
+            <h3 ref={(el) => { headingRef.current = el; }} tabIndex={-1} className="text-lg font-semibold text-foreground outline-none">
               Das sollten wir gemeinsam prüfen
             </h3>
             <p className="mt-2 text-sm text-muted-foreground">
@@ -365,7 +417,7 @@ export default function SolarCheck() {
 
         {step === 5 && (
           <fieldset>
-            <legend className="text-lg font-semibold text-foreground">
+            <legend ref={(el) => { headingRef.current = el; }} tabIndex={-1} className="text-lg font-semibold text-foreground outline-none">
               Wie dürfen wir Sie erreichen?
             </legend>
             <div className="mt-4 space-y-4">
@@ -379,8 +431,17 @@ export default function SolarCheck() {
                   autoComplete="name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
+                  onBlur={() => setTouched((t) => ({ ...t, name: true }))}
+                  aria-invalid={!!fieldError("name")}
+                  aria-describedby={fieldError("name") ? `${formBase}-name-error` : undefined}
                   className="w-full rounded-xl border border-border bg-background px-4 py-3 text-base text-foreground outline-none focus:border-primary focus:ring-2 focus:ring-ring/30"
                 />
+                {fieldError("name") && (
+                  <p id={`${formBase}-name-error`} className="mt-1.5 flex items-center gap-1.5 text-sm text-destructive">
+                    <WarningCircle size={14} weight="fill" aria-hidden />
+                    {fieldError("name")}
+                  </p>
+                )}
               </div>
 
               <fieldset>
@@ -393,7 +454,10 @@ export default function SolarCheck() {
                       key={m}
                       type="button"
                       aria-pressed={contactMethod === m}
-                      onClick={() => setContactMethod(m)}
+                      onClick={() => {
+                        setContactMethod(m);
+                        setTouched((t) => ({ ...t, contactMethod: true }));
+                      }}
                       className={`cursor-pointer rounded-full border px-4 py-2 text-sm font-medium transition-colors ${
                         contactMethod === m
                           ? "border-primary bg-primary/10 text-primary"
@@ -404,6 +468,12 @@ export default function SolarCheck() {
                     </button>
                   ))}
                 </div>
+                {fieldError("contactMethod") && (
+                  <p className="mt-1.5 flex items-center gap-1.5 text-sm text-destructive">
+                    <WarningCircle size={14} weight="fill" aria-hidden />
+                    {fieldError("contactMethod")}
+                  </p>
+                )}
               </fieldset>
 
               <div>
@@ -412,26 +482,29 @@ export default function SolarCheck() {
                 </label>
                 <input
                   id={`${formBase}-contact`}
-                  type="text"
+                  type={contactMethod === "email" ? "email" : "tel"}
                   autoComplete={contactMethod === "email" ? "email" : "tel"}
                   value={contactValue}
                   onChange={(e) => setContactValue(e.target.value)}
+                  onBlur={() => setTouched((t) => ({ ...t, contact: true }))}
+                  aria-invalid={!!fieldError("contact")}
+                  aria-describedby={fieldError("contact") ? `${formBase}-contact-error` : undefined}
                   className="w-full rounded-xl border border-border bg-background px-4 py-3 text-base text-foreground outline-none focus:border-primary focus:ring-2 focus:ring-ring/30"
                 />
+                {fieldError("contact") && (
+                  <p id={`${formBase}-contact-error`} className="mt-1.5 flex items-center gap-1.5 text-sm text-destructive">
+                    <WarningCircle size={14} weight="fill" aria-hidden />
+                    {fieldError("contact")}
+                  </p>
+                )}
               </div>
             </div>
-            {touched["5"] && !canAdvance() && (
-              <p className="mt-2 flex items-center gap-1.5 text-sm text-destructive">
-                <WarningCircle size={16} weight="fill" aria-hidden />
-                Bitte Name, Kontaktweg und Kontaktdaten angeben.
-              </p>
-            )}
           </fieldset>
         )}
 
         {step === 6 && (
           <fieldset>
-            <legend className="text-lg font-semibold text-foreground">
+            <legend ref={(el) => { headingRef.current = el; }} tabIndex={-1} className="text-lg font-semibold text-foreground outline-none">
               Möchten Sie uns noch etwas mitgeben? (optional)
             </legend>
             <textarea
