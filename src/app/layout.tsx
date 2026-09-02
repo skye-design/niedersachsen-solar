@@ -89,7 +89,7 @@ const organizationSchema = {
   "@id": "https://niedersachsen-solar.de/#organization",
   name: site.name,
   url: "https://niedersachsen-solar.de",
-  logo: `https://niedersachsen-solar.de${brand.logo}`,
+  logo: `https://niedersachsen-solar.de${brand.logoOnLight}`,
   telephone: site.phoneHref.replace("tel:", ""),
   email: site.email,
   image: "https://niedersachsen-solar.de/images/hero-v2.jpg",

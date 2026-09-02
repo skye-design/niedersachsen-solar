@@ -66,14 +66,30 @@ export default function SiteHeader() {
     >
       <div className="mx-auto flex h-[72px] max-w-6xl items-center justify-between gap-4 px-4 sm:px-6">
         <Link href="/" className="flex items-center" onClick={() => setIsOpen(false)}>
-          <Image
-            src={brand.logo}
-            alt={site.name}
-            width={220}
-            height={44}
-            priority
-            className="h-9 w-auto sm:h-10"
-          />
+          {/* 2026-09-02: both logo variants render simultaneously in this
+              dimension-fixed box (height fixed, width derived from the
+              SVG's own 541.2:106 aspect ratio — never 0 or auto) and are
+              cross-faded via opacity. Neither swaps `src`, so there's no
+              network fetch — and therefore no flash of a missing/wrong-
+              color logo — when isScrolled/isOpen toggles. */}
+          <span className="relative block h-9 aspect-[541.2/106] sm:h-10">
+            <Image
+              src={brand.logoOnDark}
+              alt={site.name}
+              aria-hidden={opaque}
+              fill
+              priority
+              className={`object-contain transition-opacity duration-150 ${opaque ? "opacity-0" : "opacity-100"}`}
+            />
+            <Image
+              src={brand.logoOnLight}
+              alt={site.name}
+              aria-hidden={!opaque}
+              fill
+              priority
+              className={`object-contain transition-opacity duration-150 ${opaque ? "opacity-100" : "opacity-0"}`}
+            />
+          </span>
         </Link>
 
         <nav className="hidden items-center gap-7 lg:flex" aria-label="Hauptnavigation">

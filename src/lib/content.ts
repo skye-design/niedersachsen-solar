@@ -35,21 +35,26 @@ export const contentGates = {
   certifiedPartnersAndResponsibilityBoundaries: "needs-owner-confirmation",
 } as const satisfies Record<string, VerificationState>;
 
-// 2026-09-02 correction: the public/brand/niso-logo-*.svg set (light/dark/
-// nav/stacked/vehicle/mono variants) came from the now-discarded Manus
-// logo package and must not be used. No new logo is designed in this pass
-// either. Until the Product Owner marks a real asset "approved", this is
-// the one temporary fallback: the original file from the pre-redesign
-// `main` branch, used identically everywhere (Header, Footer, JSON-LD,
-// manifest) rather than each consumer picking its own path. It has no
-// light/dark variants — the original site's header was uniformly dark, so
-// only one version of the logo ever existed. This redesign's header can be
-// opaque-on-light when scrolled, where this asset likely has weaker
-// contrast than the discarded variant set did — a known, undecided
-// tradeoff, not silently engineered around (e.g. with a CSS invert filter)
-// — see the report / open question to the Product Owner.
+// 2026-09-02: the public/brand/niso-logo-*.svg set (from the discarded
+// Manus logo package) has been deleted from the repo entirely, not just
+// de-referenced. Two variants now exist instead of one:
+//   - logo-on-dark.svg: the original pre-redesign asset, unchanged, for
+//     dark surfaces (transparent hero header).
+//   - logo-on-light.svg: the *same* file with only the "Niedersachsen"
+//     wordmark's fill recolored from #F8F9FA to #171A1D (the site's
+//     --foreground token) for legibility on light surfaces (scrolled
+//     header, mobile drawer, footer). This is a mechanical fill-color
+//     swap on identical vector paths — verified via diff, zero geometry
+//     changes — not a logo redesign. The icon mark and "Solar" text were
+//     already #CC010F and needed no change; only the near-white wordmark
+//     text was invisible-on-light.
+// Both are placeholders pending explicit Product Owner "approved" sign-off
+// (still open — see OWNER_CONFIRMATION_CHECKLIST.md) — this is the
+// documented, functional stand-in the correction brief asked for, not a
+// new design.
 export const brand = {
-  logo: "/images/niso-logo-horizontal.svg",
+  logoOnDark: "/images/logo-on-dark.svg",
+  logoOnLight: "/images/logo-on-light.svg",
 };
 
 export const site = {

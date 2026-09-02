@@ -71,7 +71,7 @@ export default async function RatgeberArticlePage({
       name: site.name,
       logo: {
         "@type": "ImageObject",
-        url: `https://niedersachsen-solar.de${brand.logo}`,
+        url: `https://niedersachsen-solar.de${brand.logoOnLight}`,
       },
     },
   };

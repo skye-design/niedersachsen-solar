@@ -10,7 +10,7 @@ export default function Footer() {
         <div className="flex flex-col flex-wrap gap-8 sm:flex-row sm:justify-between">
           <div>
             <Image
-              src={brand.logo}
+              src={brand.logoOnLight}
               alt={site.name}
               width={200}
               height={48}
