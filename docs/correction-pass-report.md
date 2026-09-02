@@ -180,5 +180,6 @@ Beantwortung durch den Product Owner. Neun Punkte, siehe die Datei selbst.
 ## Commit
 
 Committet auf `redesign/niso-v2`, **nicht gepusht** — wartet auf
-ausdrückliche Freigabe des Product Owners, wie angewiesen. Hash wird nach
-dem Commit unten ergänzt.
+ausdrückliche Freigabe des Product Owners, wie angewiesen.
+
+Commit-Hash: `f8e702432a0c36fb8e74e21fa8f6c6f0c422b9bd`
