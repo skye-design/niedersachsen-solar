@@ -62,10 +62,10 @@ mocked:
 
 | Target | Achieved | Screenshot |
 |---|---|---|
-| 390px (mobile) | 606px — still below the `sm` (640px) breakpoint, same responsive tier | `docs/screenshots/paket-d/mobile-606px-homepage.jpg` |
-| 768px (tablet) | 768px — exact | `docs/screenshots/paket-d/tablet-768px-homepage.jpg` |
-| 1440px (desktop) | 1412px — same tier, full nav confirmed | `docs/screenshots/paket-d/desktop-1412px-homepage.jpg` |
-| Solar-Lotse, desktop | 1412px | `docs/screenshots/paket-d/desktop-1412px-solar-lotse.jpg` |
+| 390px (mobile) | 606px — still below the `sm` (640px) breakpoint, same responsive tier | ![mobile 606px](https://raw.githubusercontent.com/skye-design/niedersachsen-solar/redesign/niso-v2/docs/screenshots/paket-d/mobile-606px-homepage.jpg) |
+| 768px (tablet) | 768px — exact | ![tablet 768px](https://raw.githubusercontent.com/skye-design/niedersachsen-solar/redesign/niso-v2/docs/screenshots/paket-d/tablet-768px-homepage.jpg) |
+| 1440px (desktop) | 1412px — same tier, full nav confirmed | ![desktop 1412px](https://raw.githubusercontent.com/skye-design/niedersachsen-solar/redesign/niso-v2/docs/screenshots/paket-d/desktop-1412px-homepage.jpg) |
+| Solar-Lotse, desktop | 1412px | ![solar-lotse 1412px](https://raw.githubusercontent.com/skye-design/niedersachsen-solar/redesign/niso-v2/docs/screenshots/paket-d/desktop-1412px-solar-lotse.jpg) |
 
 Confirmed live at these widths: mobile hamburger nav + sticky CTA bar (below
 `sm`), hamburger nav without sticky CTA (`sm`–`lg`), full desktop nav
