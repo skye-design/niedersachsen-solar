@@ -37,10 +37,15 @@ const SITUATION_OPTIONS = [
 // kWh values are shown to the user alongside the household-size label
 // (rather than hidden behind it) so the savings estimate that follows
 // doesn't feel like a black box. Fed into estimateAnnualSavings() below.
+// recommendedKwp is NISO's own sizing target per household size (Skye,
+// 2026-09-03) — sized for autarky and amortization, not bare
+// annual-consumption matching, so it's a direct business call per bucket
+// rather than something derived from the kWh figure. See the comment on
+// SELF_CONSUMPTION_CURVE in savingsEstimate.ts for why that matters.
 const CONSUMPTION_OPTIONS = [
-  { id: "1-2", label: "1–2 Personen", kwh: 2000 },
-  { id: "3-4", label: "3–4 Personen", kwh: 4000 },
-  { id: "5+", label: "5+ Personen", kwh: 6000 },
+  { id: "1-2", label: "1–2 Personen", kwh: 2000, recommendedKwp: 8 },
+  { id: "3-4", label: "3–4 Personen", kwh: 4000, recommendedKwp: 10 },
+  { id: "5+", label: "5+ Personen", kwh: 6000, recommendedKwp: 12 },
 ] as const;
 
 const ORIENTATION_OPTIONS: { id: Orientation; label: string }[] = [
@@ -91,6 +96,7 @@ export default function SolarCheck() {
   const selectedConsumption = CONSUMPTION_OPTIONS.find((o) => o.id === consumptionId) ?? null;
   const savingsEstimate = selectedConsumption
     ? estimateAnnualSavings({
+        recommendedKwp: selectedConsumption.recommendedKwp,
         annualConsumptionKwh: selectedConsumption.kwh,
         orientation: orientation ?? "unbekannt",
         hasBattery: connections.includes("speicher"),
