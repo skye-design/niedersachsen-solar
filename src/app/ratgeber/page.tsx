@@ -26,8 +26,8 @@ export default function RatgeberIndexPage() {
                 Ratgeber
               </h1>
               <p className="mt-6 text-lg leading-relaxed text-muted-foreground">
-                Fragen, die sich wirklich stellen — beantwortet aus
-                praktischer Erfahrung, nicht als generischer Blogbeitrag.
+                Fragen, die sich wirklich stellen, beantwortet aus
+                praktischer Erfahrung und nicht als generischer Blogbeitrag.
               </p>
             </Reveal>
           </div>

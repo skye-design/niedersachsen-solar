@@ -40,8 +40,8 @@ export default function SystemExplainer() {
           </h2>
           <p className="mt-4 text-lg leading-relaxed text-on-ink-muted">
             PV-Anlage, Speicher, Wallbox und Wärmepumpe werden nicht einzeln
-            geplant, sondern als ein steuerbares Gesamtsystem — jede
-            Komponente nutzt den Solarstrom der anderen.
+            geplant, sondern als ein steuerbares Gesamtsystem, in dem jede
+            Komponente den Solarstrom der anderen nutzt.
           </p>
         </Reveal>
 

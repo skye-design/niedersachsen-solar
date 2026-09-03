@@ -14,7 +14,7 @@ export default function ConversionFinale() {
           {/* RESTORED 2026-09-03 (contentGates.oneBusinessDayCallback, "Ja"). */}
           <p className="mt-4 max-w-md text-lg leading-relaxed text-on-ink-muted">
             Der Solar-Check dauert wenige Minuten. Danach melden wir uns
-            innerhalb eines Werktags persönlich bei Ihnen — ohne
+            innerhalb eines Werktags persönlich bei Ihnen, ohne
             automatisierte Preiszusage.
           </p>
 

@@ -15,7 +15,7 @@ import { proofClaims, site } from "@/lib/content";
 // though the founder-experience claim itself was confirmed.
 export const metadata: Metadata = {
   title: `Über uns | ${site.name}`,
-  description: `${site.founderRole} ${site.founder} plant ganzheitliche Energiekonzepte für ${site.serviceArea} — mit praktischer Installationserfahrung.`,
+  description: `${site.founderRole} ${site.founder} plant ganzheitliche Energiekonzepte für ${site.serviceArea}, mit praktischer Installationserfahrung.`,
   alternates: { canonical: "https://niedersachsen-solar.de/ueber-uns" },
 };
 
@@ -33,7 +33,7 @@ export default function UeberUnsPage() {
               </h1>
               <p className="mt-6 text-lg leading-relaxed text-muted-foreground">
                 {site.name} plant ganzheitliche Energiekonzepte für Eigenheime
-                in {site.serviceArea} — praktisch gedacht, verständlich
+                in {site.serviceArea}, praktisch gedacht, verständlich
                 geplant und persönlich begleitet.
               </p>
             </Reveal>
@@ -62,8 +62,8 @@ export default function UeberUnsPage() {
               </h2>
               <p className="mt-4 leading-relaxed text-muted-foreground">
                 {site.founder} hat selbst Photovoltaikanlagen installiert,
-                bevor er begann, ganzheitliche Energiekonzepte zu planen —
-                die praktische Erfahrung vom Dach fließt in jede Planung ein.
+                bevor er begann, ganzheitliche Energiekonzepte zu planen. Die
+                praktische Erfahrung vom Dach fließt in jede Planung ein.
               </p>
 
               <ul className="mt-8 space-y-4">

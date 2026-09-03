@@ -29,7 +29,7 @@ export default function ProjektePage() {
               <p className="mt-6 text-lg leading-relaxed text-muted-foreground">
                 Ein Ausschnitt realer Anlagen, mit Schwerpunkt in und um{" "}
                 {site.cities.join(", ")}. Ausführliche Fallstudien zu einzelnen
-                Projekten — Ausgangslage, Systemumfang, Lösung — folgen hier,
+                Projekten (Ausgangslage, Systemumfang, Lösung) folgen hier,
                 sobald sie mit den jeweiligen Eigentümern abgestimmt sind.
               </p>
             </Reveal>

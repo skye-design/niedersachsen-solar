@@ -86,18 +86,18 @@ export const services = [
     responsibility: "partner-coordinated" as const,
     // RESTORED 2026-09-03 (contentGates.certifiedPartnersAndResponsibilityBoundaries, "Ja").
     description:
-      "Bevor wir Module aufs Dach bringen, sorgen wir bei Bedarf dafür, dass der Untergrund stimmt. Die Dachsanierung selbst führen zertifizierte Dachdecker-Partnerbetriebe aus unserem Netzwerk durch — koordiniert von uns, damit Ihre PV-Anlage am Ende auf einer soliden Basis steht.",
+      "Bevor wir Module aufs Dach bringen, sorgen wir bei Bedarf dafür, dass der Untergrund stimmt. Die Dachsanierung selbst führen zertifizierte Dachdecker-Partnerbetriebe aus unserem Netzwerk durch, die wir koordinieren, damit Ihre PV-Anlage am Ende auf einer soliden Basis steht.",
     icon: "house",
     metaTitle: "Dachsanierung vor der PV-Anlage | Niedersachsen Solar",
     metaDescription:
-      "Dachsanierung koordiniert mit Ihrer Photovoltaik-Planung — durchgeführt von zertifizierten Dachdecker-Partnerbetrieben, abgestimmt auf Ihre PV-Anlage. Niedersachsen, mit Schwerpunkt Hannover, Hildesheim, Braunschweig.",
+      "Dachsanierung koordiniert mit Ihrer Photovoltaik-Planung, durchgeführt von zertifizierten Dachdecker-Partnerbetrieben und abgestimmt auf Ihre PV-Anlage. Niedersachsen, mit Schwerpunkt Hannover, Hildesheim, Braunschweig.",
     intro:
-      "Eine Photovoltaikanlage ist nur so gut wie das Dach, auf dem sie steht. Wenn Ziegel, Dämmung oder Unterkonstruktion nicht mehr mitziehen, planen wir die Dachsanierung als festen Bestandteil Ihres Energiekonzepts — nicht als nachträgliches Problem.",
+      "Eine Photovoltaikanlage ist nur so gut wie das Dach, auf dem sie steht. Wenn Ziegel, Dämmung oder Unterkonstruktion nicht mehr mitziehen, planen wir die Dachsanierung als festen Bestandteil Ihres Energiekonzepts statt als nachträgliches Problem.",
     benefits: [
       {
         title: "Ein Ansprechpartner, zwei Gewerke",
         description:
-          "Sie sprechen mit uns, wir koordinieren Dachdecker und PV-Installation als ein Projekt — keine getrennten Baustellen, keine widersprüchlichen Zeitpläne.",
+          "Sie sprechen mit uns, und wir koordinieren Dachdecker und PV-Installation als ein Projekt, ohne getrennte Baustellen oder widersprüchliche Zeitpläne.",
       },
       {
         title: "Zertifizierte Partnerbetriebe",
@@ -114,7 +114,7 @@ export const services = [
       {
         question: "Muss ich mein Dach vor einer PV-Anlage sanieren?",
         answer:
-          "Nicht immer. Wir prüfen bei der Dachaufnahme den Zustand von Eindeckung, Dämmung und Unterkonstruktion und sagen Ihnen ehrlich, ob eine Sanierung nötig ist — oder ob Ihr Dach für die geplante Anlage bereits geeignet ist.",
+          "Nicht immer. Wir prüfen bei der Dachaufnahme den Zustand von Eindeckung, Dämmung und Unterkonstruktion und sagen Ihnen ehrlich, ob eine Sanierung nötig ist oder Ihr Dach für die geplante Anlage bereits geeignet ist.",
       },
       {
         question: "Wer führt die Dachsanierung aus?",
@@ -133,13 +133,13 @@ export const services = [
     userQuestion: "Lohnt sich eine PV-Anlage für mein Dach?",
     responsibility: "in-house" as const,
     description:
-      "Photovoltaik-Planung und -Installation aus einer Hand — von der Dachaufnahme bis zur Inbetriebnahme. Wir haben selbst jahrelang auf dem Dach gestanden, bevor wir Energiekonzepte geplant haben.",
+      "Photovoltaik-Planung und -Installation aus einer Hand, von der Dachaufnahme bis zur Inbetriebnahme. Wir haben selbst jahrelang auf dem Dach gestanden, bevor wir Energiekonzepte geplant haben.",
     icon: "sun",
     metaTitle: "Photovoltaik-Anlagen für Hannover, Hildesheim & Braunschweig | Niedersachsen Solar",
     metaDescription:
-      "PV-Anlagen von der Dachaufnahme bis zur Inbetriebnahme — geplant von Menschen, die selbst auf dem Dach gestanden haben. Photovoltaik für Hannover, Hildesheim und Braunschweig.",
+      "PV-Anlagen von der Dachaufnahme bis zur Inbetriebnahme, geplant von Menschen, die selbst auf dem Dach gestanden haben. Photovoltaik für Hannover, Hildesheim und Braunschweig.",
     intro:
-      "Eine Photovoltaikanlage ist eine Investition für Jahrzehnte. Wir planen sie so, wie wir sie selbst installieren würden: mit realistischer Ertragsplanung, sauberer Verkabelung und einer Auslegung, die zu Ihrem tatsächlichen Verbrauch passt — nicht zur größtmöglichen Rechnung.",
+      "Eine Photovoltaikanlage ist eine Investition für Jahrzehnte. Wir planen sie so, wie wir sie selbst installieren würden: mit realistischer Ertragsplanung, sauberer Verkabelung und einer Auslegung, die zu Ihrem tatsächlichen Verbrauch passt statt zur größtmöglichen Rechnung.",
     benefits: [
       {
         title: "Praxiserfahrung statt Blaupause",
@@ -166,7 +166,7 @@ export const services = [
       {
         question: "Kann ich eine PV-Anlage mit Speicher, Wallbox und Wärmepumpe kombinieren?",
         answer:
-          "Ja — das ist unser Kernprinzip. Wir planen PV-Anlage, Speicher, Wallbox und Wärmepumpe als ein zusammenhängendes System, damit die Komponenten optimal zusammenspielen statt isoliert zu funktionieren.",
+          "Ja, das ist unser Kernprinzip. Wir planen PV-Anlage, Speicher, Wallbox und Wärmepumpe als ein zusammenhängendes System, damit die Komponenten optimal zusammenspielen statt isoliert zu funktionieren.",
       },
       {
         // RESTORED 2026-09-03 (contentGates.pricing, "Ja").
@@ -192,14 +192,14 @@ export const services = [
     icon: "battery",
     metaTitle: "Batteriespeicher für Ihre PV-Anlage | Niedersachsen Solar",
     metaDescription:
-      "Batteriespeicher abgestimmt auf Ihre PV-Anlage — für maximale Unabhängigkeit vom Netz. Hannover, Hildesheim, Braunschweig.",
+      "Batteriespeicher abgestimmt auf Ihre PV-Anlage, für maximale Unabhängigkeit vom Netz. Hannover, Hildesheim, Braunschweig.",
     intro:
       "Ein Speicher entscheidet, wie viel von Ihrem selbst erzeugten Solarstrom Sie tatsächlich nutzen, statt ihn für wenig Geld ins Netz einzuspeisen. Wir setzen auf ein geschlossenes Ökosystem statt beliebige Komponenten zu kombinieren.",
     benefits: [
       {
         title: "Ein geschlossenes System statt Einzelteile",
         description:
-          "Speicher, Wallbox und Steuerung sind für nahtloses Zusammenspiel konzipiert — keine Kompatibilitätsprobleme zwischen Komponenten.",
+          "Speicher, Wallbox und Steuerung sind für nahtloses Zusammenspiel konzipiert, ohne Kompatibilitätsprobleme zwischen den Komponenten.",
       },
       {
         title: "Maximale Unabhängigkeit vom Netz",
@@ -235,11 +235,11 @@ export const services = [
     userQuestion: "Wie lade ich mein E-Auto möglichst viel mit eigenem Solarstrom?",
     responsibility: "in-house" as const,
     description:
-      "Ladeinfrastruktur für Ihr Elektrofahrzeug, intelligent mit Ihrer PV-Anlage verbunden — laden Sie mit selbst erzeugtem Strom.",
+      "Ladeinfrastruktur für Ihr Elektrofahrzeug, intelligent mit Ihrer PV-Anlage verbunden, damit Sie mit selbst erzeugtem Strom laden.",
     icon: "plug",
     metaTitle: "Wallbox-Installation mit PV-Anbindung | Niedersachsen Solar",
     metaDescription:
-      "Wallbox-Installation, intelligent mit Ihrer PV-Anlage verbunden — laden Sie Ihr Elektrofahrzeug mit selbst erzeugtem Solarstrom. Hannover, Hildesheim, Braunschweig.",
+      "Wallbox-Installation, intelligent mit Ihrer PV-Anlage verbunden, damit Sie Ihr Elektrofahrzeug mit selbst erzeugtem Solarstrom laden. Hannover, Hildesheim, Braunschweig.",
     intro:
       "Eine Wallbox ohne Anbindung an Ihre PV-Anlage lädt einfach nur mit Netzstrom. Wir installieren sie so, dass sie mit Ihrer Solaranlage kommuniziert und bevorzugt dann lädt, wenn Sie selbst Strom erzeugen.",
     benefits: [
@@ -263,7 +263,7 @@ export const services = [
       {
         question: "Kann ich eine Wallbox auch ohne PV-Anlage bekommen?",
         answer:
-          "Ja, eine Wallbox lässt sich auch unabhängig installieren. Den größten Nutzen — Laden mit selbst erzeugtem Strom statt Netzstrom — entfaltet sie aber im Zusammenspiel mit einer PV-Anlage und einem Speicher.",
+          "Ja, eine Wallbox lässt sich auch unabhängig installieren. Ihren größten Nutzen, das Laden mit selbst erzeugtem Strom statt Netzstrom, entfaltet sie aber im Zusammenspiel mit einer PV-Anlage und einem Speicher.",
       },
       {
         question: "Wie wird die Wallbox mit der PV-Anlage verbunden?",
@@ -286,7 +286,7 @@ export const services = [
     responsibility: "partner-coordinated" as const,
     // RESTORED 2026-09-03 (contentGates.certifiedPartnersAndResponsibilityBoundaries, "Ja").
     description:
-      "Als Teil Ihres Energiekonzepts koordinieren wir die Wärmepumpen-Installation über unser Netzwerk zertifizierter Heizungsbau-Fachpartner — abgestimmt auf Ihre PV-Anlage und Ihren Speicher.",
+      "Als Teil Ihres Energiekonzepts koordinieren wir die Wärmepumpen-Installation über unser Netzwerk zertifizierter Heizungsbau-Fachpartner, abgestimmt auf Ihre PV-Anlage und Ihren Speicher.",
     icon: "thermometer",
     metaTitle: "Wärmepumpe im Energiekonzept | Niedersachsen Solar",
     metaDescription:
@@ -307,7 +307,7 @@ export const services = [
       {
         title: "Ein Energiekonzept, ein Ansprechpartner",
         description:
-          "Sie müssen nicht selbst zwischen Solarteur und Heizungsbauer vermitteln — wir übernehmen die Abstimmung.",
+          "Sie müssen nicht selbst zwischen Solarteur und Heizungsbauer vermitteln, denn wir übernehmen die Abstimmung.",
       },
     ],
     faqs: [
@@ -325,7 +325,7 @@ export const services = [
         // RESTORED 2026-09-03 (contentGates.pricing + contentGates.förderung, both "Ja").
         question: "Was kostet eine Wärmepumpe?",
         answer:
-          "Die Gesamtkosten für eine Wärmepumpe — Anschaffung, Installation und Umfeldarbeiten — liegen laut Finanztip.de je nach System zwischen 11.000 € und 47.000 € vor Förderung. Der Staat bezuschusst Wärmepumpen mit bis zu 80 % der Kosten. Wir koordinieren die Installation über zertifizierte Heizungsbau-Fachpartner und beraten Sie zu den passenden Fördermöglichkeiten.",
+          "Die Gesamtkosten für eine Wärmepumpe (Anschaffung, Installation und Umfeldarbeiten) liegen laut Finanztip.de je nach System zwischen 11.000 € und 47.000 € vor Förderung. Der Staat bezuschusst Wärmepumpen mit bis zu 80 % der Kosten. Wir koordinieren die Installation über zertifizierte Heizungsbau-Fachpartner und beraten Sie zu den passenden Fördermöglichkeiten.",
       },
     ],
   },
@@ -341,19 +341,19 @@ export const trustPoints = [
   {
     title: "Vom Dach in die Planung",
     description:
-      "Bevor wir Energiekonzepte entworfen haben, haben wir selbst PV-Anlagen installiert. Diese praktische Erfahrung fließt in jede Planung ein — wir kennen die Details, die auf dem Papier oft übersehen werden.",
+      "Bevor wir Energiekonzepte entworfen haben, haben wir selbst PV-Anlagen installiert. Diese praktische Erfahrung fließt in jede Planung ein, denn wir kennen die Details, die auf dem Papier oft übersehen werden.",
     icon: "toolbox",
   },
   {
     title: "Ein geschlossenes Ökosystem",
     description:
-      "Wir setzen bewusst auf ein geschlossenes, durchdachtes Ökosystem statt beliebiger Einzelteile — für nahtloses Zusammenspiel von Speicher, Wallbox und Steuerung.",
+      "Wir setzen bewusst auf ein geschlossenes, durchdachtes Ökosystem statt beliebiger Einzelteile, für nahtloses Zusammenspiel von Speicher, Wallbox und Steuerung.",
     icon: "shield-check",
   },
   {
     title: "Direkter Zugang zur Finanzierung",
     description:
-      "Über unseren Finanzierungspartner Cloover klären wir Ihre Optionen direkt und unkompliziert — ohne Umwege über mehrere Ansprechpartner.",
+      "Über unseren Finanzierungspartner Cloover klären wir Ihre Optionen direkt und unkompliziert, ohne Umwege über mehrere Ansprechpartner.",
     icon: "handshake",
   },
 ];
@@ -397,7 +397,7 @@ export const generalFaqs = [
     // RESTORED 2026-09-03 (contentGates.openingHours + .oneBusinessDayCallback, both "Ja").
     question: "Wann sind Sie persönlich erreichbar?",
     answer:
-      "Montags bis freitags von 8 bis 17 Uhr. Außerhalb dieser Zeiten erreichen Sie uns über das Kontaktformular oder den Solar-Check — wir melden uns innerhalb eines Werktags zurück.",
+      "Montags bis freitags von 8 bis 17 Uhr. Außerhalb dieser Zeiten erreichen Sie uns über das Kontaktformular oder den Solar-Check, und wir melden uns innerhalb eines Werktags zurück.",
   },
 ];
 
@@ -456,7 +456,7 @@ export const proofClaims: Claim[] = [
   {
     id: "praxiserfahrung",
     statement:
-      "Gründer und Geschäftsführer Skye van Dyck hat selbst PV-Anlagen installiert, bevor er Energiekonzepte geplant hat — diese praktische Erfahrung fließt in jede Planung ein.",
+      "Gründer und Geschäftsführer Skye van Dyck hat selbst PV-Anlagen installiert, bevor er Energiekonzepte geplant hat. Diese praktische Erfahrung fließt in jede Planung ein.",
     state: "confirmed",
   },
   {
@@ -481,7 +481,7 @@ export const processSteps = [
     step: 1,
     title: "Kennenlernen",
     result: "Sie wissen, ob ein Gesamtsystem für Ihr Haus sinnvoll ist.",
-    documents: "Keine — ein kurzes Gespräch genügt.",
+    documents: "Keine, ein kurzes Gespräch genügt.",
     responsible: "Niedersachsen Solar",
   },
   {
@@ -510,7 +510,7 @@ export const processSteps = [
     step: 5,
     title: "Gemeinsam in Betrieb nehmen",
     result: "Ihr System läuft, Sie wissen, wie Sie es bedienen.",
-    documents: "Keine — Einweisung erfolgt vor Ort.",
+    documents: "Keine, Einweisung erfolgt vor Ort.",
     responsible: "Niedersachsen Solar",
   },
 ];
@@ -524,14 +524,14 @@ export const knowledgeArticles = [
     slug: "dach-vor-pv-sanieren",
     title: "Wann sollte das Dach vor der PV-Anlage saniert werden?",
     excerpt:
-      "Nicht jedes Dach braucht vorab eine Sanierung. Woran Sie erkennen, ob Ihre Eindeckung und Unterkonstruktion für eine PV-Anlage bereit sind — und wann sich eine Sanierung zuerst lohnt.",
+      "Nicht jedes Dach braucht vorab eine Sanierung. Woran Sie erkennen, ob Ihre Eindeckung und Unterkonstruktion für eine PV-Anlage bereit sind und wann sich eine Sanierung zuerst lohnt.",
     relatedService: "dachsanierung",
     body: [
-      "Eine Photovoltaikanlage hält mehrere Jahrzehnte — deutlich länger als viele Dacheindeckungen. Wer eine Anlage auf ein Dach setzt, das in wenigen Jahren ohnehin saniert werden muss, verursacht doppelte Arbeit: Die Module müssen für die Dacharbeiten wieder abgebaut und neu montiert werden.",
+      "Eine Photovoltaikanlage hält mehrere Jahrzehnte, deutlich länger als viele Dacheindeckungen. Wer eine Anlage auf ein Dach setzt, das in wenigen Jahren ohnehin saniert werden muss, verursacht doppelte Arbeit: Die Module müssen für die Dacharbeiten wieder abgebaut und neu montiert werden.",
       "Bei der Dachaufnahme prüfen wir deshalb drei Dinge, bevor wir eine PV-Anlage auslegen: den Zustand der Eindeckung (Alter, sichtbare Schäden, Undichtigkeiten), die Dämmung und die Tragfähigkeit der Unterkonstruktion. Erst wenn diese drei Punkte für die geplante Nutzungsdauer der Anlage tragen, macht eine Installation ohne vorherige Sanierung Sinn.",
       // RESTORED 2026-09-03 (contentGates.certifiedPartnersAndResponsibilityBoundaries, "Ja").
-      "Ist eine Sanierung nötig, koordinieren wir sie über zertifizierte Dachdecker-Partnerbetriebe aus unserem Netzwerk — als ein gemeinsam geplantes Projekt mit der PV-Installation, nicht als getrennte Baustelle mit eigenem Zeitplan. So entscheiden Statik, Ausrichtung und Unterkonstruktion der Dachsanierung von Anfang an mit, wie die Photovoltaikanlage später ausgelegt wird.",
-      "Die ehrliche Antwort auf die Frage \"Muss ich sanieren?\" bekommen Sie erst nach einer Dachaufnahme vor Ort — pauschale Aussagen ohne Blick aufs Dach sind hier wenig wert.",
+      "Ist eine Sanierung nötig, koordinieren wir sie über zertifizierte Dachdecker-Partnerbetriebe aus unserem Netzwerk, als ein gemeinsam geplantes Projekt mit der PV-Installation statt als getrennte Baustelle mit eigenem Zeitplan. So entscheiden Statik, Ausrichtung und Unterkonstruktion der Dachsanierung von Anfang an mit, wie die Photovoltaikanlage später ausgelegt wird.",
+      "Die ehrliche Antwort auf die Frage \"Muss ich sanieren?\" bekommen Sie erst nach einer Dachaufnahme vor Ort, denn pauschale Aussagen ohne Blick aufs Dach sind hier wenig wert.",
     ],
   },
   {
@@ -542,8 +542,8 @@ export const knowledgeArticles = [
     relatedService: "speicher",
     body: [
       "Ein Batteriespeicher hat eine einzige Aufgabe: den tagsüber erzeugten Solarstrom für den Verbrauch am Abend und in der Nacht verfügbar zu machen. Wie groß er dafür sein muss, hängt nicht von der PV-Anlage allein ab, sondern vom Zusammenspiel aus Erzeugung und tatsächlichem Verbrauch.",
-      "Ein zu klein dimensionierter Speicher ist schnell voll und schickt überschüssigen Strom trotzdem für wenig Geld ins Netz — der eigentliche Vorteil des Speichers verpufft. Ein zu groß dimensionierter Speicher wird dagegen selten vollständig genutzt und verlängert die Amortisationszeit unnötig, ohne einen entsprechenden Zusatznutzen zu bringen.",
-      "Wir bewerten die passende Kapazität deshalb anhand Ihrer tatsächlichen Verbrauchsdaten, nicht anhand einer Pauschalgröße pro Haushalt oder pro kWp Anlagenleistung. Das Ergebnis ist ein Speicher, der zu Ihrem Alltag passt — inklusive der Frage, ob und wann eine Wallbox oder Wärmepumpe später dazukommen soll, weil das die sinnvolle Kapazität ebenfalls verschiebt.",
+      "Ein zu klein dimensionierter Speicher ist schnell voll und schickt überschüssigen Strom trotzdem für wenig Geld ins Netz, sodass der eigentliche Vorteil des Speichers verpufft. Ein zu groß dimensionierter Speicher wird dagegen selten vollständig genutzt und verlängert die Amortisationszeit unnötig, ohne einen entsprechenden Zusatznutzen zu bringen.",
+      "Wir bewerten die passende Kapazität deshalb anhand Ihrer tatsächlichen Verbrauchsdaten, nicht anhand einer Pauschalgröße pro Haushalt oder pro kWp Anlagenleistung. Das Ergebnis ist ein Speicher, der zu Ihrem Alltag passt, inklusive der Frage, ob und wann eine Wallbox oder Wärmepumpe später dazukommen soll, weil das die sinnvolle Kapazität ebenfalls verschiebt.",
       // Deliberately still not restored: this used to close on EcoFlow
       // exclusivity specifically, which stays rejected. "Geschlossenes
       // Ökosystem" is used elsewhere on the Speicher page instead.
@@ -557,10 +557,10 @@ export const knowledgeArticles = [
       "Die Wallbox lädt bevorzugt dann, wenn Ihre PV-Anlage Strom erzeugt. Was das für Ladezeiten, Reichweite und Ihre Stromrechnung konkret bedeutet.",
     relatedService: "wallbox",
     body: [
-      "Eine Wallbox ohne Anbindung an die PV-Anlage lädt einfach mit Netzstrom, unabhängig davon, ob gerade die Sonne scheint. Beim PV-Überschussladen ist das anders: Die Wallbox ist intelligent mit der PV-Anlage — und, sofern vorhanden, dem Speicher — verbunden und lädt bevorzugt dann, wenn Sie selbst Strom erzeugen.",
-      "Im Alltag heißt das konkret: An einem sonnigen Tag lädt Ihr Elektrofahrzeug einen relevanten Teil seiner Reichweite mit selbst erzeugtem Strom, während Sie zu Hause sind oder arbeiten — ohne dass Sie den Ladevorgang manuell steuern müssen. An bewölkten Tagen oder wenn schnell geladen werden muss, greift die Steuerung auf Netzstrom zurück, damit Sie nicht auf Sonnenschein warten müssen, wenn es eilt.",
-      "Für Ihre Stromrechnung bedeutet das: Jede Kilowattstunde, die Sie selbst erzeugt statt eingespeist oder aus dem Netz bezogen haben, spart doppelt — Sie zahlen keinen Netzstrompreis für diese Energie und verzichten nicht auf die (meist niedrigere) Einspeisevergütung dafür, weil der Strom ohnehin direkt genutzt wurde.",
-      "Voraussetzung ist eine Wallbox, die mit Ihrer PV-Anlage kommuniziert, statt isoliert am Netz zu hängen — deshalb planen wir Wallbox, PV-Anlage und Speicher immer als ein System.",
+      "Eine Wallbox ohne Anbindung an die PV-Anlage lädt einfach mit Netzstrom, unabhängig davon, ob gerade die Sonne scheint. Beim PV-Überschussladen ist das anders: Die Wallbox ist intelligent mit der PV-Anlage und, sofern vorhanden, dem Speicher verbunden und lädt bevorzugt dann, wenn Sie selbst Strom erzeugen.",
+      "Im Alltag heißt das konkret: An einem sonnigen Tag lädt Ihr Elektrofahrzeug einen relevanten Teil seiner Reichweite mit selbst erzeugtem Strom, während Sie zu Hause sind oder arbeiten, ohne dass Sie den Ladevorgang manuell steuern müssen. An bewölkten Tagen oder wenn schnell geladen werden muss, greift die Steuerung auf Netzstrom zurück, damit Sie nicht auf Sonnenschein warten müssen, wenn es eilt.",
+      "Für Ihre Stromrechnung bedeutet das: Jede Kilowattstunde, die Sie selbst erzeugt statt eingespeist oder aus dem Netz bezogen haben, spart doppelt, denn Sie zahlen keinen Netzstrompreis für diese Energie und verzichten nicht auf die (meist niedrigere) Einspeisevergütung dafür, weil der Strom ohnehin direkt genutzt wurde.",
+      "Voraussetzung ist eine Wallbox, die mit Ihrer PV-Anlage kommuniziert, statt isoliert am Netz zu hängen. Deshalb planen wir Wallbox, PV-Anlage und Speicher immer als ein System.",
     ],
   },
 ];

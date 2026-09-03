@@ -88,7 +88,7 @@ export default function Hero() {
             <div className="absolute -inset-x-4 -inset-y-3 -z-10 rounded-2xl bg-gradient-to-b from-ink/55 via-ink/45 to-ink/55 blur-lg" />
             <p className="text-lg leading-relaxed text-on-ink-muted">
               Wir planen Photovoltaik, Speicher, Wallbox und Wärmepumpe als
-              ein System — mit Erfahrung vom Dach und einem festen
+              ein System, mit Erfahrung vom Dach und einem festen
               Ansprechpartner.
             </p>
           </div>
@@ -137,7 +137,7 @@ export default function Hero() {
             className="mt-8 flex flex-wrap items-center gap-2 text-sm text-on-ink-muted transition-colors hover:text-on-ink"
           >
             <SignalTag index="01">Vertrauen</SignalTag>
-            <span>— Vom Dach bis zur Inbetriebnahme.</span>
+            <span>Vom Dach bis zur Inbetriebnahme.</span>
           </a>
         </div>
       </div>

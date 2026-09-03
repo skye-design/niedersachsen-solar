@@ -485,7 +485,7 @@ function HandoffScreen({ onBack, onDone }: { onBack: () => void; onDone: () => v
       <BackButton onClick={onBack} />
       <p className="text-sm text-muted-foreground">
         Für den Rückruf brauchen wir Name und Kontakt. Verbindliche Planung und Angebote erhalten Sie
-        persönlich von unserem Team — nicht vom Solar-Lotsen.
+        persönlich von unserem Team, nicht vom Solar-Lotsen.
       </p>
 
       <div aria-hidden="true" className="absolute -left-[9999px] h-0 w-0 overflow-hidden">
@@ -574,7 +574,7 @@ function HandoffScreen({ onBack, onDone }: { onBack: () => void; onDone: () => v
 
       <p className="text-[11px] leading-relaxed text-muted-foreground">
         Zweck: Bearbeitung Ihrer Anfrage. Empfänger: Niedersachsen Solar. Ihre Angaben werden nur zu
-        diesem Zweck verwendet — Details in der{" "}
+        diesem Zweck verwendet, Details in der{" "}
         <Link href="/datenschutz" className="underline underline-offset-2">
           Datenschutzerklärung
         </Link>

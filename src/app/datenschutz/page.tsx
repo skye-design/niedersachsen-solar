@@ -54,10 +54,10 @@ export default function Datenschutz() {
           </h2>
           <p className="mt-3 text-foreground/80">
             Wir verarbeiten personenbezogene Daten, die Sie uns freiwillig
-            mitteilen — über das Angebotsformular, den Solar-Check oder eine
-            Anfrage über den geführten Solar-Lotsen (jeweils Name,
+            über das Angebotsformular, den Solar-Check oder eine Anfrage über
+            den geführten Solar-Lotsen mitteilen (jeweils Name,
             Telefonnummer und/oder E-Mail-Adresse, Ort/PLZ sowie Angaben zu
-            Ihrem Interesse an unseren Leistungen) — ausschließlich zur
+            Ihrem Interesse an unseren Leistungen), ausschließlich zur
             Bearbeitung Ihrer Anfrage gemäß Art. 6 Abs. 1 lit. b DSGVO
             (vorvertragliche Maßnahmen). Der Solar-Lotse selbst ist
             regelbasiert und verarbeitet keine personenbezogenen Daten,

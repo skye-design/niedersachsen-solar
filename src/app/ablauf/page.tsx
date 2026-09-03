@@ -8,7 +8,7 @@ import { processSteps, site } from "@/lib/content";
 
 export const metadata: Metadata = {
   title: `Ablauf | ${site.name}`,
-  description: "Fünf Schritte vom Erstgespräch bis zur Inbetriebnahme — mit Ergebnis, benötigten Unterlagen und verantwortlicher Rolle je Schritt.",
+  description: "Fünf Schritte vom Erstgespräch bis zur Inbetriebnahme, mit Ergebnis, benötigten Unterlagen und verantwortlicher Rolle je Schritt.",
   alternates: { canonical: "https://niedersachsen-solar.de/ablauf" },
 };
 
@@ -26,9 +26,9 @@ export default function AblaufPage() {
               </h1>
               <p className="mt-6 text-lg leading-relaxed text-muted-foreground">
                 Fünf Schritte, die Unsicherheit aus dem Prozess nehmen sollen
-                — nicht nur eine Zeitleiste. Zu jedem Schritt: was am Ende
-                dabei herauskommt, welche Unterlagen nötig sind und wer
-                verantwortlich ist.
+                und mehr sind als nur eine Zeitleiste. Zu jedem Schritt: was
+                am Ende dabei herauskommt, welche Unterlagen nötig sind und
+                wer verantwortlich ist.
               </p>
             </Reveal>
           </div>
