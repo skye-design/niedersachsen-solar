@@ -19,18 +19,8 @@ const navLinks = [
 ];
 
 export default function SiteHeader() {
-  const [isScrolled, setIsScrolled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [isSolutionsOpen, setIsSolutionsOpen] = useState(false);
-
-  useEffect(() => {
-    function onScroll() {
-      setIsScrolled(window.scrollY > 8);
-    }
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
 
   useEffect(() => {
     document.body.style.overflow = isOpen ? "hidden" : "";
@@ -54,40 +44,21 @@ export default function SiteHeader() {
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [isOpen, isSolutionsOpen]);
 
-  const opaque = isScrolled || isOpen;
-
   return (
-    <header
-      className={`fixed inset-x-0 top-0 z-50 border-b transition-colors duration-300 ${
-        opaque
-          ? "border-border bg-background/95 backdrop-blur-md"
-          : "border-transparent bg-gradient-to-b from-black/45 to-transparent"
-      }`}
-    >
+    <header className="fixed inset-x-0 top-0 z-50 border-b border-border bg-background/95 backdrop-blur-md">
       <div className="mx-auto flex h-[72px] max-w-6xl items-center justify-between gap-4 px-4 sm:px-6">
         <Link href="/" className="flex items-center" onClick={() => setIsOpen(false)}>
-          {/* 2026-09-02: both logo variants render simultaneously in this
-              dimension-fixed box (height fixed, width derived from the
-              SVG's own 541.2:106 aspect ratio — never 0 or auto) and are
-              cross-faded via opacity. Neither swaps `src`, so there's no
-              network fetch — and therefore no flash of a missing/wrong-
-              color logo — when isScrolled/isOpen toggles. */}
+          {/* 2026-09-03: header is always solid/white now (Skye: no
+              transparent-over-hero state), so only the light-background
+              logo variant is ever shown — see git history for the
+              previous scroll-triggered cross-fade with logoOnDark. */}
           <span className="relative block h-9 aspect-[541.2/106] sm:h-10">
-            <Image
-              src={brand.logoOnDark}
-              alt={site.name}
-              aria-hidden={opaque}
-              fill
-              priority
-              className={`object-contain transition-opacity duration-150 ${opaque ? "opacity-0" : "opacity-100"}`}
-            />
             <Image
               src={brand.logoOnLight}
               alt={site.name}
-              aria-hidden={!opaque}
               fill
               priority
-              className={`object-contain transition-opacity duration-150 ${opaque ? "opacity-100" : "opacity-0"}`}
+              className="object-contain"
             />
           </span>
         </Link>
@@ -103,9 +74,7 @@ export default function SiteHeader() {
               aria-expanded={isSolutionsOpen}
               aria-haspopup="true"
               onClick={() => setIsSolutionsOpen((v) => !v)}
-              className={`flex items-center gap-1 text-sm font-medium transition-colors ${
-                opaque ? "text-foreground/80 hover:text-foreground" : "text-white/85 hover:text-white"
-              }`}
+              className="flex items-center gap-1 text-sm font-medium text-foreground/80 transition-colors hover:text-foreground"
             >
               Lösungen
               <CaretDown size={14} weight="bold" aria-hidden />
@@ -132,9 +101,7 @@ export default function SiteHeader() {
             <Link
               key={link.href}
               href={link.href}
-              className={`text-sm font-medium transition-colors ${
-                opaque ? "text-foreground/80 hover:text-foreground" : "text-white/85 hover:text-white"
-              }`}
+              className="text-sm font-medium text-foreground/80 transition-colors hover:text-foreground"
             >
               {link.label}
             </Link>
@@ -144,11 +111,7 @@ export default function SiteHeader() {
         <div className="flex items-center gap-3">
           <a
             href={site.phoneHref}
-            className={`hidden items-center gap-2 rounded-full border px-4 py-2 text-sm font-semibold transition-colors lg:flex ${
-              opaque
-                ? "border-border text-foreground hover:border-primary hover:text-primary"
-                : "border-white/30 text-white hover:border-white hover:bg-white/10"
-            }`}
+            className="hidden items-center gap-2 rounded-full border border-border px-4 py-2 text-sm font-semibold text-foreground transition-colors hover:border-primary hover:text-primary lg:flex"
           >
             <Phone size={16} weight="fill" aria-hidden />
             {site.phone}
@@ -165,9 +128,7 @@ export default function SiteHeader() {
             aria-label={isOpen ? "Menü schließen" : "Menü öffnen"}
             aria-expanded={isOpen}
             aria-controls="mobile-nav"
-            className={`flex h-10 w-10 items-center justify-center lg:hidden ${
-              opaque ? "text-foreground" : "text-white"
-            }`}
+            className="flex h-10 w-10 items-center justify-center text-foreground lg:hidden"
           >
             {isOpen ? <X size={24} /> : <List size={24} />}
           </button>
