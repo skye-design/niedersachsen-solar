@@ -11,6 +11,7 @@ import {
 import { site } from "@/lib/content";
 import { trackEvent } from "@/lib/analytics";
 import { EMAIL_RE, PHONE_RE } from "@/lib/validation";
+import { estimateAnnualSavings, type Orientation } from "@/lib/savingsEstimate";
 
 const CONNECTION_OPTIONS = [
   { id: "pv", label: "Photovoltaik" },
@@ -33,12 +34,29 @@ const SITUATION_OPTIONS = [
   { id: "dachpruefung", label: "Dachprüfung gewünscht" },
 ] as const;
 
-type Step = 1 | 2 | 3 | 4 | "summary" | 5 | 6;
-const STEP_ORDER: Step[] = [1, 2, 3, 4, "summary", 5, 6];
-// The summary screen isn't a numbered form step — it's a review checkpoint
-// of steps 1-4 before contact details. It used to display "Schritt 4 von
-// 6", identical to the real step 4, which read as if nothing had advanced.
-const NUMBERED_STEP_COUNT = 6;
+// kWh values are shown to the user alongside the household-size label
+// (rather than hidden behind it) so the savings estimate that follows
+// doesn't feel like a black box. Fed into estimateAnnualSavings() below.
+const CONSUMPTION_OPTIONS = [
+  { id: "1-2", label: "1–2 Personen", kwh: 2000 },
+  { id: "3-4", label: "3–4 Personen", kwh: 4000 },
+  { id: "5+", label: "5+ Personen", kwh: 6000 },
+] as const;
+
+const ORIENTATION_OPTIONS: { id: Orientation; label: string }[] = [
+  { id: "sued", label: "Süden" },
+  { id: "ost-west", label: "Ost-West" },
+  { id: "norden", label: "Norden" },
+  { id: "unbekannt", label: "Weiß ich nicht" },
+];
+
+type Step = 1 | 2 | 3 | 4 | 5 | "estimate" | "summary" | 6 | 7;
+const STEP_ORDER: Step[] = [1, 2, 3, 4, 5, "estimate", "summary", 6, 7];
+// "estimate" and "summary" aren't numbered form steps — they're review
+// checkpoints after step 5, before contact details. Both show progress
+// fill 5 (see progressFill below), same reasoning as the old single
+// summary screen: they shouldn't claim to be a step that hasn't happened.
+const NUMBERED_STEP_COUNT = 7;
 
 type Status = "idle" | "submitting" | "success" | "error";
 
@@ -57,6 +75,8 @@ export default function SolarCheck() {
   const [situation, setSituation] = useState<string | null>(null);
   const [postalCode, setPostalCode] = useState("");
   const [city, setCity] = useState("");
+  const [consumptionId, setConsumptionId] = useState<string | null>(null);
+  const [orientation, setOrientation] = useState<Orientation | null>(null);
   const [name, setName] = useState("");
   const [contactMethod, setContactMethod] = useState<"telefon" | "email" | null>(null);
   const [contactValue, setContactValue] = useState("");
@@ -65,9 +85,17 @@ export default function SolarCheck() {
   const [touched, setTouched] = useState<Record<string, boolean>>({});
 
   const step = STEP_ORDER[stepIndex];
-  // Fills through 4/6 while reviewing the summary — it's showing progress
-  // made, not claiming the summary itself is step 4.
-  const progressFill = step === "summary" ? 4 : typeof step === "number" && step <= 4 ? step : step === 5 ? 5 : 6;
+  // "estimate"/"summary" both show fill 5 — see the STEP_ORDER comment.
+  const progressFill = typeof step === "number" ? step : 5;
+
+  const selectedConsumption = CONSUMPTION_OPTIONS.find((o) => o.id === consumptionId) ?? null;
+  const savingsEstimate = selectedConsumption
+    ? estimateAnnualSavings({
+        annualConsumptionKwh: selectedConsumption.kwh,
+        orientation: orientation ?? "unbekannt",
+        hasBattery: connections.includes("speicher"),
+      })
+    : null;
 
   // Focus the new step's heading/legend on every step change, so keyboard
   // and screen-reader users land somewhere meaningful instead of the focus
@@ -122,16 +150,20 @@ export default function SolarCheck() {
         return !!situation;
       case 4:
         return !fieldError("plz") && !fieldError("ort") && postalCode.trim() !== "" && city.trim() !== "";
+      case 5:
+        return !!consumptionId;
+      case "estimate":
+        return true;
       case "summary":
         return true;
-      case 5:
+      case 6:
         return (
           name.trim().length > 1 &&
           !!contactMethod &&
           !fieldError("contact") &&
           contactValue.trim().length > 0
         );
-      case 6:
+      case 7:
         return true;
       default:
         return false;
@@ -140,7 +172,7 @@ export default function SolarCheck() {
 
   function goNext() {
     if (step === 4) setTouched((t) => ({ ...t, plz: true, ort: true }));
-    if (step === 5) setTouched((t) => ({ ...t, name: true, contactMethod: true, contact: true }));
+    if (step === 6) setTouched((t) => ({ ...t, name: true, contactMethod: true, contact: true }));
     if (!canAdvance()) return;
     trackEvent({ name: "solar_check_step_completed", step });
     setStepIndex((i) => Math.min(i + 1, STEP_ORDER.length - 1));
@@ -180,6 +212,13 @@ export default function SolarCheck() {
           interests: connections
             .map((id) => CONNECTION_OPTIONS.find((o) => o.id === id)?.label)
             .filter((label): label is (typeof CONNECTION_OPTIONS)[number]["label"] => label !== undefined),
+          annualConsumptionKwh: selectedConsumption?.kwh,
+          roofOrientation: orientation
+            ? ORIENTATION_OPTIONS.find((o) => o.id === orientation)?.label
+            : undefined,
+          estimatedSavingsRange: savingsEstimate
+            ? `${savingsEstimate.lowEstimateEur}–${savingsEstimate.highEstimateEur} € / Jahr (ca. ${savingsEstimate.recommendedKwp} kWp)`
+            : undefined,
           message,
           company,
         }),
@@ -236,10 +275,14 @@ export default function SolarCheck() {
         ))}
       </div>
       <p className="font-data mb-6 text-xs text-muted-foreground uppercase">
-        {step === "summary" ? "Zusammenfassung" : `Schritt ${progressFill} von ${NUMBERED_STEP_COUNT}`}
+        {step === "summary"
+          ? "Zusammenfassung"
+          : step === "estimate"
+            ? "Ihre Einschätzung"
+            : `Schritt ${progressFill} von ${NUMBERED_STEP_COUNT}`}
       </p>
 
-      <form onSubmit={step === 6 ? handleSubmit : (e) => e.preventDefault()}>
+      <form onSubmit={step === 7 ? handleSubmit : (e) => e.preventDefault()}>
         <div aria-hidden="true" className="absolute -left-[9999px] h-0 w-0 overflow-hidden">
           <label htmlFor={`${formBase}-company`}>Firma (bitte freilassen)</label>
           <input
@@ -393,6 +436,84 @@ export default function SolarCheck() {
           </fieldset>
         )}
 
+        {step === 5 && (
+          <fieldset>
+            <legend ref={(el) => { headingRef.current = el; }} tabIndex={-1} className="text-lg font-semibold text-foreground outline-none">
+              Wie hoch ist etwa Ihr jährlicher Stromverbrauch?
+            </legend>
+            <div className="mt-4 flex flex-wrap gap-2">
+              {CONSUMPTION_OPTIONS.map((opt) => {
+                const checked = consumptionId === opt.id;
+                return (
+                  <button
+                    key={opt.id}
+                    type="button"
+                    aria-pressed={checked}
+                    onClick={() => setConsumptionId(opt.id)}
+                    className={`cursor-pointer rounded-full border px-4 py-2 text-sm font-medium transition-colors ${
+                      checked
+                        ? "border-primary bg-primary/10 text-primary"
+                        : "border-border text-foreground/70 hover:border-primary/50"
+                    }`}
+                  >
+                    {opt.label} <span className="text-foreground/50">(ca. {opt.kwh.toLocaleString("de-DE")} kWh)</span>
+                  </button>
+                );
+              })}
+            </div>
+
+            <p className="mt-6 mb-1.5 text-sm font-semibold text-foreground">
+              Dachausrichtung (optional)
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {ORIENTATION_OPTIONS.map((opt) => {
+                const checked = orientation === opt.id;
+                return (
+                  <button
+                    key={opt.id}
+                    type="button"
+                    aria-pressed={checked}
+                    onClick={() => setOrientation(opt.id)}
+                    className={`cursor-pointer rounded-full border px-4 py-2 text-sm font-medium transition-colors ${
+                      checked
+                        ? "border-primary bg-primary/10 text-primary"
+                        : "border-border text-foreground/70 hover:border-primary/50"
+                    }`}
+                  >
+                    {opt.label}
+                  </button>
+                );
+              })}
+            </div>
+          </fieldset>
+        )}
+
+        {step === "estimate" && savingsEstimate && (
+          <div>
+            <h3 ref={(el) => { headingRef.current = el; }} tabIndex={-1} className="text-lg font-semibold text-foreground outline-none">
+              Ihre grobe Einschätzung
+            </h3>
+            <p className="mt-2 text-sm text-muted-foreground">
+              Eine erste Näherung auf Basis Ihrer Angaben, keine verbindliche
+              Zusage. Die genaue Auslegung klären wir im persönlichen
+              Gespräch.
+            </p>
+            <div className="mt-5 rounded-xl border border-border bg-background p-5">
+              <p className="font-data text-xs tracking-wide text-muted-foreground uppercase">
+                Geschätzte Ersparnis pro Jahr
+              </p>
+              <p className="mt-1 text-3xl font-semibold text-primary">
+                {savingsEstimate.lowEstimateEur.toLocaleString("de-DE")}–
+                {savingsEstimate.highEstimateEur.toLocaleString("de-DE")} €
+              </p>
+              <p className="mt-3 text-sm text-muted-foreground">
+                Passend dazu: eine Anlage von etwa {savingsEstimate.recommendedKwp} kWp
+                mit rund {savingsEstimate.annualGenerationKwh.toLocaleString("de-DE")} kWh Jahresertrag.
+              </p>
+            </div>
+          </div>
+        )}
+
         {step === "summary" && (
           <div>
             <h3 ref={(el) => { headingRef.current = el; }} tabIndex={-1} className="text-lg font-semibold text-foreground outline-none">
@@ -425,11 +546,20 @@ export default function SolarCheck() {
                   {postalCode} {city}
                 </dd>
               </div>
+              {savingsEstimate && (
+                <div className="flex justify-between gap-4">
+                  <dt className="text-muted-foreground">Geschätzte Ersparnis</dt>
+                  <dd className="text-right font-medium text-foreground">
+                    {savingsEstimate.lowEstimateEur.toLocaleString("de-DE")}–
+                    {savingsEstimate.highEstimateEur.toLocaleString("de-DE")} € / Jahr
+                  </dd>
+                </div>
+              )}
             </dl>
           </div>
         )}
 
-        {step === 5 && (
+        {step === 6 && (
           <fieldset>
             <legend ref={(el) => { headingRef.current = el; }} tabIndex={-1} className="text-lg font-semibold text-foreground outline-none">
               Wie dürfen wir Sie erreichen?
@@ -516,7 +646,7 @@ export default function SolarCheck() {
           </fieldset>
         )}
 
-        {step === 6 && (
+        {step === 7 && (
           <fieldset>
             <legend ref={(el) => { headingRef.current = el; }} tabIndex={-1} className="text-lg font-semibold text-foreground outline-none">
               Möchten Sie uns noch etwas mitgeben? (optional)
@@ -552,7 +682,7 @@ export default function SolarCheck() {
             <span />
           )}
 
-          {step === 6 ? (
+          {step === 7 ? (
             <button
               type="submit"
               disabled={status === "submitting"}

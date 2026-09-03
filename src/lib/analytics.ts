@@ -4,7 +4,7 @@
 // its own consent/cookie handling) is wired in.
 export type AnalyticsEvent =
   | { name: "decision_card_click"; serviceId: string }
-  | { name: "solar_check_step_completed"; step: number | "summary" }
+  | { name: "solar_check_step_completed"; step: number | "summary" | "estimate" }
   | { name: "solar_check_submitted" }
   | { name: "solar_check_error" }
   | { name: "quote_form_submitted" }
