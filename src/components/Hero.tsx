@@ -25,7 +25,14 @@ export default function Hero() {
     // header-height spacer that's a flex sibling *before* the content, not
     // padding the content can be pushed through: the safe area is always
     // reserved regardless of how tall the content below it grows.
-    <section id="top" className="relative flex min-h-[100dvh] flex-col overflow-hidden bg-ink">
+    //
+    // 2026-09-03 (Option A, target-preview match): full 100dvh stays on
+    // mobile/tablet (the safe-area spacer above depends on it), but on
+    // desktop (lg+, where there's no dynamic toolbar and vertical space is
+    // more plentiful) the hero is capped shorter so TrustSection's light
+    // background is already visible at the bottom of the first viewport —
+    // matching the approved preview instead of a full-bleed dark fold.
+    <section id="top" className="relative flex min-h-[100dvh] flex-col overflow-hidden bg-ink lg:min-h-[86vh]">
       <div className="absolute inset-0">
         <HeroMedia />
         <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/60 to-ink/15" />
