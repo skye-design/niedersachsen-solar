@@ -626,4 +626,8 @@ export const projectTeasers = [
     src: "/images/gallery/gallery-04-v2.jpg",
     alt: "PV-Anlage auf einem Reihenhaus mit Klinkerfassade",
   },
+  {
+    src: "/images/gallery/gallery-05.jpg",
+    alt: "Frisch installierte PV-Module auf einem Satteldach im Abendlicht",
+  },
 ];
