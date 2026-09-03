@@ -57,7 +57,7 @@ export const site = {
   phone: "0511 95733515",
   phoneHref: "tel:+4951195733515",
   email: "kontakt@niedersachsen-solar.de",
-  cities: ["Hannover", "Hildesheim", "Braunschweig"],
+  cities: ["Hannover", "Hildesheim", "Celle", "Braunschweig"],
   // RESTORED 2026-09-03 (contentGates.statewideServiceArea, "Ja"): safe to
   // render again — city mentions stay too, as the named service hubs.
   serviceArea: "Niedersachsen",
@@ -89,8 +89,7 @@ export const services = [
       "Bevor wir Module aufs Dach bringen, sorgen wir bei Bedarf dafür, dass der Untergrund stimmt. Die Dachsanierung selbst führen zertifizierte Dachdecker-Partnerbetriebe aus unserem Netzwerk durch, die wir koordinieren, damit Ihre PV-Anlage am Ende auf einer soliden Basis steht.",
     icon: "house",
     metaTitle: "Dachsanierung vor der PV-Anlage | Niedersachsen Solar",
-    metaDescription:
-      "Dachsanierung koordiniert mit Ihrer Photovoltaik-Planung, durchgeführt von zertifizierten Dachdecker-Partnerbetrieben und abgestimmt auf Ihre PV-Anlage. Niedersachsen, mit Schwerpunkt Hannover, Hildesheim, Braunschweig.",
+    metaDescription: `Dachsanierung koordiniert mit Ihrer Photovoltaik-Planung, durchgeführt von zertifizierten Dachdecker-Partnerbetrieben und abgestimmt auf Ihre PV-Anlage. Niedersachsen, mit Schwerpunkt ${site.cities.join(", ")}.`,
     intro:
       "Eine Photovoltaikanlage ist nur so gut wie das Dach, auf dem sie steht. Wenn Ziegel, Dämmung oder Unterkonstruktion nicht mehr mitziehen, planen wir die Dachsanierung als festen Bestandteil Ihres Energiekonzepts statt als nachträgliches Problem.",
     benefits: [
@@ -135,9 +134,8 @@ export const services = [
     description:
       "Photovoltaik-Planung und -Installation aus einer Hand, von der Dachaufnahme bis zur Inbetriebnahme. Wir haben selbst jahrelang auf dem Dach gestanden, bevor wir Energiekonzepte geplant haben.",
     icon: "sun",
-    metaTitle: "Photovoltaik-Anlagen für Hannover, Hildesheim & Braunschweig | Niedersachsen Solar",
-    metaDescription:
-      "PV-Anlagen von der Dachaufnahme bis zur Inbetriebnahme, geplant von Menschen, die selbst auf dem Dach gestanden haben. Photovoltaik für Hannover, Hildesheim und Braunschweig.",
+    metaTitle: `Photovoltaik-Anlagen für ${site.cities.join(", ")} | Niedersachsen Solar`,
+    metaDescription: `PV-Anlagen von der Dachaufnahme bis zur Inbetriebnahme, geplant von Menschen, die selbst auf dem Dach gestanden haben. Photovoltaik für ${site.cities.join(", ")}.`,
     intro:
       "Eine Photovoltaikanlage ist eine Investition für Jahrzehnte. Wir planen sie so, wie wir sie selbst installieren würden: mit realistischer Ertragsplanung, sauberer Verkabelung und einer Auslegung, die zu Ihrem tatsächlichen Verbrauch passt statt zur größtmöglichen Rechnung.",
     benefits: [
@@ -192,7 +190,7 @@ export const services = [
     icon: "battery",
     metaTitle: "Batteriespeicher für Ihre PV-Anlage | Niedersachsen Solar",
     metaDescription:
-      "Batteriespeicher abgestimmt auf Ihre PV-Anlage, für maximale Unabhängigkeit vom Netz. Hannover, Hildesheim, Braunschweig.",
+      `Batteriespeicher abgestimmt auf Ihre PV-Anlage, für maximale Unabhängigkeit vom Netz. ${site.cities.join(", ")}.`,
     intro:
       "Ein Speicher entscheidet, wie viel von Ihrem selbst erzeugten Solarstrom Sie tatsächlich nutzen, statt ihn für wenig Geld ins Netz einzuspeisen. Wir setzen auf ein geschlossenes Ökosystem statt beliebige Komponenten zu kombinieren.",
     benefits: [
@@ -239,7 +237,7 @@ export const services = [
     icon: "plug",
     metaTitle: "Wallbox-Installation mit PV-Anbindung | Niedersachsen Solar",
     metaDescription:
-      "Wallbox-Installation, intelligent mit Ihrer PV-Anlage verbunden, damit Sie Ihr Elektrofahrzeug mit selbst erzeugtem Solarstrom laden. Hannover, Hildesheim, Braunschweig.",
+      `Wallbox-Installation, intelligent mit Ihrer PV-Anlage verbunden, damit Sie Ihr Elektrofahrzeug mit selbst erzeugtem Solarstrom laden. ${site.cities.join(", ")}.`,
     intro:
       "Eine Wallbox ohne Anbindung an Ihre PV-Anlage lädt einfach nur mit Netzstrom. Wir installieren sie so, dass sie mit Ihrer Solaranlage kommuniziert und bevorzugt dann lädt, wenn Sie selbst Strom erzeugen.",
     benefits: [
@@ -290,7 +288,7 @@ export const services = [
     icon: "thermometer",
     metaTitle: "Wärmepumpe im Energiekonzept | Niedersachsen Solar",
     metaDescription:
-      "Wärmepumpen-Installation über zertifizierte Heizungsbau-Fachpartner, abgestimmt auf Ihre PV-Anlage und Ihren Speicher. Hannover, Hildesheim, Braunschweig.",
+      `Wärmepumpen-Installation über zertifizierte Heizungsbau-Fachpartner, abgestimmt auf Ihre PV-Anlage und Ihren Speicher. ${site.cities.join(", ")}.`,
     intro:
       "Eine Wärmepumpe, die unabhängig von Ihrer PV-Anlage geplant wird, verschenkt Potenzial. Wir koordinieren die Installation über zertifizierte Heizungsbau-Fachpartner und stimmen die Auslegung auf Ihre Solaranlage und Ihren Speicher ab.",
     benefits: [

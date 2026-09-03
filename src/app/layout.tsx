@@ -28,7 +28,7 @@ const plexMono = IBM_Plex_Mono({
 // finalized in Paket B; only the homepage baseline needed updating here.
 const title = "Photovoltaik & Energiekonzepte in Niedersachsen | Niedersachsen Solar";
 const description =
-  "Photovoltaik, Speicher, Wallbox und Wärmepumpe für Hannover, Hildesheim und Braunschweig – persönlich geplant, regional umgesetzt und verständlich begleitet.";
+  "Photovoltaik, Speicher, Wallbox und Wärmepumpe für Hannover, Hildesheim, Celle und Braunschweig, persönlich geplant, regional umgesetzt und verständlich begleitet.";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://niedersachsen-solar.de"),

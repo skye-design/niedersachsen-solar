@@ -14,8 +14,7 @@ export default function manifest(): MetadataRoute.Manifest {
   return {
     name: site.name,
     short_name: "NISO Solar",
-    description:
-      "Photovoltaik, Speicher, Wallbox und Wärmepumpe für Hannover, Hildesheim und Braunschweig.",
+    description: `Photovoltaik, Speicher, Wallbox und Wärmepumpe für ${site.cities.join(", ")}.`,
     start_url: "/",
     display: "standalone",
     background_color: "#f5f2ea",

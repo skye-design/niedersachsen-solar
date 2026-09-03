@@ -72,7 +72,7 @@ export default function Hero() {
 
           <p className="mb-5 inline-flex items-center gap-2 text-xs font-semibold tracking-[0.2em] text-primary uppercase">
             <MapPin size={14} weight="fill" aria-hidden />
-            Hannover · Hildesheim · Braunschweig
+            {site.cities.join(" · ")}
           </p>
 
           <h1 className="max-w-2xl text-4xl leading-[1.1] font-semibold text-on-ink sm:text-5xl lg:text-6xl">
