@@ -61,14 +61,20 @@ export default function UeberUnsPage() {
                 {site.founderRole}: {site.founder}
               </h2>
               <p className="mt-4 leading-relaxed text-muted-foreground">
-                {site.founder} hat selbst Photovoltaikanlagen installiert,
-                bevor er begann, ganzheitliche Energiekonzepte zu planen. Die
+                Er hat selbst Photovoltaikanlagen installiert, bevor er
+                begann, ganzheitliche Energiekonzepte zu planen. Die
                 praktische Erfahrung vom Dach fließt in jede Planung ein.
               </p>
 
+              {/* 2026-09-03 (Skye): "praxiserfahrung" excluded here
+                  specifically — its statement duplicates the heading + bio
+                  paragraph directly above almost word for word, which also
+                  repeated "Skye van Dyck" a third time on one page. Still
+                  used as-is on the homepage (TrustSection), where it's the
+                  only place that claim appears. */}
               <ul className="mt-8 space-y-4">
                 {proofClaims
-                  .filter((claim) => claim.state === "confirmed")
+                  .filter((claim) => claim.state === "confirmed" && claim.id !== "praxiserfahrung")
                   .map((claim) => (
                     <li key={claim.id} className="flex gap-3">
                       <CheckCircle
