@@ -7,7 +7,7 @@ export default function Process() {
     <section id="ablauf" aria-labelledby="process-heading">
       <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-28">
         <Reveal className="max-w-2xl">
-          <SignalTag index={3}>Ablauf</SignalTag>
+          <SignalTag index={4}>Ablauf</SignalTag>
           <h2 id="process-heading" className="mt-4 text-3xl font-semibold text-foreground sm:text-4xl">
             Fünf Schritte, keine Überraschungen
           </h2>

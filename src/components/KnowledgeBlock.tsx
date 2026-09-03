@@ -10,7 +10,7 @@ export default function KnowledgeBlock() {
       <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-28">
         <Reveal className="flex max-w-2xl flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <SignalTag index={5}>Wissen</SignalTag>
+            <SignalTag index={6}>Wissen</SignalTag>
             <h2 id="knowledge-heading" className="mt-4 text-3xl font-semibold text-foreground sm:text-4xl">
               Fragen, die sich wirklich stellen
             </h2>

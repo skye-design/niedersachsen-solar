@@ -358,6 +358,45 @@ export const trustPoints = [
   },
 ];
 
+// 2026-09-03 (Skye): general, provider-agnostic PV benefits, modeled on the
+// "Vorteile"-section pattern common among regional PV competitors
+// (referenced: pv-anlagen-hannover.de). Deliberately generic/educational —
+// facts about solar itself, not claims about NISO specifically — so this
+// doesn't need the same owner-confirmation gate as a business-specific
+// statement would. Explicitly excludes the "growing numbers" pattern those
+// sites also use (installations/customers/years-in-business counters):
+// Skye isn't long enough in the market for that yet.
+export const solarBenefits = [
+  {
+    title: "Unabhängig vom Energieversorger",
+    description:
+      "Mit eigenem Solarstrom sind Sie weniger von den Preisentscheidungen großer Energieversorger abhängig und besser gegen kurzfristige Preissprünge am Strommarkt abgesichert.",
+    icon: "shield-check",
+  },
+  {
+    title: "Strom aus 100 % erneuerbarer Quelle",
+    description:
+      "Der Strom aus Ihrer eigenen Anlage kommt nachweislich von Ihrem Dach statt aus dem allgemeinen Strommix. Sie wissen genau, woher er stammt, und leisten aktiv einen Beitrag zum Klimaschutz.",
+    icon: "leaf",
+  },
+  {
+    title: "Planbare statt steigende Stromkosten",
+    description:
+      "Nach der Anschaffung fallen nur noch überschaubare Wartungskosten an, während Netzstrompreise langfristig schwer vorhersehbar bleiben. Für Strom, den Sie ins Netz einspeisen, gilt zusätzlich eine für 20 Jahre gesetzlich garantierte Vergütung.",
+    icon: "trend-up",
+  },
+  {
+    // Nullsteuersatz für PV-Anlagen bis 30 kWp an Wohngebäuden, § 12 Abs. 3
+    // UStG, seit 1.1.2023 in Kraft — deutlich über NISO's eigenen
+    // Anlagengrößen-Empfehlungen (8-12 kWp), gilt also praktisch für jeden
+    // Privatkunden. Real, current German tax law, not a NISO-specific claim.
+    title: "0 % Mehrwertsteuer auf die Anlage",
+    description:
+      "Seit 2023 entfällt die Umsatzsteuer auf Lieferung und Installation von Photovoltaikanlagen bis 30 kWp an Wohngebäuden vollständig (§ 12 Abs. 3 UStG). Das senkt die Anschaffungskosten direkt, ganz ohne Antrag.",
+    icon: "percent",
+  },
+];
+
 export const generalFaqs = [
   {
     // RESTORED 2026-09-03 (contentGates.statewideServiceArea, "Ja").

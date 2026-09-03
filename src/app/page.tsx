@@ -3,6 +3,7 @@ import Hero from "@/components/Hero";
 import DecisionEntry from "@/components/DecisionEntry";
 import TrustSection from "@/components/TrustSection";
 import SystemExplainer from "@/components/SystemExplainer";
+import BenefitsSection from "@/components/BenefitsSection";
 import Process from "@/components/Process";
 import ProjectTeasers from "@/components/ProjectTeasers";
 import KnowledgeBlock from "@/components/KnowledgeBlock";
@@ -23,6 +24,7 @@ export default function Home() {
         <DecisionEntry />
         <TrustSection />
         <SystemExplainer />
+        <BenefitsSection />
         <Process />
         <ProjectTeasers />
         <div id="wissen">
