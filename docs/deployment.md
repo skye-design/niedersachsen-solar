@@ -93,18 +93,17 @@ isn't a bug — it's a product judgment call on whether to keep, compress, or
 cut the video, which is out of scope for a bug-fix pass to decide
 unilaterally.
 
-## Security headers (2026-09-02 correction pass)
+## Security headers (2026-09-02 correction pass; CSP enabled 2026-09-03)
 
-`next.config.ts` now sets `poweredByHeader: false` and four response headers
+`next.config.ts` sets `poweredByHeader: false` and six response headers
 (HSTS without preload/includeSubDomains, X-Content-Type-Options, Referrer-
-Policy, Permissions-Policy) via `headers()` — real application config, not
-just documentation, since it only affects this Next.js app once deployed
-and touches no server. **Not included: CSP.** It constrains what the page
-can load, so turning one on blind risks silently breaking images, fonts,
-the QuoteForm/Solar-Check POST to `/api/lead`, and any future Solar-Lotse
-model-provider origin if it's ever upgraded off guided-only. It needs a
-real audit of every load source first. Draft starting point once that
-audit happens:
+Policy, Permissions-Policy, Content-Security-Policy, and the redirects
+above) via `headers()` — real application config, not just documentation,
+since it only affects this Next.js app once deployed and touches no server.
+
+**CSP is now live**, after auditing every real load source in `src/` and,
+critically, testing it live in a browser rather than shipping on the audit
+alone (see below for why that mattered):
 
 ```
 Content-Security-Policy:
@@ -112,14 +111,49 @@ Content-Security-Policy:
   img-src 'self' data:;
   font-src 'self';
   connect-src 'self';
-  script-src 'self';
+  script-src 'self' 'unsafe-inline';
   style-src 'self' 'unsafe-inline';
+  object-src 'none';
+  base-uri 'self';
+  form-action 'self';
   frame-ancestors 'none';
 ```
 
-(`style-src 'unsafe-inline'` is a placeholder for Tailwind's inline styles
-where used — worth checking whether a stricter nonce-based approach is
-feasible before shipping this.)
+`style-src 'unsafe-inline'` is needed because several components use
+dynamic `style={{...}}` attributes (ScrollProgress, EnergyPath, SolarLotse,
+Header) that can't be hash-allowed (their values differ per render).
+`script-src 'unsafe-inline'` was not the first choice — a hash-only
+script-src was tried first (allowing just the one hand-authored inline
+script by its exact sha256, blocking everything else). **It broke client
+hydration site-wide in production**, confirmed live (not theoretical): SSR
+HTML rendered fine, but a real click dispatched on a Solar-Check option did
+nothing — `aria-pressed` never flipped. Root cause: Next.js's App Router
+streams page data via its own inline `self.__next_f.push([...])` scripts
+(React's Flight/RSC client runtime), whose content differs per request, so
+no fixed hash can ever cover them; blocked, the Flight stream errors
+("Connection closed" in console) and hydration silently never completes.
+
+The correct fix is a per-request nonce via `middleware.ts` — implemented
+and confirmed to generate correctly, but it doesn't fully work here: Next.js
+can only stamp a nonce onto scripts it renders live, and it has no way to
+inject one into a page already prerendered to static HTML at build time
+(this app prerenders most routes as `○ Static`, by design, for speed).
+Nonce-based CSP would require forcing every page to dynamic (per-request)
+rendering to actually work — a real performance/hosting-cost tradeoff, not
+a header tweak, so it wasn't done blind under launch pressure. **Decided
+(Skye, 2026-09-03): ship `'unsafe-inline'` on script-src, keep static
+rendering.** CSP still blocks external scripts, iframes/objects,
+clickjacking, and cross-origin fetch/image/font/form-action — the
+remaining gap is specifically inline-script injection. Revisit nonce-based
+CSP + dynamic rendering as its own follow-up if that gap ever needs
+closing (the abandoned middleware.ts approach is a good starting point,
+preserved in git history on this branch).
+
+**If the Solar-Lotse is ever upgraded off guided-only** to call a real model
+provider, or any new third-party script/analytics/embed is added, `connect-src`
+/ `script-src` need a matching addition here — CSP will otherwise silently
+block the new request rather than erroring loudly in an obvious way, so
+check the browser console after adding any new external origin.
 
 **nginx-side, not applied here:**
 - Confirm nginx doesn't already set any of the four active headers (a
