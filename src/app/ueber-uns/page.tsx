@@ -8,12 +8,14 @@ import Reveal from "@/components/Reveal";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { proofClaims, site } from "@/lib/content";
 
-// 2026-09-02: description no longer names the founder or the statewide
-// service area — both gated (contentGates.founderAndAddressInMarketing /
-// .statewideServiceArea in content.ts) pending explicit owner confirmation.
+// RESTORED 2026-09-03: founder name and statewide service area
+// (contentGates.founderAndAddressInMarketing / .statewideServiceArea, both
+// "Ja"). Note: does not use the phrase "keine Vertriebsnummer" — that
+// specific line was explicitly rejected in the proof-claims table, even
+// though the founder-experience claim itself was confirmed.
 export const metadata: Metadata = {
   title: `Über uns | ${site.name}`,
-  description: `${site.name} plant ganzheitliche Energiekonzepte für ${site.cities.join(", ")} — mit praktischer Installationserfahrung statt Vertriebsnummer.`,
+  description: `${site.founderRole} ${site.founder} plant ganzheitliche Energiekonzepte für ${site.serviceArea} — mit praktischer Installationserfahrung.`,
   alternates: { canonical: "https://niedersachsen-solar.de/ueber-uns" },
 };
 
@@ -31,7 +33,7 @@ export default function UeberUnsPage() {
               </h1>
               <p className="mt-6 text-lg leading-relaxed text-muted-foreground">
                 {site.name} plant ganzheitliche Energiekonzepte für Eigenheime
-                in {site.cities.join(", ")} — praktisch gedacht, verständlich
+                in {site.serviceArea} — praktisch gedacht, verständlich
                 geplant und persönlich begleitet.
               </p>
             </Reveal>
@@ -51,18 +53,20 @@ export default function UeberUnsPage() {
             </Reveal>
 
             <Reveal delay={80}>
-              {/* 2026-09-02: this section no longer names the founder — gated
-                  (contentGates.founderAndAddressInMarketing) pending owner
-                  confirmation. It's an odd trade-off for an "Über uns" page
-                  specifically (the name is already public on /impressum,
-                  and Skye is very likely the fastest checklist item to
-                  confirm) — flagged prominently in the report rather than
-                  worked around here. */}
+              {/* RESTORED 2026-09-03 (contentGates.founderAndAddressInMarketing,
+                  "Ja"). "Keine Vertriebsnummer" specifically was rejected in
+                  the proof-claims table — not used here even though the
+                  founder-experience claim itself is confirmed. */}
               <h2 className="text-2xl font-semibold text-foreground sm:text-3xl">
-                Praktische Erfahrung statt Vertriebsnummer
+                {site.founderRole}: {site.founder}
               </h2>
+              <p className="mt-4 leading-relaxed text-muted-foreground">
+                {site.founder} hat selbst Photovoltaikanlagen installiert,
+                bevor er begann, ganzheitliche Energiekonzepte zu planen —
+                die praktische Erfahrung vom Dach fließt in jede Planung ein.
+              </p>
 
-              <ul className="mt-4 space-y-4">
+              <ul className="mt-8 space-y-4">
                 {proofClaims
                   .filter((claim) => claim.state === "confirmed")
                   .map((claim) => (
@@ -79,7 +83,9 @@ export default function UeberUnsPage() {
               </ul>
 
               <p className="mt-8 leading-relaxed text-muted-foreground">
-                Wir sind vor allem in und um {site.cities.join(", ")} tätig.
+                Wir sind im gesamten Bundesland {site.serviceArea} tätig, mit
+                Schwerpunkt in und um {site.cities.join(", ")}. Sie erreichen
+                uns persönlich {site.hours}.
               </p>
             </Reveal>
           </div>

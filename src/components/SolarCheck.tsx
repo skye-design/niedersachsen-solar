@@ -198,9 +198,11 @@ export default function SolarCheck() {
       >
         <CheckCircle size={44} weight="fill" className="text-primary" aria-hidden />
         <h3 className="text-xl font-semibold text-foreground">Vielen Dank, {name.split(" ")[0]}!</h3>
+        {/* RESTORED 2026-09-03 (contentGates.oneBusinessDayCallback, "Ja"). */}
         <p className="max-w-sm text-muted-foreground">
-          Wir haben Ihren Solar-Check erhalten und melden uns bei Ihnen. Bei
-          dringenden Fragen erreichen Sie uns direkt unter{" "}
+          Wir haben Ihren Solar-Check erhalten und melden uns innerhalb eines
+          Werktags bei Ihnen. Bei dringenden Fragen erreichen Sie uns direkt
+          unter{" "}
           <a href={site.phoneHref} className="font-semibold text-primary underline underline-offset-2">
             {site.phone}
           </a>

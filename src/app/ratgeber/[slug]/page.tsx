@@ -63,9 +63,8 @@ export default async function RatgeberArticlePage({
     mainEntityOfPage: { "@type": "WebPage", "@id": url },
     datePublished: articleDate,
     dateModified: articleDate,
-    // GATED (contentGates.founderAndAddressInMarketing, content.ts):
-    // attributed to the organization rather than the founder by name.
-    author: { "@type": "Organization", name: site.name },
+    // RESTORED 2026-09-03 (contentGates.founderAndAddressInMarketing, "Ja").
+    author: { "@type": "Person", name: site.founder },
     publisher: {
       "@type": "Organization",
       name: site.name,

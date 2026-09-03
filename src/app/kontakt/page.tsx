@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Phone, EnvelopeSimple } from "@phosphor-icons/react/dist/ssr";
+import { Phone, EnvelopeSimple, Clock, MapPin } from "@phosphor-icons/react/dist/ssr";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Reveal from "@/components/Reveal";
@@ -7,11 +7,10 @@ import Breadcrumbs from "@/components/Breadcrumbs";
 import SolarCheck from "@/components/SolarCheck";
 import { site } from "@/lib/content";
 
-// 2026-09-02: description no longer states opening hours — gated
-// (contentGates.openingHours in content.ts) pending owner confirmation.
+// RESTORED 2026-09-03 (contentGates.openingHours, "Ja").
 export const metadata: Metadata = {
   title: `Kontakt | ${site.name}`,
-  description: `Erreichen Sie ${site.name} telefonisch, per E-Mail oder über den Solar-Check.`,
+  description: `Erreichen Sie ${site.name} telefonisch, per E-Mail oder über den Solar-Check. ${site.hours}.`,
   alternates: { canonical: "https://niedersachsen-solar.de/kontakt" },
 };
 
@@ -52,15 +51,24 @@ export default function KontaktPage() {
                 <EnvelopeSimple size={20} weight="fill" className="text-primary" aria-hidden />
                 {site.email}
               </a>
-              {/* 2026-09-02: opening hours and the full business address were
-                  removed here — both gated (contentGates.openingHours /
-                  .founderAndAddressInMarketing in content.ts) pending owner
-                  confirmation. The address itself is already public on
-                  /impressum (legally required, not a marketing claim); this
-                  page just doesn't repeat it until confirmed for this
-                  context too. */}
+              {/* RESTORED 2026-09-03: opening hours and full address
+                  (contentGates.openingHours / .founderAndAddressInMarketing,
+                  both "Ja"). */}
+              <div className="flex items-center gap-3 rounded-xl border border-border bg-card px-5 py-4 font-medium text-foreground">
+                <Clock size={20} weight="fill" className="text-primary" aria-hidden />
+                {site.hours}
+              </div>
+              <div className="flex items-start gap-3 rounded-xl border border-border bg-card px-5 py-4 font-medium text-foreground">
+                <MapPin size={20} weight="fill" className="mt-0.5 shrink-0 text-primary" aria-hidden />
+                <span>
+                  {site.address.street}
+                  <br />
+                  {site.address.postalCode} {site.address.city}
+                </span>
+              </div>
               <p className="text-sm text-muted-foreground">
-                Tätig in und um {site.cities.join(", ")}.
+                Tätig im gesamten Bundesland {site.serviceArea}, mit
+                Schwerpunkt in und um {site.cities.join(", ")}.
               </p>
             </Reveal>
 

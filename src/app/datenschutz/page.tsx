@@ -35,25 +35,50 @@ export default function Datenschutz() {
           </p>
 
           <h2 className="mt-8 font-heading text-xl font-semibold text-foreground">
-            2. Erhebung und Verarbeitung von Daten
+            2. Hosting und Server-Logfiles
           </h2>
           <p className="mt-3 text-foreground/80">
-            Wir verarbeiten personenbezogene Daten, die Sie uns über unser
-            Angebotsformular freiwillig mitteilen (Name, Telefonnummer
-            und/oder E-Mail-Adresse, Ort/PLZ, Angaben zu Ihrem Interesse an
-            unseren Leistungen), ausschließlich zur Bearbeitung Ihrer Anfrage
-            gemäß Art. 6 Abs. 1 lit. b DSGVO.
+            Beim Aufruf dieser Website erhebt unser Hosting-Provider
+            automatisch technische Daten, die Ihr Browser übermittelt
+            (IP-Adresse, Datum und Uhrzeit der Anfrage, aufgerufene Seite,
+            Referrer-URL, Browsertyp und Betriebssystem). Diese Daten werden
+            in Server-Logfiles gespeichert und dienen der technischen
+            Bereitstellung und Absicherung der Website sowie der Behebung
+            von Störungen. Rechtsgrundlage ist unser berechtigtes Interesse
+            an einem sicheren und funktionsfähigen Betrieb der Website
+            (Art. 6 Abs. 1 lit. f DSGVO).
           </p>
 
           <h2 className="mt-8 font-heading text-xl font-semibold text-foreground">
-            3. Formularversand über Formspree
+            3. Erhebung und Verarbeitung von Daten aus unseren Formularen
           </h2>
           <p className="mt-3 text-foreground/80">
-            Zur technischen Zustellung des Angebotsformulars nutzen wir den
-            Dienst Formspree (Formspree, Inc., USA). Die von Ihnen im
-            Formular eingegebenen Daten werden dabei an Server von Formspree
+            Wir verarbeiten personenbezogene Daten, die Sie uns freiwillig
+            mitteilen — über das Angebotsformular, den Solar-Check oder eine
+            Anfrage über den geführten Solar-Lotsen (jeweils Name,
+            Telefonnummer und/oder E-Mail-Adresse, Ort/PLZ sowie Angaben zu
+            Ihrem Interesse an unseren Leistungen) — ausschließlich zur
+            Bearbeitung Ihrer Anfrage gemäß Art. 6 Abs. 1 lit. b DSGVO
+            (vorvertragliche Maßnahmen). Der Solar-Lotse selbst ist
+            regelbasiert und verarbeitet keine personenbezogenen Daten,
+            solange Sie keine Anfrage darüber absenden.
+          </p>
+
+          <h2 className="mt-8 font-heading text-xl font-semibold text-foreground">
+            4. Formularversand über Formspree
+          </h2>
+          <p className="mt-3 text-foreground/80">
+            Zur technischen Zustellung unserer Formulare nutzen wir den
+            Dienst Formspree (Formspree, Inc., USA). Die von Ihnen
+            eingegebenen Daten werden dabei an Server von Formspree
             übertragen und von dort an unsere E-Mail-Adresse weitergeleitet.
-            Weitere Informationen:{" "}
+            Da Formspree in den USA ansässig ist, findet eine Übermittlung
+            personenbezogener Daten in ein Land außerhalb der EU/des EWR
+            statt (sogenanntes Drittland). Diese Übermittlung erfolgt auf
+            Grundlage geeigneter Garantien im Sinne von Art. 44 ff. DSGVO
+            (z. B. EU-Standardvertragsklauseln oder eine Zertifizierung
+            von Formspree nach dem EU-U.S. Data Privacy Framework). Weitere
+            Informationen:{" "}
             <a
               href="https://formspree.io/legal/privacy-policy/"
               target="_blank"
@@ -66,7 +91,7 @@ export default function Datenschutz() {
           </p>
 
           <h2 className="mt-8 font-heading text-xl font-semibold text-foreground">
-            4. Kontaktaufnahme
+            5. Kontaktaufnahme
           </h2>
           <p className="mt-3 text-foreground/80">
             Bei Kontaktaufnahme per Formular, Telefon oder E-Mail werden Ihre
@@ -75,18 +100,24 @@ export default function Datenschutz() {
           </p>
 
           <h2 className="mt-8 font-heading text-xl font-semibold text-foreground">
-            5. Ihre Rechte
+            6. Ihre Rechte
           </h2>
           <ul className="mt-3 list-disc space-y-1 pl-5 text-foreground/80">
             <li>Auskunft über Ihre gespeicherten Daten (Art. 15 DSGVO)</li>
             <li>Berichtigung unrichtiger Daten (Art. 16 DSGVO)</li>
             <li>Löschung Ihrer Daten (Art. 17 DSGVO)</li>
             <li>Einschränkung der Verarbeitung (Art. 18 DSGVO)</li>
+            <li>Datenübertragbarkeit (Art. 20 DSGVO)</li>
             <li>Widerspruch gegen die Verarbeitung (Art. 21 DSGVO)</li>
+            <li>
+              Beschwerde bei einer Datenschutz-Aufsichtsbehörde (Art. 77
+              DSGVO), z. B. bei der Landesbeauftragten für den Datenschutz
+              Niedersachsen
+            </li>
           </ul>
 
           <h2 className="mt-8 font-heading text-xl font-semibold text-foreground">
-            6. Speicherdauer
+            7. Speicherdauer
           </h2>
           <p className="mt-3 text-foreground/80">
             Wir speichern personenbezogene Daten nur so lange, wie es für die

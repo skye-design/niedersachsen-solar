@@ -1,5 +1,15 @@
 # Owner Confirmation Checklist
 
+**Status: Beantwortet von Skye am 2026-09-03 und umgesetzt.** Alle neun
+Punkte wurden in `src/lib/content.ts` (`contentGates`-Objekt) sowie den
+betroffenen Seiten/JSON-LD/dem Solar-Lotsen entsprechend nachgezogen. Die
+einzelnen Antworten stehen unten bei den jeweiligen Punkten; zusätzlich galt
+für Punkt 8 (Gründername), dass die spezifische Formulierung „keine
+Vertriebsnummer" bewusst nicht verwendet wird, obwohl die zugrundeliegende
+Aussage (praktische Erfahrung des Gründers) bestätigt wurde — das war eine
+separate Rückmeldung von Skye zur proof-claims-Tabelle, nicht Teil dieser
+neun Punkte.
+
 Neun Aussagekategorien wurden am 2026-09-02 als unbestätigt eingestuft und
 aus öffentlichem Rendering, JSON-LD und den Antworten des geführten
 Solar-Lotsen entfernt (siehe `src/lib/content.ts`, `contentGates`-Objekt,
@@ -22,7 +32,7 @@ Finanztip.de, von Skye als Quelle akzeptiert). Es handelt sich nicht um
 erfundene Platzhalter — die Frage ist nur, ob sie über diesen formalen
 Freigabeprozess erneut bestätigt werden sollen, bevor sie live gehen.
 
-**Antwort:** [ ] Ja  [ ] Nein  [ ] Korrektur: ___________
+**Antwort:** [x] Ja  [ ] Nein  [ ] Korrektur: ___________
 
 ---
 
@@ -32,7 +42,7 @@ Freigabeprozess erneut bestätigt werden sollen, bevor sie live gehen.
 bis zu 80 % der Kosten" sowie die Formulierung, dass zu Fördermöglichkeiten
 beraten wird — beides Teil der jetzt entfernten Wärmepumpen-Preis-FAQ.
 
-**Antwort:** [ ] Ja  [ ] Nein  [ ] Korrektur: ___________
+**Antwort:** [x] Ja  [ ] Nein  [ ] Korrektur: ___________
 
 ---
 
@@ -46,7 +56,7 @@ ausschließlich die drei Städte). Betroffen: Footer, Startseiten-FAQ,
 **Kontext:** Die drei Städte (Hannover, Hildesheim, Braunschweig) bestehen
 bereits vor diesem Redesign und sind nicht Teil dieser Gate.
 
-**Antwort:** [ ] Ja, gesamtes Niedersachsen bestätigt  [ ] Nein, nur die drei Städte  [ ] Korrektur (z. B. anderer Radius): ___________
+**Antwort:** [x] Ja, gesamtes Niedersachsen bestätigt  [ ] Nein, nur die drei Städte  [ ] Korrektur (z. B. anderer Radius): ___________
 
 ---
 
@@ -57,7 +67,7 @@ QuoteSection, SolarCheck-Erfolgsmeldung, Solar-Lotse-Übergabe und der
 Startseiten-FAQ. Übrig bleibt jeweils die neutrale Aussage „Wir melden uns
 bei Ihnen" ohne Frist.
 
-**Antwort:** [ ] Ja, 1 Werktag bestätigt  [ ] Nein  [ ] Korrektur (andere Frist): ___________
+**Antwort:** [x] Ja, 1 Werktag bestätigt  [ ] Nein  [ ] Korrektur (andere Frist): ___________
 
 ---
 
@@ -68,7 +78,7 @@ bei Ihnen" ohne Frist.
 gesamte FAQ „Wann sind Sie persönlich erreichbar?" wurde entfernt (sie
 bestand nur aus dieser Aussage plus der Werktag-Zusage).
 
-**Antwort:** [ ] Ja, wie oben bestätigt  [ ] Nein  [ ] Korrektur: ___________
+**Antwort:** [x] Ja, wie oben bestätigt  [ ] Nein  [ ] Korrektur: ___________
 
 ---
 
@@ -82,7 +92,7 @@ abgestimmten Speichersystems ohne Herstellernennung.
 **Kontext:** Diese Aussage bestand bereits vor diesem Redesign — die
 Exklusivitätsbehauptung speziell war aber nie über diesen Prozess bestätigt.
 
-**Antwort:** [ ] Ja, EcoFlow-Exklusivität bestätigt  [ ] Nein  [ ] Korrektur: ___________
+**Antwort:** [ ] Ja, EcoFlow-Exklusivität bestätigt  [x] Nein  [ ] Korrektur: ___________
 
 ---
 
@@ -95,7 +105,7 @@ unbenannte „Finanzierungspartner"-Formulierung.
 Redesigns neu eingeführte, namentliche Behauptung — vorher stand nur generisch
 „Finanzierungspartner" ohne Namen.
 
-**Antwort:** [ ] Ja, Cloover bestätigt  [ ] Nein  [ ] Korrektur (anderer Partner): ___________
+**Antwort:** [x] Ja, Cloover bestätigt  [ ] Nein  [ ] Korrektur (anderer Partner): ___________
 
 ---
 
@@ -112,7 +122,7 @@ Vorsichtsmaßnahme.
 ist Skyes eigener Name und die bereits im Impressum öffentliche Adresse,
 keine unabhängig zu prüfende Drittangabe.
 
-**Antwort:** [ ] Ja, Name/Adresse auch in Marketing/JSON-LD bestätigt  [ ] Nein  [ ] Korrektur: ___________
+**Antwort:** [x] Ja, Name/Adresse auch in Marketing/JSON-LD bestätigt  [ ] Nein  [ ] Korrektur: ___________
 
 ---
 
@@ -125,7 +135,7 @@ kürzer geworden (siehe Vorher/Nachher im Abschlussbericht) — die
 `responsibility`-Felder in `content.ts` (`"partner-coordinated"` bzw.
 `"in-house"`) sind nicht gerendert, bleiben aber im Datenmodell für später.
 
-**Antwort:** [ ] Ja, wie vorher bestätigt  [ ] Nein  [ ] Korrektur (z. B. andere Formulierung ohne „zertifiziert"): ___________
+**Antwort:** [x] Ja, wie vorher bestätigt  [ ] Nein  [ ] Korrektur (z. B. andere Formulierung ohne „zertifiziert"): ___________
 
 ---
 

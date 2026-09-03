@@ -23,9 +23,13 @@ export default function TrustSection() {
           <h2 className="mt-4 text-3xl font-semibold text-foreground sm:text-4xl">
             Vom Dach in die Planung
           </h2>
+          {/* RESTORED/FIXED 2026-09-03: "Keine Vertriebsnummer" was
+              explicitly rejected in the proof-claims table (the underlying
+              founder-experience claim is confirmed, that specific phrase is
+              not) — this line had slipped through the earlier gating pass. */}
           <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
-            Keine Vertriebsnummer, sondern echte Handwerkserfahrung, ein
-            geschlossenes Ökosystem und ein direkter Weg zur Finanzierung.
+            Echte Handwerkserfahrung, ein geschlossenes Ökosystem und ein
+            direkter Weg zur Finanzierung.
           </p>
 
           <ul className="mt-8 space-y-5">

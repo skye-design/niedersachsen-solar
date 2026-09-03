@@ -12,9 +12,10 @@ export default function QuoteSection() {
           <h2 className="font-serif text-3xl font-medium text-foreground sm:text-4xl">
             Lassen Sie uns Ihr Energiekonzept besprechen
           </h2>
+          {/* RESTORED 2026-09-03 (contentGates.oneBusinessDayCallback, "Ja"). */}
           <p className="mt-4 max-w-md text-lg leading-relaxed text-muted-foreground">
-            Unverbindlich, persönlich, ohne Verkaufsdruck. Wir melden uns bei
-            Ihnen.
+            Unverbindlich, persönlich, ohne Verkaufsdruck. Wir melden uns
+            innerhalb eines Werktags bei Ihnen.
           </p>
 
           <div className="relative mt-8 hidden aspect-[4/3] w-full max-w-md overflow-hidden rounded-2xl border border-border sm:block">

@@ -2,7 +2,7 @@
 // Business claims are never hardcoded directly into JSX — they flow through
 // here with an explicit verification state so an unconfirmed number/promise
 // can never quietly ship.
-export type VerificationState = "confirmed" | "needs-owner-confirmation" | "internal-only";
+export type VerificationState = "confirmed" | "needs-owner-confirmation" | "rejected" | "internal-only";
 
 export type Claim = {
   id: string;
@@ -11,33 +11,31 @@ export type Claim = {
   state: VerificationState;
 };
 
-// 2026-09-02 correction pass: nine claim categories were flagged as
-// published without explicit owner confirmation (pricing, Förderung,
-// statewide service area, 1-Werktag callback promise, opening hours,
-// EcoFlow exclusivity, the Cloover partnership, founder/address in
-// marketing/schema contexts, and "certified partner" + in-house/partner
-// responsibility framing). Every one of those categories is gated here —
-// nothing below renders, and nothing downstream (JSON-LD, Solar-Lotse
-// answers) may reintroduce them — until OWNER_CONFIRMATION_CHECKLIST.md is
-// answered. No replacement values were invented for any of them; where a
-// claim was removed, the surrounding copy either drops the clause or falls
-// back to a narrower fact that was already established before this
-// redesign (e.g. the three named cities, which predate any of this work).
+// 2026-09-02: nine claim categories were flagged as published without
+// explicit owner confirmation and gated out of visible render/JSON-LD/the
+// Solar-Lotse. 2026-09-03: the Product Owner answered
+// OWNER_CONFIRMATION_CHECKLIST.md. Eight are now confirmed and restored
+// throughout the codebase (see each file's own "RESTORED 2026-09-03"
+// comment). One — EcoFlow exclusivity — was explicitly rejected: the site
+// must never claim EcoFlow (or any vendor) as the exclusive/only system.
+// The separately-approved "ein geschlossenes Ökosystem" framing (proof-
+// claims table) describes system *integration*, not vendor exclusivity,
+// and is used instead where relevant.
 export const contentGates = {
-  pricing: "needs-owner-confirmation",
-  förderung: "needs-owner-confirmation",
-  statewideServiceArea: "needs-owner-confirmation",
-  oneBusinessDayCallback: "needs-owner-confirmation",
-  openingHours: "needs-owner-confirmation",
-  ecoflowExclusivity: "needs-owner-confirmation",
-  clooverPartnership: "needs-owner-confirmation",
-  founderAndAddressInMarketing: "needs-owner-confirmation",
-  certifiedPartnersAndResponsibilityBoundaries: "needs-owner-confirmation",
+  pricing: "confirmed",
+  förderung: "confirmed",
+  statewideServiceArea: "confirmed",
+  oneBusinessDayCallback: "confirmed",
+  openingHours: "confirmed",
+  ecoflowExclusivity: "rejected",
+  clooverPartnership: "confirmed",
+  founderAndAddressInMarketing: "confirmed",
+  certifiedPartnersAndResponsibilityBoundaries: "confirmed",
 } as const satisfies Record<string, VerificationState>;
 
 // 2026-09-02: the public/brand/niso-logo-*.svg set (from the discarded
 // Manus logo package) has been deleted from the repo entirely, not just
-// de-referenced. Two variants now exist instead of one:
+// de-referenced. Two variants exist instead of one:
 //   - logo-on-dark.svg: the original pre-redesign asset, unchanged, for
 //     dark surfaces (transparent hero header).
 //   - logo-on-light.svg: the *same* file with only the "Niedersachsen"
@@ -45,13 +43,10 @@ export const contentGates = {
 //     --foreground token) for legibility on light surfaces (scrolled
 //     header, mobile drawer, footer). This is a mechanical fill-color
 //     swap on identical vector paths — verified via diff, zero geometry
-//     changes — not a logo redesign. The icon mark and "Solar" text were
-//     already #CC010F and needed no change; only the near-white wordmark
-//     text was invisible-on-light.
-// Both are placeholders pending explicit Product Owner "approved" sign-off
-// (still open — see OWNER_CONFIRMATION_CHECKLIST.md) — this is the
-// documented, functional stand-in the correction brief asked for, not a
-// new design.
+//     changes — not a logo redesign.
+// Both remain placeholders pending explicit Product Owner "approved"
+// sign-off on the asset itself (separate from the content confirmations
+// above — still open, not part of OWNER_CONFIRMATION_CHECKLIST.md).
 export const brand = {
   logoOnDark: "/images/logo-on-dark.svg",
   logoOnLight: "/images/logo-on-light.svg",
@@ -62,20 +57,13 @@ export const site = {
   phone: "0511 95733515",
   phoneHref: "tel:+4951195733515",
   email: "kontakt@niedersachsen-solar.de",
-  // Established before this redesign — safe to keep. The broader claim
-  // below (serviceArea) is not.
   cities: ["Hannover", "Hildesheim", "Braunschweig"],
-  // GATED (contentGates.statewideServiceArea): kept as a field for when it's
-  // confirmed, but nothing reads this for rendering right now — every
-  // consumer falls back to `cities`. Do not wire this back in without an
-  // explicit "Ja" on the checklist.
+  // RESTORED 2026-09-03 (contentGates.statewideServiceArea, "Ja"): safe to
+  // render again — city mentions stay too, as the named service hubs.
   serviceArea: "Niedersachsen",
-  // GATED (contentGates.founderAndAddressInMarketing): the name/address
-  // themselves are legally required on /impressum and /datenschutz
-  // (German TMG) and stay there untouched — that's a legal disclosure
-  // obligation, not a marketing claim, and hiding it would be a compliance
-  // problem, not a safer default. What's gated is using this in *marketing*
-  // contexts (JSON-LD founder field, trust-section copy, JSON-LD address).
+  // RESTORED 2026-09-03 (contentGates.founderAndAddressInMarketing, "Ja"):
+  // safe to use in marketing copy and JSON-LD again, not just the legally-
+  // required /impressum and /datenschutz pages.
   founder: "Skye van Dyck",
   founderRole: "Gründer und Geschäftsführer",
   address: {
@@ -83,13 +71,9 @@ export const site = {
     postalCode: "30419",
     city: "Hannover",
   },
-  // GATED (contentGates.clooverPartnership): kept for when confirmed;
-  // nothing currently renders this name. Generic "Finanzierungspartner"
-  // (unnamed) is used in copy instead, matching what was already live
-  // before this redesign.
+  // RESTORED 2026-09-03 (contentGates.clooverPartnership, "Ja").
   financingPartner: "Cloover",
-  // GATED (contentGates.openingHours): kept for when confirmed; nothing
-  // currently renders this.
+  // RESTORED 2026-09-03 (contentGates.openingHours, "Ja").
   hours: "Montag bis Freitag, 8–17 Uhr",
 };
 
@@ -99,24 +83,26 @@ export const services = [
     route: "/dachsanierung-photovoltaik",
     title: "Dachsanierung",
     userQuestion: "Muss ich erst mein Dach lösen, bevor eine PV-Anlage möglich ist?",
-    // GATED (contentGates.certifiedPartnersAndResponsibilityBoundaries):
-    // whether this is in-house or partner-executed, and any certification
-    // claim about who executes it, is unconfirmed. Not read anywhere in
-    // JSX today (verified), kept only as a data field for when confirmed.
     responsibility: "partner-coordinated" as const,
+    // RESTORED 2026-09-03 (contentGates.certifiedPartnersAndResponsibilityBoundaries, "Ja").
     description:
-      "Bevor wir Module aufs Dach bringen, sorgen wir bei Bedarf dafür, dass der Untergrund stimmt — damit Ihre PV-Anlage am Ende auf einer soliden Basis steht.",
+      "Bevor wir Module aufs Dach bringen, sorgen wir bei Bedarf dafür, dass der Untergrund stimmt. Die Dachsanierung selbst führen zertifizierte Dachdecker-Partnerbetriebe aus unserem Netzwerk durch — koordiniert von uns, damit Ihre PV-Anlage am Ende auf einer soliden Basis steht.",
     icon: "house",
     metaTitle: "Dachsanierung vor der PV-Anlage | Niedersachsen Solar",
     metaDescription:
-      "Dachsanierung abgestimmt auf Ihre Photovoltaik-Planung. Hannover, Hildesheim, Braunschweig.",
+      "Dachsanierung koordiniert mit Ihrer Photovoltaik-Planung — durchgeführt von zertifizierten Dachdecker-Partnerbetrieben, abgestimmt auf Ihre PV-Anlage. Niedersachsen, mit Schwerpunkt Hannover, Hildesheim, Braunschweig.",
     intro:
       "Eine Photovoltaikanlage ist nur so gut wie das Dach, auf dem sie steht. Wenn Ziegel, Dämmung oder Unterkonstruktion nicht mehr mitziehen, planen wir die Dachsanierung als festen Bestandteil Ihres Energiekonzepts — nicht als nachträgliches Problem.",
     benefits: [
       {
-        title: "Ein Ansprechpartner für Ihr Projekt",
+        title: "Ein Ansprechpartner, zwei Gewerke",
         description:
-          "Wir denken Dacharbeiten und PV-Installation als ein Projekt — keine getrennten Baustellen, keine widersprüchlichen Zeitpläne.",
+          "Sie sprechen mit uns, wir koordinieren Dachdecker und PV-Installation als ein Projekt — keine getrennten Baustellen, keine widersprüchlichen Zeitpläne.",
+      },
+      {
+        title: "Zertifizierte Partnerbetriebe",
+        description:
+          "Die Dachsanierung selbst führen geprüfte Dachdecker-Fachbetriebe aus unserem Netzwerk aus, nach Handwerksstandard und mit Gewährleistung.",
       },
       {
         title: "Auf die PV-Anlage abgestimmt",
@@ -130,6 +116,14 @@ export const services = [
         answer:
           "Nicht immer. Wir prüfen bei der Dachaufnahme den Zustand von Eindeckung, Dämmung und Unterkonstruktion und sagen Ihnen ehrlich, ob eine Sanierung nötig ist — oder ob Ihr Dach für die geplante Anlage bereits geeignet ist.",
       },
+      {
+        question: "Wer führt die Dachsanierung aus?",
+        answer:
+          "Die Sanierung selbst übernehmen zertifizierte Dachdecker-Partnerbetriebe aus unserem Netzwerk. Wir koordinieren den Ablauf, damit Dacharbeiten und PV-Installation nahtlos ineinandergreifen.",
+      },
+      // Pricing intentionally still absent here — too project-specific for
+      // an honest range (roof condition/size vary too much). Unrelated to
+      // the pricing confirmation, which covers PV/Speicher/Wallbox/Wärmepumpe.
     ],
   },
   {
@@ -174,9 +168,12 @@ export const services = [
         answer:
           "Ja — das ist unser Kernprinzip. Wir planen PV-Anlage, Speicher, Wallbox und Wärmepumpe als ein zusammenhängendes System, damit die Komponenten optimal zusammenspielen statt isoliert zu funktionieren.",
       },
-      // GATED (contentGates.pricing): "Was kostet eine PV-Anlage?" removed —
-      // do not re-add a price range without an explicit "Ja" in
-      // OWNER_CONFIRMATION_CHECKLIST.md.
+      {
+        // RESTORED 2026-09-03 (contentGates.pricing, "Ja").
+        question: "Was kostet eine PV-Anlage?",
+        answer:
+          "Je nach Dachgröße und gewünschter Leistung liegen Photovoltaik-Anlagen meist zwischen 6.000 € und 35.000 € vor Förderung. Den genauen Preis für Ihr Dach ermitteln wir im kostenlosen Erstgespräch.",
+      },
     ],
   },
   {
@@ -185,22 +182,22 @@ export const services = [
     title: "Speicher",
     userQuestion: "Wie viel von meinem eigenen Solarstrom kann ich wirklich selbst nutzen?",
     responsibility: "in-house" as const,
-    // GATED (contentGates.ecoflowExclusivity): description/intro/benefits
-    // below no longer assert exclusivity ("ausschließlich"/"einziges
-    // Ökosystem") or name a specific vendor — only the functional claim
-    // (a storage system that works with the rest of the setup) remains,
-    // which doesn't depend on which manufacturer is confirmed.
+    // NOT restored: EcoFlow exclusivity was explicitly rejected
+    // (contentGates.ecoflowExclusivity, "Nein") — no vendor name, no
+    // "ausschließlich/einziges" framing. "Ein geschlossenes Ökosystem" was
+    // separately approved and used below instead — it describes
+    // integration, not a single-vendor claim.
     description:
-      "Ein durchdachtes Speichersystem statt loser Einzelkomponenten, für maximale Unabhängigkeit vom Netz.",
+      "Ein geschlossenes Speicher-Ökosystem statt loser Einzelkomponenten, für maximale Unabhängigkeit vom Netz.",
     icon: "battery",
     metaTitle: "Batteriespeicher für Ihre PV-Anlage | Niedersachsen Solar",
     metaDescription:
       "Batteriespeicher abgestimmt auf Ihre PV-Anlage — für maximale Unabhängigkeit vom Netz. Hannover, Hildesheim, Braunschweig.",
     intro:
-      "Ein Speicher entscheidet, wie viel von Ihrem selbst erzeugten Solarstrom Sie tatsächlich nutzen, statt ihn für wenig Geld ins Netz einzuspeisen.",
+      "Ein Speicher entscheidet, wie viel von Ihrem selbst erzeugten Solarstrom Sie tatsächlich nutzen, statt ihn für wenig Geld ins Netz einzuspeisen. Wir setzen auf ein geschlossenes Ökosystem statt beliebige Komponenten zu kombinieren.",
     benefits: [
       {
-        title: "Ein System statt Einzelteile",
+        title: "Ein geschlossenes System statt Einzelteile",
         description:
           "Speicher, Wallbox und Steuerung sind für nahtloses Zusammenspiel konzipiert — keine Kompatibilitätsprobleme zwischen Komponenten.",
       },
@@ -221,9 +218,14 @@ export const services = [
         answer:
           "Das hängt von Ihrem Verbrauchsprofil und Ihrer PV-Anlage ab. Wir bewerten das im persönlichen Gespräch anhand Ihrer tatsächlichen Verbrauchsdaten, statt pauschal einen Speicher zu empfehlen.",
       },
-      // GATED (contentGates.pricing): "Was kostet ein Batteriespeicher?"
-      // removed. GATED (contentGates.ecoflowExclusivity): "Warum nur
-      // EcoFlow?" removed — both need owner confirmation.
+      {
+        // RESTORED 2026-09-03 (contentGates.pricing, "Ja").
+        question: "Was kostet ein Batteriespeicher?",
+        answer:
+          "Batteriespeicher kosten je nach Kapazität ab ca. 2.000 € bis 12.000 €. Im Erstgespräch klären wir, welche Speichergröße zu Ihrem Verbrauch und Ihrer PV-Anlage passt.",
+      },
+      // No "Warum nur EcoFlow?" FAQ — that question's premise (exclusivity)
+      // was explicitly rejected, not just left unconfirmed.
     ],
   },
   {
@@ -249,7 +251,7 @@ export const services = [
       {
         title: "Teil eines Gesamtsystems",
         description:
-          "Wallbox, Speicher und PV-Anlage werden gemeinsam geplant, statt isoliert voneinander betrieben zu werden.",
+          "Wallbox, Speicher und PV-Anlage stammen aus einem abgestimmten Ökosystem und werden gemeinsam geplant.",
       },
       {
         title: "Fachgerechte Elektroinstallation",
@@ -268,7 +270,12 @@ export const services = [
         answer:
           "Über eine gemeinsame Steuerung, die Erzeugung, Speicher und Ladevorgang aufeinander abstimmt, statt die Wallbox isoliert am Netz zu betreiben.",
       },
-      // GATED (contentGates.pricing): "Was kostet eine Wallbox?" removed.
+      {
+        // RESTORED 2026-09-03 (contentGates.pricing, "Ja").
+        question: "Was kostet eine Wallbox inklusive Installation?",
+        answer:
+          "Eine Wallbox inklusive fachgerechter Installation kostet in der Regel zwischen 1.200 € und 2.500 €, abhängig vom Modell und dem Aufwand für die Elektroinstallation in Ihrem Haus.",
+      },
     ],
   },
   {
@@ -276,22 +283,26 @@ export const services = [
     route: "/waermepumpe",
     title: "Wärmepumpe",
     userQuestion: "Passt eine Wärmepumpe zu meinem Dach und meiner PV-Anlage?",
-    // GATED (contentGates.certifiedPartnersAndResponsibilityBoundaries):
-    // see Dachsanierung's note above — same category, same gate.
     responsibility: "partner-coordinated" as const,
+    // RESTORED 2026-09-03 (contentGates.certifiedPartnersAndResponsibilityBoundaries, "Ja").
     description:
-      "Als Teil Ihres Energiekonzepts stimmen wir die Wärmepumpen-Installation auf Ihre PV-Anlage und Ihren Speicher ab.",
+      "Als Teil Ihres Energiekonzepts koordinieren wir die Wärmepumpen-Installation über unser Netzwerk zertifizierter Heizungsbau-Fachpartner — abgestimmt auf Ihre PV-Anlage und Ihren Speicher.",
     icon: "thermometer",
     metaTitle: "Wärmepumpe im Energiekonzept | Niedersachsen Solar",
     metaDescription:
-      "Wärmepumpen-Installation abgestimmt auf Ihre PV-Anlage und Ihren Speicher. Hannover, Hildesheim, Braunschweig.",
+      "Wärmepumpen-Installation über zertifizierte Heizungsbau-Fachpartner, abgestimmt auf Ihre PV-Anlage und Ihren Speicher. Hannover, Hildesheim, Braunschweig.",
     intro:
-      "Eine Wärmepumpe, die unabhängig von Ihrer PV-Anlage geplant wird, verschenkt Potenzial. Wir stimmen die Auslegung auf Ihre Solaranlage und Ihren Speicher ab.",
+      "Eine Wärmepumpe, die unabhängig von Ihrer PV-Anlage geplant wird, verschenkt Potenzial. Wir koordinieren die Installation über zertifizierte Heizungsbau-Fachpartner und stimmen die Auslegung auf Ihre Solaranlage und Ihren Speicher ab.",
     benefits: [
       {
         title: "Abgestimmt auf PV-Anlage und Speicher",
         description:
           "Die Wärmepumpe wird so ausgelegt, dass sie bevorzugt dann läuft, wenn Ihre PV-Anlage Strom erzeugt.",
+      },
+      {
+        title: "Zertifizierte Fachpartner",
+        description:
+          "Die Installation übernehmen geprüfte Heizungsbau-Betriebe aus unserem Partnernetzwerk, wir koordinieren die Schnittstelle zum Energiekonzept.",
       },
       {
         title: "Ein Energiekonzept, ein Ansprechpartner",
@@ -301,21 +312,31 @@ export const services = [
     ],
     faqs: [
       {
+        question: "Installiert Niedersachsen Solar die Wärmepumpe selbst?",
+        answer:
+          "Die Installation führen zertifizierte Heizungsbau-Fachpartner aus unserem Netzwerk aus. Wir koordinieren die Planung, damit die Wärmepumpe zu Ihrer PV-Anlage und Ihrem Speicher passt.",
+      },
+      {
         question: "Passt eine Wärmepumpe zu jedem Haus mit PV-Anlage?",
         answer:
-          "Das hängt von Gebäudezustand, Dämmung und Heizlast ab. Wir klären das im persönlichen Gespräch, statt es pauschal zu versprechen.",
+          "Das hängt von Gebäudezustand, Dämmung und Heizlast ab. Wir klären das gemeinsam mit unseren Heizungsbau-Partnern im persönlichen Gespräch, statt es pauschal zu versprechen.",
       },
-      // GATED (contentGates.certifiedPartnersAndResponsibilityBoundaries):
-      // "Installiert Niedersachsen Solar die Wärmepumpe selbst?" removed.
-      // GATED (contentGates.pricing + contentGates.förderung): "Was kostet
-      // eine Wärmepumpe?" removed — it asserted both a price range and a
-      // specific Förderhöhe ("bis zu 80%").
+      {
+        // RESTORED 2026-09-03 (contentGates.pricing + contentGates.förderung, both "Ja").
+        question: "Was kostet eine Wärmepumpe?",
+        answer:
+          "Die Gesamtkosten für eine Wärmepumpe — Anschaffung, Installation und Umfeldarbeiten — liegen laut Finanztip.de je nach System zwischen 11.000 € und 47.000 € vor Förderung. Der Staat bezuschusst Wärmepumpen mit bis zu 80 % der Kosten. Wir koordinieren die Installation über zertifizierte Heizungsbau-Fachpartner und beraten Sie zu den passenden Fördermöglichkeiten.",
+      },
     ],
   },
 ];
 
 export type Service = (typeof services)[number];
 
+// RESTORED 2026-09-03: "Ein geschlossenes Ökosystem" (2nd point) and
+// "Direkter Zugang zur Finanzierung" naming Cloover (3rd point) are both
+// confirmed statements per the proof-claims table — see proofClaims below
+// for the same two claims in Claim form.
 export const trustPoints = [
   {
     title: "Vom Dach in die Planung",
@@ -324,52 +345,59 @@ export const trustPoints = [
     icon: "toolbox",
   },
   {
-    title: "Ein durchdachtes System",
+    title: "Ein geschlossenes Ökosystem",
     description:
-      "Wir setzen bewusst auf ein durchdachtes Zusammenspiel von Speicher, Wallbox und Steuerung statt beliebiger Einzelteile.",
+      "Wir setzen bewusst auf ein geschlossenes, durchdachtes Ökosystem statt beliebiger Einzelteile — für nahtloses Zusammenspiel von Speicher, Wallbox und Steuerung.",
     icon: "shield-check",
   },
   {
     title: "Direkter Zugang zur Finanzierung",
     description:
-      "Über unseren Finanzierungspartner klären wir Ihre Optionen direkt und unkompliziert — ohne Umwege über mehrere Ansprechpartner.",
+      "Über unseren Finanzierungspartner Cloover klären wir Ihre Optionen direkt und unkompliziert — ohne Umwege über mehrere Ansprechpartner.",
     icon: "handshake",
   },
 ];
 
-// NOTE: Dachsanierung pricing intentionally has no range anywhere on the
-// site — costs are too project-specific (roof condition/size) to give an
-// honest range. Keep it "im Gespräch klären wir das" only.
-//
-// 2026-09-02: three entries removed from this array entirely rather than
-// edited (region/cost/reachability) because every sentence in them asserted
-// a gated claim (statewide area, pricing, Cloover, opening hours, the
-// 1-business-day promise) with no safe remainder worth keeping as a
-// standalone FAQ. See OWNER_CONFIRMATION_CHECKLIST.md.
 export const generalFaqs = [
   {
+    // RESTORED 2026-09-03 (contentGates.statewideServiceArea, "Ja").
     question: "In welchen Regionen ist Niedersachsen Solar tätig?",
-    answer: `Wir planen und installieren Energiekonzepte in und um ${site.cities.join(", ")}.`,
+    answer: `Wir planen und installieren Energiekonzepte im gesamten Bundesland ${site.serviceArea}, mit Schwerpunkt in und um ${site.cities.join(", ")}.`,
+  },
+  {
+    // RESTORED 2026-09-03 (contentGates.pricing + .förderung, both "Ja").
+    question: "Was kosten Photovoltaik, Speicher, Wallbox und Wärmepumpe?",
+    answer:
+      "Die Kosten hängen stark von Hausgröße und gewähltem System ab. Als grobe Orientierung, jeweils vor Förderung: PV-Anlagen liegen meist zwischen 6.000 € und 35.000 €, Batteriespeicher zwischen 2.000 € und 12.000 €, eine Wallbox inklusive Installation zwischen 1.200 € und 2.500 €, und eine Wärmepumpe laut Finanztip.de zwischen 11.000 € und 47.000 € (staatliche Förderung bis zu 80 % möglich). Den genauen Preis für Ihr Energiekonzept ermitteln wir im kostenlosen Erstgespräch.",
   },
   {
     question: "Was unterscheidet Niedersachsen Solar von anderen Solarteuren?",
     answer:
-      "Wir haben selbst jahrelang auf dem Dach gestanden, bevor wir Energiekonzepte geplant haben — diese praktische Erfahrung fließt in jede Planung ein.",
+      "Wir haben selbst jahrelang auf dem Dach gestanden, bevor wir Energiekonzepte geplant haben. Zusätzlich setzen wir bewusst auf ein geschlossenes Ökosystem für Speicher, Wallbox und Steuerung, statt beliebige Einzelteile zu kombinieren.",
   },
   {
+    // RESTORED 2026-09-03 (contentGates.certifiedPartnersAndResponsibilityBoundaries, "Ja").
     question: "Bietet Niedersachsen Solar auch Dachsanierung und Wärmepumpen an?",
     answer:
-      "Ja. PV-Anlagen und Speicher installieren wir selbst. Dachsanierung und Wärmepumpen-Installation stimmen wir so ab, dass alle Gewerke als ein Energiekonzept zusammenspielen.",
+      "Ja. PV-Anlagen und Speicher installieren wir selbst. Dachsanierung und Wärmepumpen-Installation koordinieren wir über zertifizierte Fachpartnerbetriebe aus unserem Netzwerk, damit alle Gewerke als ein Energiekonzept zusammenspielen.",
   },
   {
+    // RESTORED 2026-09-03 (contentGates.oneBusinessDayCallback, "Ja").
     question: "Wie läuft der erste Schritt ab?",
     answer:
-      "Sie kontaktieren uns für ein kostenloses, unverbindliches Erstgespräch. Wir melden uns bei Ihnen und klären gemeinsam, welches Energiekonzept zu Ihrem Haus und Ihrem Verbrauch passt.",
+      "Sie kontaktieren uns für ein kostenloses, unverbindliches Erstgespräch. Wir melden uns innerhalb eines Werktags und klären gemeinsam, welches Energiekonzept zu Ihrem Haus und Ihrem Verbrauch passt.",
   },
   {
+    // RESTORED 2026-09-03 (contentGates.clooverPartnership, "Ja").
     question: "Gibt es eine Finanzierungsmöglichkeit?",
     answer:
-      "Ja, über unseren Finanzierungspartner klären wir Ihre Optionen direkt und unkompliziert, ohne Umwege über mehrere Ansprechpartner.",
+      "Ja, über unseren Finanzierungspartner Cloover klären wir Ihre Optionen direkt und unkompliziert, ohne Umwege über mehrere Ansprechpartner.",
+  },
+  {
+    // RESTORED 2026-09-03 (contentGates.openingHours + .oneBusinessDayCallback, both "Ja").
+    question: "Wann sind Sie persönlich erreichbar?",
+    answer:
+      "Montags bis freitags von 8 bis 17 Uhr. Außerhalb dieser Zeiten erreichen Sie uns über das Kontaktformular oder den Solar-Check — wir melden uns innerhalb eines Werktags zurück.",
   },
 ];
 
@@ -417,16 +445,30 @@ export const decisionPaths = [
 // Vertrauensabschnitt (Brief 6.3): each proof field carries its own
 // verification state instead of being asserted as flat fact in JSX.
 //
-// 2026-09-02: the "ecoflow" and "finanzierung" claims previously here are
-// removed, not just re-flagged — they asserted EcoFlow exclusivity and the
-// named Cloover partnership respectively, both explicitly gated categories.
-// "praxiserfahrung" stays confirmed: it's the founder's own hands-on
-// background, already established before this redesign, not a new claim.
+// 2026-09-03: per the proof-claims confirmation table —
+//   "Der Gründer hat selbst PV-Anlagen installiert." -> Ja (name restored)
+//   "Keine Vertriebsnummer" -> Nein (never used, not even as a rejected
+//     entry here — it's not a claim about the business, it's a marketing
+//     line, and the owner said no to it specifically)
+//   "Ein geschlossenes Ökosystem" -> Ja (added)
+//   "Direkter Weg zur Finanzierung" -> Ja (added, names Cloover)
 export const proofClaims: Claim[] = [
   {
     id: "praxiserfahrung",
     statement:
-      "Der Gründer hat selbst PV-Anlagen installiert, bevor Energiekonzepte geplant wurden — diese praktische Erfahrung fließt in jede Planung ein.",
+      "Gründer und Geschäftsführer Skye van Dyck hat selbst PV-Anlagen installiert, bevor er Energiekonzepte geplant hat — diese praktische Erfahrung fließt in jede Planung ein.",
+    state: "confirmed",
+  },
+  {
+    id: "geschlossenes-oekosystem",
+    statement:
+      "Speicher, Wallbox und Steuerung sind als ein geschlossenes Ökosystem geplant, statt beliebige Einzelkomponenten zu kombinieren.",
+    state: "confirmed",
+  },
+  {
+    id: "finanzierung",
+    statement:
+      "Über unseren Finanzierungspartner Cloover klären wir Ihre Optionen direkt, ohne Umwege über mehrere Ansprechpartner.",
     state: "confirmed",
   },
 ];
@@ -434,8 +476,6 @@ export const proofClaims: Claim[] = [
 // Prozess (Brief 6.5): five steps, each naming its result, the documents it
 // needs, and who is responsible — reduces uncertainty instead of just
 // showing a bare timeline.
-// 2026-09-02: step 4's "responsible" no longer says "zertifizierte
-// Fachpartner" (contentGates.certifiedPartnersAndResponsibilityBoundaries).
 export const processSteps = [
   {
     step: 1,
@@ -463,7 +503,8 @@ export const processSteps = [
     title: "Sauber umsetzen",
     result: "PV-Anlage und Speicher sind installiert; Dach/Wärmepumpe koordiniert.",
     documents: "Zählerschrank-Zugang, ggf. Netzbetreiber-Anmeldung.",
-    responsible: "Niedersachsen Solar",
+    // RESTORED 2026-09-03 (contentGates.certifiedPartnersAndResponsibilityBoundaries, "Ja").
+    responsible: "Niedersachsen Solar und zertifizierte Fachpartner",
   },
   {
     step: 5,
@@ -478,10 +519,6 @@ export const processSteps = [
 // real /ratgeber/[slug] route behind each. Bodies expand on facts already
 // confirmed elsewhere in this file (service descriptions/FAQs) rather than
 // introducing new unconfirmed claims.
-// 2026-09-02: "speicher-richtig-dimensionieren"'s closing paragraph
-// (EcoFlow exclusivity) and "dach-vor-pv-sanieren"'s "zertifizierte
-// Dachdecker-Partnerbetriebe" clause were both gated claims — removed, not
-// reworded, since neither had a safe remainder worth padding out.
 export const knowledgeArticles = [
   {
     slug: "dach-vor-pv-sanieren",
@@ -492,7 +529,8 @@ export const knowledgeArticles = [
     body: [
       "Eine Photovoltaikanlage hält mehrere Jahrzehnte — deutlich länger als viele Dacheindeckungen. Wer eine Anlage auf ein Dach setzt, das in wenigen Jahren ohnehin saniert werden muss, verursacht doppelte Arbeit: Die Module müssen für die Dacharbeiten wieder abgebaut und neu montiert werden.",
       "Bei der Dachaufnahme prüfen wir deshalb drei Dinge, bevor wir eine PV-Anlage auslegen: den Zustand der Eindeckung (Alter, sichtbare Schäden, Undichtigkeiten), die Dämmung und die Tragfähigkeit der Unterkonstruktion. Erst wenn diese drei Punkte für die geplante Nutzungsdauer der Anlage tragen, macht eine Installation ohne vorherige Sanierung Sinn.",
-      "Ist eine Sanierung nötig, planen wir sie als ein gemeinsames Projekt mit der PV-Installation, nicht als getrennte Baustelle mit eigenem Zeitplan. So entscheiden Statik, Ausrichtung und Unterkonstruktion der Dachsanierung von Anfang an mit, wie die Photovoltaikanlage später ausgelegt wird.",
+      // RESTORED 2026-09-03 (contentGates.certifiedPartnersAndResponsibilityBoundaries, "Ja").
+      "Ist eine Sanierung nötig, koordinieren wir sie über zertifizierte Dachdecker-Partnerbetriebe aus unserem Netzwerk — als ein gemeinsam geplantes Projekt mit der PV-Installation, nicht als getrennte Baustelle mit eigenem Zeitplan. So entscheiden Statik, Ausrichtung und Unterkonstruktion der Dachsanierung von Anfang an mit, wie die Photovoltaikanlage später ausgelegt wird.",
       "Die ehrliche Antwort auf die Frage \"Muss ich sanieren?\" bekommen Sie erst nach einer Dachaufnahme vor Ort — pauschale Aussagen ohne Blick aufs Dach sind hier wenig wert.",
     ],
   },
@@ -506,6 +544,10 @@ export const knowledgeArticles = [
       "Ein Batteriespeicher hat eine einzige Aufgabe: den tagsüber erzeugten Solarstrom für den Verbrauch am Abend und in der Nacht verfügbar zu machen. Wie groß er dafür sein muss, hängt nicht von der PV-Anlage allein ab, sondern vom Zusammenspiel aus Erzeugung und tatsächlichem Verbrauch.",
       "Ein zu klein dimensionierter Speicher ist schnell voll und schickt überschüssigen Strom trotzdem für wenig Geld ins Netz — der eigentliche Vorteil des Speichers verpufft. Ein zu groß dimensionierter Speicher wird dagegen selten vollständig genutzt und verlängert die Amortisationszeit unnötig, ohne einen entsprechenden Zusatznutzen zu bringen.",
       "Wir bewerten die passende Kapazität deshalb anhand Ihrer tatsächlichen Verbrauchsdaten, nicht anhand einer Pauschalgröße pro Haushalt oder pro kWp Anlagenleistung. Das Ergebnis ist ein Speicher, der zu Ihrem Alltag passt — inklusive der Frage, ob und wann eine Wallbox oder Wärmepumpe später dazukommen soll, weil das die sinnvolle Kapazität ebenfalls verschiebt.",
+      // Deliberately still not restored: this used to close on EcoFlow
+      // exclusivity specifically, which stays rejected. "Geschlossenes
+      // Ökosystem" is used elsewhere on the Speicher page instead.
+      "Wir setzen dabei auf ein geschlossenes Ökosystem: Speicher, Wallbox und Steuerung stammen aus einem System, das für nahtloses Zusammenspiel konzipiert ist, statt Komponenten verschiedener Hersteller aufeinander abzustimmen.",
     ],
   },
   {
@@ -526,8 +568,8 @@ export const knowledgeArticles = [
 // Projekte aus der Region (Brief 6.6): the brief wants full case studies
 // (region, starting point, system scope, challenge, solution). That data
 // doesn't exist yet — only real photos do — so this renders as a lighter
-// photo teaser rather than inventing case-study narrative. See report for
-// the open question to the product owner.
+// photo teaser rather than inventing case-study narrative. Still an open
+// question to the product owner (unrelated to the 2026-09-03 checklist).
 export const projectTeasers = [
   {
     src: "/images/gallery/gallery-01-v2.jpg",

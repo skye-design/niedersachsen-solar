@@ -465,8 +465,10 @@ function HandoffScreen({ onBack, onDone }: { onBack: () => void; onDone: () => v
       >
         <CheckCircle size={36} weight="fill" className="text-primary" aria-hidden />
         <p className="font-heading text-base font-semibold text-foreground">Danke, {name.split(" ")[0]}!</p>
+        {/* RESTORED 2026-09-03 (contentGates.oneBusinessDayCallback, "Ja"). */}
         <p className="max-w-xs text-sm text-muted-foreground">
-          Wir melden uns bei Ihnen. Dringend? Rufen Sie uns direkt an:{" "}
+          Wir melden uns innerhalb eines Werktags bei Ihnen. Dringend? Rufen
+          Sie uns direkt an:{" "}
           <a href={site.phoneHref} className="font-semibold text-primary underline underline-offset-2">
             {site.phone}
           </a>

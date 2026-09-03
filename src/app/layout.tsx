@@ -69,20 +69,15 @@ export const metadata: Metadata = {
 };
 
 // One node, two @types (valid schema.org pattern) rather than a @graph of
-// two loosely-linked nodes — Organization-level fields (logo) and
-// LocalBusiness-level fields (areaServed) both describe the same
-// real-world entity. HomeAndConstructionBusiness is the closest fitting
+// two loosely-linked nodes — Organization-level fields (founder, logo) and
+// LocalBusiness-level fields (address, hours, areaServed) both describe the
+// same real-world entity. HomeAndConstructionBusiness is the closest fitting
 // LocalBusiness subtype for a coordinated PV/roofing/heat-pump business.
 //
-// 2026-09-02 correction pass: `founder`, `address`, and
-// `openingHoursSpecification` were removed from this schema (they were
-// present before). All three are gated per
-// contentGates.founderAndAddressInMarketing / .openingHours in content.ts —
-// structured/machine-readable data gets the same bar as visible copy, and
-// none of the three has explicit owner confirmation yet. JSON-LD is
-// intentionally incomplete (no address) until that changes — see
-// OWNER_CONFIRMATION_CHECKLIST.md. `areaServed` stays: it only uses the
-// three named cities, which predate this redesign and aren't gated.
+// RESTORED 2026-09-03: `founder`, `address`, and `openingHoursSpecification`
+// (contentGates.founderAndAddressInMarketing / .openingHours, both "Ja" in
+// OWNER_CONFIRMATION_CHECKLIST.md). `areaServed` now uses the state-level
+// claim (contentGates.statewideServiceArea, "Ja") instead of city-only.
 const organizationSchema = {
   "@context": "https://schema.org",
   "@type": ["Organization", "HomeAndConstructionBusiness"],
@@ -90,11 +85,25 @@ const organizationSchema = {
   name: site.name,
   url: "https://niedersachsen-solar.de",
   logo: `https://niedersachsen-solar.de${brand.logoOnLight}`,
+  founder: { "@type": "Person", name: site.founder },
   telephone: site.phoneHref.replace("tel:", ""),
   email: site.email,
   image: "https://niedersachsen-solar.de/images/hero-v2.jpg",
   description,
-  areaServed: site.cities.map((city) => ({ "@type": "City", name: city })),
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: site.address.street,
+    postalCode: site.address.postalCode,
+    addressLocality: site.address.city,
+    addressCountry: "DE",
+  },
+  openingHoursSpecification: {
+    "@type": "OpeningHoursSpecification",
+    dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+    opens: "08:00",
+    closes: "17:00",
+  },
+  areaServed: { "@type": "State", name: site.serviceArea },
   makesOffer: [
     { "@type": "Offer", itemOffered: { "@type": "Service", name: "Dachsanierung" } },
     { "@type": "Offer", itemOffered: { "@type": "Service", name: "PV-Anlagen" } },

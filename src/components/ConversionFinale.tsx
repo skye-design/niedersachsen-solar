@@ -11,9 +11,11 @@ export default function ConversionFinale() {
           <h2 className="text-3xl font-semibold text-on-ink sm:text-4xl">
             Erzählen Sie uns zuerst nur von Ihrem Haus.
           </h2>
+          {/* RESTORED 2026-09-03 (contentGates.oneBusinessDayCallback, "Ja"). */}
           <p className="mt-4 max-w-md text-lg leading-relaxed text-on-ink-muted">
             Der Solar-Check dauert wenige Minuten. Danach melden wir uns
-            persönlich bei Ihnen — ohne automatisierte Preiszusage.
+            innerhalb eines Werktags persönlich bei Ihnen — ohne
+            automatisierte Preiszusage.
           </p>
 
           <div className="mt-8 space-y-3">
