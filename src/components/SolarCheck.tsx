@@ -71,9 +71,19 @@ export default function SolarCheck() {
 
   // Focus the new step's heading/legend on every step change, so keyboard
   // and screen-reader users land somewhere meaningful instead of the focus
-  // silently staying on the now-hidden "Weiter" button.
+  // silently staying on the now-hidden "Weiter" button. Skipped on the
+  // component's initial mount: a bare useEffect fires on mount too (not
+  // just on later `stepIndex` changes), and focusing an element
+  // auto-scrolls the browser to it — on the homepage that dragged every
+  // fresh visitor's viewport straight down to wherever this widget sits on
+  // the page, well past the hero, before they'd done anything at all.
   const headingRef = useRef<HTMLElement | null>(null);
+  const isFirstRender = useRef(true);
   useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
     headingRef.current?.focus();
   }, [stepIndex]);
 
@@ -389,7 +399,7 @@ export default function SolarCheck() {
               Das sollten wir gemeinsam prüfen
             </h3>
             <p className="mt-2 text-sm text-muted-foreground">
-              Keine automatische Preis- oder Ertragszusage — nur eine
+              Keine automatische Preis- oder Ertragszusage, sondern nur eine
               Zusammenfassung für unser Gespräch.
             </p>
             <dl className="mt-5 space-y-3 rounded-xl border border-border bg-background p-5 text-sm">
