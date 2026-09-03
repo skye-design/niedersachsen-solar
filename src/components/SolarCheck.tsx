@@ -11,7 +11,6 @@ import {
 import { site } from "@/lib/content";
 import { trackEvent } from "@/lib/analytics";
 import { EMAIL_RE, PHONE_RE } from "@/lib/validation";
-import { estimateAnnualSavings, type Orientation } from "@/lib/savingsEstimate";
 
 const CONNECTION_OPTIONS = [
   { id: "pv", label: "Photovoltaik" },
@@ -34,20 +33,17 @@ const SITUATION_OPTIONS = [
   { id: "dachpruefung", label: "Dachprüfung gewünscht" },
 ] as const;
 
-// kWh values are shown to the user alongside the household-size label
-// (rather than hidden behind it) so the savings estimate that follows
-// doesn't feel like a black box. Fed into estimateAnnualSavings() below.
-// recommendedKwp is NISO's own sizing target per household size (Skye,
-// 2026-09-03) — sized for autarky and amortization, not bare
-// annual-consumption matching, so it's a direct business call per bucket
-// rather than something derived from the kWh figure. See the comment on
-// SELF_CONSUMPTION_CURVE in savingsEstimate.ts for why that matters.
+// 2026-09-03 (Skye): dropped the live savings-estimate step (€/kWp/kWh
+// output) entirely — no calculated numbers shown to the visitor at all.
+// This bucket's kwh value is still sent along as raw qualifying context
+// for whoever follows up (see handleSubmit), it's just never rendered.
 const CONSUMPTION_OPTIONS = [
-  { id: "1-2", label: "1–2 Personen", kwh: 2000, recommendedKwp: 8 },
-  { id: "3-4", label: "3–4 Personen", kwh: 4000, recommendedKwp: 10 },
-  { id: "5+", label: "5+ Personen", kwh: 6000, recommendedKwp: 12 },
+  { id: "1-2", label: "1–2 Personen", kwh: 2000 },
+  { id: "3-4", label: "3–4 Personen", kwh: 4000 },
+  { id: "5+", label: "5+ Personen", kwh: 6000 },
 ] as const;
 
+type Orientation = "sued" | "ost-west" | "norden" | "unbekannt";
 const ORIENTATION_OPTIONS: { id: Orientation; label: string }[] = [
   { id: "sued", label: "Süden" },
   { id: "ost-west", label: "Ost-West" },
@@ -55,13 +51,30 @@ const ORIENTATION_OPTIONS: { id: Orientation; label: string }[] = [
   { id: "unbekannt", label: "Weiß ich nicht" },
 ];
 
-type Step = 1 | 2 | 3 | 4 | 5 | "estimate" | "summary" | 6 | 7;
-const STEP_ORDER: Step[] = [1, 2, 3, 4, 5, "estimate", "summary", 6, 7];
-// "estimate" and "summary" aren't numbered form steps — they're review
-// checkpoints after step 5, before contact details. Both show progress
-// fill 5 (see progressFill below), same reasoning as the old single
-// summary screen: they shouldn't claim to be a step that hasn't happened.
-const NUMBERED_STEP_COUNT = 7;
+// Dachform + Dach-Baujahr, added 2026-09-03 (Skye) modeled on Hanovolt's
+// own qualifying-question flow (pv-anlagen-hannover.de) — same categories,
+// same idea: pure lead qualification feeding a human-prepared offer, no
+// live calculator anywhere in the flow.
+const ROOF_SHAPE_OPTIONS = [
+  { id: "satteldach", label: "Satteldach" },
+  { id: "pultdach", label: "Pultdach" },
+  { id: "flachdach", label: "Flachdach" },
+  { id: "sonstige", label: "Sonstige Form" },
+] as const;
+
+const ROOF_AGE_OPTIONS = [
+  { id: "planung", label: "Erst in Planung" },
+  { id: "neu", label: "Erst erbaut" },
+  { id: "nach-1990", label: "Nach 1990" },
+  { id: "vor-1990", label: "Vor 1990" },
+] as const;
+
+type Step = 1 | 2 | 3 | 4 | 5 | 6 | 7 | "summary" | 8 | 9;
+const STEP_ORDER: Step[] = [1, 2, 3, 4, 5, 6, 7, "summary", 8, 9];
+// "summary" isn't a numbered form step — it's a review checkpoint after
+// step 7, before contact details. Shows progress fill 7 (see progressFill
+// below) rather than claiming to be a step that hasn't happened.
+const NUMBERED_STEP_COUNT = 9;
 
 type Status = "idle" | "submitting" | "success" | "error";
 
@@ -82,6 +95,8 @@ export default function SolarCheck() {
   const [city, setCity] = useState("");
   const [consumptionId, setConsumptionId] = useState<string | null>(null);
   const [orientation, setOrientation] = useState<Orientation | null>(null);
+  const [roofShape, setRoofShape] = useState<string | null>(null);
+  const [roofAge, setRoofAge] = useState<string | null>(null);
   const [name, setName] = useState("");
   const [contactMethod, setContactMethod] = useState<"telefon" | "email" | null>(null);
   const [contactValue, setContactValue] = useState("");
@@ -90,18 +105,8 @@ export default function SolarCheck() {
   const [touched, setTouched] = useState<Record<string, boolean>>({});
 
   const step = STEP_ORDER[stepIndex];
-  // "estimate"/"summary" both show fill 5 — see the STEP_ORDER comment.
-  const progressFill = typeof step === "number" ? step : 5;
-
-  const selectedConsumption = CONSUMPTION_OPTIONS.find((o) => o.id === consumptionId) ?? null;
-  const savingsEstimate = selectedConsumption
-    ? estimateAnnualSavings({
-        recommendedKwp: selectedConsumption.recommendedKwp,
-        annualConsumptionKwh: selectedConsumption.kwh,
-        orientation: orientation ?? "unbekannt",
-        hasBattery: connections.includes("speicher"),
-      })
-    : null;
+  // "summary" shows fill 7 — see the STEP_ORDER comment.
+  const progressFill = typeof step === "number" ? step : 7;
 
   // Focus the new step's heading/legend on every step change, so keyboard
   // and screen-reader users land somewhere meaningful instead of the focus
@@ -158,18 +163,20 @@ export default function SolarCheck() {
         return !fieldError("plz") && !fieldError("ort") && postalCode.trim() !== "" && city.trim() !== "";
       case 5:
         return !!consumptionId;
-      case "estimate":
-        return true;
+      case 6:
+        return !!roofShape;
+      case 7:
+        return !!roofAge;
       case "summary":
         return true;
-      case 6:
+      case 8:
         return (
           name.trim().length > 1 &&
           !!contactMethod &&
           !fieldError("contact") &&
           contactValue.trim().length > 0
         );
-      case 7:
+      case 9:
         return true;
       default:
         return false;
@@ -178,7 +185,7 @@ export default function SolarCheck() {
 
   function goNext() {
     if (step === 4) setTouched((t) => ({ ...t, plz: true, ort: true }));
-    if (step === 6) setTouched((t) => ({ ...t, name: true, contactMethod: true, contact: true }));
+    if (step === 8) setTouched((t) => ({ ...t, name: true, contactMethod: true, contact: true }));
     if (!canAdvance()) return;
     trackEvent({ name: "solar_check_step_completed", step });
     setStepIndex((i) => Math.min(i + 1, STEP_ORDER.length - 1));
@@ -218,13 +225,12 @@ export default function SolarCheck() {
           interests: connections
             .map((id) => CONNECTION_OPTIONS.find((o) => o.id === id)?.label)
             .filter((label): label is (typeof CONNECTION_OPTIONS)[number]["label"] => label !== undefined),
-          annualConsumptionKwh: selectedConsumption?.kwh,
+          annualConsumptionKwh: CONSUMPTION_OPTIONS.find((o) => o.id === consumptionId)?.kwh,
           roofOrientation: orientation
             ? ORIENTATION_OPTIONS.find((o) => o.id === orientation)?.label
             : undefined,
-          estimatedSavingsRange: savingsEstimate
-            ? `${savingsEstimate.lowEstimateEur}–${savingsEstimate.highEstimateEur} € / Jahr (ca. ${savingsEstimate.recommendedKwp} kWp)`
-            : undefined,
+          roofShape: roofShape ? labelFor(ROOF_SHAPE_OPTIONS, roofShape) : undefined,
+          roofBuildYear: roofAge ? labelFor(ROOF_AGE_OPTIONS, roofAge) : undefined,
           message,
           company,
         }),
@@ -281,14 +287,10 @@ export default function SolarCheck() {
         ))}
       </div>
       <p className="font-data mb-6 text-xs text-muted-foreground uppercase">
-        {step === "summary"
-          ? "Zusammenfassung"
-          : step === "estimate"
-            ? "Ihre Einschätzung"
-            : `Schritt ${progressFill} von ${NUMBERED_STEP_COUNT}`}
+        {step === "summary" ? "Zusammenfassung" : `Schritt ${progressFill} von ${NUMBERED_STEP_COUNT}`}
       </p>
 
-      <form onSubmit={step === 7 ? handleSubmit : (e) => e.preventDefault()}>
+      <form onSubmit={step === 9 ? handleSubmit : (e) => e.preventDefault()}>
         <div aria-hidden="true" className="absolute -left-[9999px] h-0 w-0 overflow-hidden">
           <label htmlFor={`${formBase}-company`}>Firma (bitte freilassen)</label>
           <input
@@ -462,7 +464,7 @@ export default function SolarCheck() {
                         : "border-border text-foreground/70 hover:border-primary/50"
                     }`}
                   >
-                    {opt.label} <span className="text-foreground/50">(ca. {opt.kwh.toLocaleString("de-DE")} kWh)</span>
+                    {opt.label}
                   </button>
                 );
               })}
@@ -494,30 +496,60 @@ export default function SolarCheck() {
           </fieldset>
         )}
 
-        {step === "estimate" && savingsEstimate && (
-          <div>
-            <h3 ref={(el) => { headingRef.current = el; }} tabIndex={-1} className="text-lg font-semibold text-foreground outline-none">
-              Ihre grobe Einschätzung
-            </h3>
-            <p className="mt-2 text-sm text-muted-foreground">
-              Eine erste Näherung auf Basis Ihrer Angaben, keine verbindliche
-              Zusage. Die genaue Auslegung klären wir im persönlichen
-              Gespräch.
-            </p>
-            <div className="mt-5 rounded-xl border border-border bg-background p-5">
-              <p className="font-data text-xs tracking-wide text-muted-foreground uppercase">
-                Geschätzte Ersparnis pro Jahr
-              </p>
-              <p className="mt-1 text-3xl font-semibold text-primary">
-                {savingsEstimate.lowEstimateEur.toLocaleString("de-DE")}–
-                {savingsEstimate.highEstimateEur.toLocaleString("de-DE")} €
-              </p>
-              <p className="mt-3 text-sm text-muted-foreground">
-                Passend dazu: eine Anlage von etwa {savingsEstimate.recommendedKwp} kWp
-                mit rund {savingsEstimate.annualGenerationKwh.toLocaleString("de-DE")} kWh Jahresertrag.
-              </p>
+        {step === 6 && (
+          <fieldset>
+            <legend ref={(el) => { headingRef.current = el; }} tabIndex={-1} className="text-lg font-semibold text-foreground outline-none">
+              Welche Form hat Ihr Dach?
+            </legend>
+            <div className="mt-4 flex flex-wrap gap-2">
+              {ROOF_SHAPE_OPTIONS.map((opt) => {
+                const checked = roofShape === opt.id;
+                return (
+                  <button
+                    key={opt.id}
+                    type="button"
+                    aria-pressed={checked}
+                    onClick={() => setRoofShape(opt.id)}
+                    className={`cursor-pointer rounded-full border px-4 py-2 text-sm font-medium transition-colors ${
+                      checked
+                        ? "border-primary bg-primary/10 text-primary"
+                        : "border-border text-foreground/70 hover:border-primary/50"
+                    }`}
+                  >
+                    {opt.label}
+                  </button>
+                );
+              })}
             </div>
-          </div>
+          </fieldset>
+        )}
+
+        {step === 7 && (
+          <fieldset>
+            <legend ref={(el) => { headingRef.current = el; }} tabIndex={-1} className="text-lg font-semibold text-foreground outline-none">
+              Wann wurde Ihr Dach erbaut?
+            </legend>
+            <div className="mt-4 flex flex-wrap gap-2">
+              {ROOF_AGE_OPTIONS.map((opt) => {
+                const checked = roofAge === opt.id;
+                return (
+                  <button
+                    key={opt.id}
+                    type="button"
+                    aria-pressed={checked}
+                    onClick={() => setRoofAge(opt.id)}
+                    className={`cursor-pointer rounded-full border px-4 py-2 text-sm font-medium transition-colors ${
+                      checked
+                        ? "border-primary bg-primary/10 text-primary"
+                        : "border-border text-foreground/70 hover:border-primary/50"
+                    }`}
+                  >
+                    {opt.label}
+                  </button>
+                );
+              })}
+            </div>
+          </fieldset>
         )}
 
         {step === "summary" && (
@@ -552,20 +584,19 @@ export default function SolarCheck() {
                   {postalCode} {city}
                 </dd>
               </div>
-              {savingsEstimate && (
-                <div className="flex justify-between gap-4">
-                  <dt className="text-muted-foreground">Geschätzte Ersparnis</dt>
-                  <dd className="text-right font-medium text-foreground">
-                    {savingsEstimate.lowEstimateEur.toLocaleString("de-DE")}–
-                    {savingsEstimate.highEstimateEur.toLocaleString("de-DE")} € / Jahr
-                  </dd>
-                </div>
-              )}
+              <div className="flex justify-between gap-4">
+                <dt className="text-muted-foreground">Dachform</dt>
+                <dd className="font-medium text-foreground">{labelFor(ROOF_SHAPE_OPTIONS, roofShape)}</dd>
+              </div>
+              <div className="flex justify-between gap-4">
+                <dt className="text-muted-foreground">Dach-Baujahr</dt>
+                <dd className="font-medium text-foreground">{labelFor(ROOF_AGE_OPTIONS, roofAge)}</dd>
+              </div>
             </dl>
           </div>
         )}
 
-        {step === 6 && (
+        {step === 8 && (
           <fieldset>
             <legend ref={(el) => { headingRef.current = el; }} tabIndex={-1} className="text-lg font-semibold text-foreground outline-none">
               Wie dürfen wir Sie erreichen?
@@ -652,7 +683,7 @@ export default function SolarCheck() {
           </fieldset>
         )}
 
-        {step === 7 && (
+        {step === 9 && (
           <fieldset>
             <legend ref={(el) => { headingRef.current = el; }} tabIndex={-1} className="text-lg font-semibold text-foreground outline-none">
               Möchten Sie uns noch etwas mitgeben? (optional)
@@ -661,7 +692,7 @@ export default function SolarCheck() {
               rows={4}
               value={message}
               onChange={(e) => setMessage(e.target.value)}
-              placeholder="Zum Beispiel: Baujahr des Hauses, aktueller Stromverbrauch, Wunschtermin…"
+              placeholder="Zum Beispiel: aktueller Stromverbrauch, Wunschtermin…"
               className="mt-4 w-full rounded-xl border border-border bg-background px-4 py-3 text-base text-foreground outline-none focus:border-primary focus:ring-2 focus:ring-ring/30"
             />
 
@@ -688,7 +719,7 @@ export default function SolarCheck() {
             <span />
           )}
 
-          {step === 7 ? (
+          {step === 9 ? (
             <button
               type="submit"
               disabled={status === "submitting"}

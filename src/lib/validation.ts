@@ -34,11 +34,14 @@ export const leadSchema = z
     interests: z.array(z.string().max(60)).max(10).optional(),
     propertyType: z.string().max(60).optional(),
     situation: z.string().max(120).optional(),
-    // Solar-Check savings-estimate step, all optional (only SolarCheck's
-    // extended flow sends these; QuoteForm never does).
+    // Solar-Check's extended qualifying steps, all optional (only
+    // SolarCheck's flow sends these; QuoteForm never does). Raw lead
+    // context for whoever follows up — never computed into an estimate or
+    // shown back to the visitor (Skye, 2026-09-03: no numbers in the flow).
     annualConsumptionKwh: z.number().int().positive().max(1_000_000).optional(),
     roofOrientation: z.string().max(60).optional(),
-    estimatedSavingsRange: z.string().max(120).optional(),
+    roofShape: z.string().max(60).optional(),
+    roofBuildYear: z.string().max(60).optional(),
     message: z.string().trim().max(2000).optional(),
     source: z.enum(["quote-form", "solar-check", "solar-lotse"]),
     // Honeypot: validated only for shape here, checked for emptiness in the
