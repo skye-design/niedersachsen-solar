@@ -29,14 +29,14 @@ export default function PartnerLogos() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={`${partner.name} Website öffnen (neuer Tab)`}
-                className="partner-logo flex h-24 items-center justify-center rounded-2xl border border-border bg-white p-6 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+                className="partner-logo flex h-28 items-center justify-center rounded-2xl border border-border bg-white p-4 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring sm:h-32 sm:p-5"
               >
                 <Image
                   src={partner.logo}
                   alt={partner.name}
                   width={160}
                   height={64}
-                  className="h-full w-auto max-h-10 object-contain sm:max-h-12"
+                  className="h-full w-full object-contain"
                 />
               </a>
             </Reveal>
