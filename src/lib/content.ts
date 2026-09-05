@@ -655,4 +655,8 @@ export const projectTeasers = [
     src: "/images/gallery/gallery-05.jpg",
     alt: "Frisch installierte PV-Module auf einem Satteldach im Abendlicht",
   },
+  {
+    src: "/images/gallery/gallery-06.jpg",
+    alt: "Luftaufnahme einer PV-Anlage auf einem Ziegeldach mit Gaube",
+  },
 ];
