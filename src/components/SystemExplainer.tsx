@@ -34,7 +34,7 @@ export default function SystemExplainer() {
     <section className="bg-ink text-on-ink" aria-labelledby="system-heading">
       <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-28">
         <Reveal className="max-w-2xl">
-          <SignalTag index={2}>System</SignalTag>
+          <SignalTag index={3}>System</SignalTag>
           <h2 id="system-heading" className="mt-4 text-3xl font-semibold text-on-ink sm:text-4xl">
             Ein System, das zusammenspielt
           </h2>

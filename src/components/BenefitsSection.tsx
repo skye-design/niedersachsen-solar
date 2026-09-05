@@ -15,7 +15,7 @@ export default function BenefitsSection() {
     <section aria-labelledby="benefits-heading">
       <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-28">
         <Reveal className="max-w-2xl">
-          <SignalTag index={3}>Vorteile</SignalTag>
+          <SignalTag index={4}>Vorteile</SignalTag>
           <h2 id="benefits-heading" className="mt-4 text-3xl font-semibold text-foreground sm:text-4xl">
             Die Vorteile einer Solaranlage
           </h2>

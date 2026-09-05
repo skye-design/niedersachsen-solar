@@ -8,7 +8,7 @@ export default function ProjectTeasers() {
     <section id="projekte" aria-labelledby="projects-heading">
       <div className="mx-auto max-w-6xl px-4 py-20 sm:px-6 sm:py-28">
         <Reveal className="max-w-2xl">
-          <SignalTag index={5}>Projekte</SignalTag>
+          <SignalTag index={6}>Projekte</SignalTag>
           <h2 id="projects-heading" className="mt-4 text-3xl font-semibold text-foreground sm:text-4xl">
             Installationen aus der Region
           </h2>

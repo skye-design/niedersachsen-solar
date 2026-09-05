@@ -607,6 +607,33 @@ export const knowledgeArticles = [
 // doesn't exist yet — only real photos do — so this renders as a lighter
 // photo teaser rather than inventing case-study narrative. Still an open
 // question to the product owner (unrelated to the 2026-09-03 checklist).
+// Herstellerpartner (2026-09-05): Markenlogos, die auf die jeweilige
+// Partner-Website verlinken. Bewusst kein eigener Claim/Verification-Status
+// nötig, es handelt sich um reine Marken-/Produktpartnerschaften, nicht um
+// eine geschäftliche Aussage über NISO selbst.
+export const partners = [
+  {
+    name: "SUNKON",
+    logo: "/images/partners/sunkon.png",
+    url: "https://www.sunkon.de/",
+  },
+  {
+    name: "EcoFlow",
+    logo: "/images/partners/ecoflow.png",
+    url: "https://de.ecoflow.com/",
+  },
+  {
+    name: "AIKO",
+    logo: "/images/partners/aiko.png",
+    url: "https://www.aikosolar.com/",
+  },
+  {
+    name: "autarc",
+    logo: "/images/partners/autarc.png",
+    url: "https://www.autarc.energy/",
+  },
+];
+
 export const projectTeasers = [
   {
     src: "/images/gallery/gallery-01-v2.jpg",

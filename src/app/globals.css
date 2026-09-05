@@ -125,6 +125,29 @@ h4 {
   transform: translateY(0);
 }
 
+/* 2026-09-05: partner logo strip (PartnerLogos.tsx) — quiet grayscale by
+   default, full color + a slight lift on hover confirms the card is a link
+   out. Hover-gated to fine pointers so a tap on mobile can't get stuck in
+   the hover state; prefers-reduced-motion below already zeroes every
+   transition-duration site-wide, so the color still changes, it just no
+   longer moves. */
+.partner-logo {
+  filter: grayscale(1);
+  opacity: 0.7;
+  transition: filter 0.2s ease, opacity 0.2s ease, transform 0.2s ease;
+}
+.partner-logo:focus-visible {
+  filter: grayscale(0);
+  opacity: 1;
+}
+@media (hover: hover) and (pointer: fine) {
+  .partner-logo:hover {
+    filter: grayscale(0);
+    opacity: 1;
+    transform: translateY(-2px);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

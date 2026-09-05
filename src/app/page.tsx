@@ -2,6 +2,7 @@ import Header from "@/components/Header";
 import Hero from "@/components/Hero";
 import DecisionEntry from "@/components/DecisionEntry";
 import TrustSection from "@/components/TrustSection";
+import PartnerLogos from "@/components/PartnerLogos";
 import SystemExplainer from "@/components/SystemExplainer";
 import BenefitsSection from "@/components/BenefitsSection";
 import Process from "@/components/Process";
@@ -23,6 +24,7 @@ export default function Home() {
         <Hero />
         <DecisionEntry />
         <TrustSection />
+        <PartnerLogos />
         <SystemExplainer />
         <BenefitsSection />
         <Process />
