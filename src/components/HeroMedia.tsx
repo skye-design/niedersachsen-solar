@@ -47,15 +47,12 @@ export default function HeroMedia() {
         preload="none"
         poster="/images/gallery/gallery-01-v2.jpg"
       />
-      {/* 2026-09-02: was gallery-01-v2.jpg, a top-down aerial shot that's
-          almost entirely a flat panel grid — center-cropped to a narrow
-          portrait viewport it reads as an abstract texture, not a
-          recognizable building. hero-v2.jpg has roof tiles, a dormer
-          window, trees, and a neighboring house in frame, so it survives
-          that crop as an actual, readable project photo. */}
+      {/* 2026-09-05 (Skye, testing): swapped in gallery-05.jpg — dusk shot,
+          diagonal roofline leading into a colored sky, holds up better in a
+          narrow portrait crop than hero-v2's flatter daylight framing. */}
       <Image
-        src="/images/hero-v2.jpg"
-        alt="Photovoltaik-Module auf einem Wohnhausdach mit Dachfenster, umgeben von Bäumen"
+        src="/images/gallery/gallery-05.jpg"
+        alt="Frisch installierte PV-Module auf einem Satteldach im Abendlicht"
         fill
         priority
         sizes="100vw"
