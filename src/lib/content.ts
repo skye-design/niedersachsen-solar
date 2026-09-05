@@ -619,7 +619,7 @@ export const partners = [
   },
   {
     name: "EcoFlow",
-    logo: "/images/partners/ecoflow.png",
+    logo: "/images/partners/ecoflow.svg",
     url: "https://de.ecoflow.com/",
   },
   {
