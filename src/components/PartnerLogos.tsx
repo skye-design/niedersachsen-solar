@@ -21,12 +21,7 @@ export default function PartnerLogos() {
           </h2>
         </Reveal>
 
-        {/* 2026-09-05: 2 columns at every breakpoint (not 4 on desktop) —
-            with only 4 logos, halving the column count roughly doubles each
-            card's width, which is what actually lets the squarer marks
-            (EcoFlow, AIKO) grow to a size comparable to SUNKON's naturally
-            wide wordmark instead of staying capped by a narrow column. */}
-        <div className="mt-10 grid grid-cols-2 gap-6 sm:gap-8">
+        <div className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-4 sm:gap-6">
           {partners.map((partner, i) => (
             <Reveal key={partner.name} delay={i * 60}>
               <a
@@ -34,13 +29,13 @@ export default function PartnerLogos() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={`${partner.name} Website öffnen (neuer Tab)`}
-                className="partner-logo flex h-32 items-center justify-center rounded-2xl border border-border bg-white p-6 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring sm:h-44 sm:p-8"
+                className="partner-logo flex h-28 items-center justify-center rounded-2xl border border-border bg-white p-4 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring sm:h-32 sm:p-5"
               >
                 <Image
                   src={partner.logo}
                   alt={partner.name}
-                  width={320}
-                  height={128}
+                  width={160}
+                  height={64}
                   unoptimized={partner.logo.endsWith(".svg")}
                   className="h-full w-full object-contain"
                 />
