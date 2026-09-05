@@ -629,7 +629,7 @@ export const partners = [
   },
   {
     name: "autarc",
-    logo: "/images/partners/autarc.png",
+    logo: "/images/partners/autarc.svg",
     url: "https://www.autarc.energy/",
   },
 ];
